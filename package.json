@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "db:migrate": "psql $DATABASE_URL < db/migrations/001_initial_schema.sql",
+    "db:seed": "tsx db/seed/run.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",
@@ -32,6 +34,9 @@
     "happy-dom": "^20.11.1",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "@types/pg": "^8.11.10",
+    "pg": "^8.13.3",
+    "tsx": "^4.20.3"
   }
 }
