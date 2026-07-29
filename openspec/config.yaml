@@ -1,0 +1,71 @@
+schema: spec-driven
+version: "1.0"
+project: erp-minero-ia
+initialized: "2026-07-29"
+persistence: hybrid
+
+context: |
+  Stack: Next.js 16.2.12 (App Router, Turbopack) + React 19.2 + TypeScript strict
+  Styling: Tailwind CSS v4 (CSS-based config, design tokens in src/app/globals.css), single theme (no dark mode)
+  i18n: next-intl v4, locales es/en, default es, catalogs in messages/{locale}.json
+  Data: Supabase (Postgres), server-side client at src/lib/supabase/server.ts
+  AI features: text-to-query (structured intent) + cost-variance explainer; LLM runs server-side on free/open providers with fallback chain
+  Scope: read-only ERP demo, no auth/roles/multi-tenant
+  Deploy: dev via Docker (docker-compose.yml + Dockerfile.dev), production on Vercel
+  Prior architecture decisions: Engram obs #404 (architecture), #405 (data model), #406 (AI features)
+
+testing:
+  strict_tdd: true
+  test_command: "pnpm test"
+  watch_command: "pnpm test:watch"
+  framework: vitest
+  version: "4.x"
+  environment: happy-dom
+  setup_file: vitest.setup.ts
+  include_pattern: "src/**/*.{test,spec}.{ts,tsx}"
+  layers:
+    unit: { available: true, tool: "vitest + @testing-library/react" }
+    integration: { available: true, tool: "@testing-library/react + @testing-library/user-event" }
+    e2e: { available: false, tool: null }
+  coverage:
+    available: false
+    note: "No coverage plugin configured; add @vitest/coverage-v8 if needed"
+  quality:
+    linter: { available: true, command: "pnpm lint", tool: "eslint 9 (eslint-config-next)" }
+    type_checker: { available: true, command: "pnpm exec tsc --noEmit", tool: "typescript 5 strict" }
+    formatter: { available: false, tool: null }
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Note i18n impact (es/en message keys) when UI text is involved
+    - Note if Supabase schema migrations are required
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+    - Reference domain entities from Engram obs #405 (data model)
+  design:
+    - Include sequence diagrams for server-side AI flows
+    - Document architecture decisions with rationale
+    - Specify which Next.js construct is used (Server Component, Route Handler, Server Action)
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+    - TDD tasks MUST include RED step (failing test) before GREEN step (implementation)
+  apply:
+    guidelines:
+      - Follow Next.js App Router conventions; read node_modules/next/dist/docs/ before writing
+      - All Supabase calls MUST be server-side only (src/lib/supabase/server.ts)
+      - AI/LLM calls MUST run server-side (Route Handler or Server Action)
+      - All user-facing strings MUST use next-intl translation keys
+    tdd: true
+    test_command: "pnpm test"
+  verify:
+    test_command: "pnpm test"
+    build_command: "pnpm build"
+    type_check_command: "pnpm exec tsc --noEmit"
+    lint_command: "pnpm lint"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas
+    - Preserve i18n message key additions in merged specs

@@ -1,0 +1,12 @@
+{
+  "app": {
+    "name": "Mining ERP"
+  },
+  "home": {
+    "title": "Mining ERP",
+    "subtitle": "Dashboard under construction"
+  },
+  "health": {
+    "ok": "Operational"
+  }
+}

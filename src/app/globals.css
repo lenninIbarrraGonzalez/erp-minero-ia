@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — single theme, no dark mode.
+ * These are PLACEHOLDER values. The real palette (provided later) plugs in here
+ * without touching components: only edit the raw values under :root.
+ */
+:root {
+  /* Surfaces */
+  --color-bg: #0f1115;
+  --color-surface: #171a21;
+  --color-surface-2: #1f232c;
+  --color-border: #2a2f3a;
+
+  /* Text */
+  --color-text: #e6e8ec;
+  --color-text-muted: #9aa1ac;
+
+  /* Brand / accent (mineral amber — placeholder) */
+  --color-primary: #d97706;
+  --color-primary-contrast: #0f1115;
+
+  /* Semantic (KPI deltas) */
+  --color-positive: #22c55e;
+  --color-negative: #ef4444;
+  --color-warning: #eab308;
+
+  --radius: 0.5rem;
+}
+
+/* Expose tokens to Tailwind utilities (bg-bg, text-text-muted, border-border, ...) */
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-surface-2: var(--color-surface-2);
+  --color-border: var(--color-border);
+  --color-text: var(--color-text);
+  --color-text-muted: var(--color-text-muted);
+  --color-primary: var(--color-primary);
+  --color-primary-contrast: var(--color-primary-contrast);
+  --color-positive: var(--color-positive);
+  --color-negative: var(--color-negative);
+  --color-warning: var(--color-warning);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}

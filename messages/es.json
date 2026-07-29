@@ -1,0 +1,12 @@
+{
+  "app": {
+    "name": "ERP Minero"
+  },
+  "home": {
+    "title": "ERP Minero",
+    "subtitle": "Dashboard en construcción"
+  },
+  "health": {
+    "ok": "Operativo"
+  }
+}
