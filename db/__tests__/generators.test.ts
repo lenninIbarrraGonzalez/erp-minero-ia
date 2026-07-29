@@ -157,6 +157,37 @@ describe('applyOperationalStoppage', () => {
 });
 
 // ──────────────────────────────────────────────────────────
+// Threat matrix: run.ts MUST NOT log DATABASE_URL / connection string
+// ──────────────────────────────────────────────────────────
+describe('secret exposure — run.ts must not log connection strings', () => {
+  it('no console output contains "postgresql://" during a seed run', async () => {
+    const { runSeed } = await import('../seed/run');
+
+    const logged: string[] = [];
+    const origLog   = console.log;
+    const origError = console.error;
+    const origWrite = process.stdout.write.bind(process.stdout);
+
+    console.log   = (...args: unknown[]) => { logged.push(args.map(String).join(' ')); };
+    console.error = (...args: unknown[]) => { logged.push(args.map(String).join(' ')); };
+    process.stdout.write = (chunk: Uint8Array | string) => { logged.push(String(chunk)); return true; };
+
+    try {
+      // runSeed will fail (no real DB in unit test environment) — we only care about
+      // what gets logged, not whether the DB call succeeds.
+      await runSeed().catch(() => { /* expected in unit context */ });
+    } finally {
+      console.log          = origLog;
+      console.error        = origError;
+      process.stdout.write = origWrite;
+    }
+
+    const combined = logged.join('\n');
+    expect(combined).not.toContain('postgresql://');
+  });
+});
+
+// ──────────────────────────────────────────────────────────
 // Dimension test: 5 mines × 12 months = 60 production rows
 //                 5 × 12 × 4 = 240 cost rows
 // ──────────────────────────────────────────────────────────

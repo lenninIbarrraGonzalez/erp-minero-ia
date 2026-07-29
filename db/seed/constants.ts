@@ -67,3 +67,12 @@ export const STOPPAGE_MONTH = 6;
 export const STOPPAGE_FACTOR = 0.60;
 export const DIESEL_SHOCK_MONTH = 8;
 export const DIESEL_SHOCK_FACTOR = 1.15;
+
+// Equipment hours baseline per mine per month (h/month)
+export const EQUIPMENT_HOURS: Record<string, number> = {
+  'Cerro Rojo':   4_000,
+  'Veta Dorada':  1_500,
+  'Loma Grande':  7_000,
+  'Quebrada Sur': 2_200,
+  'Peña Azul':    3_000,
+};
