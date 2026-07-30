@@ -25,5 +25,11 @@
       "label": "Filtrar por Mina"
     },
     "empty": "Sin datos disponibles"
+  },
+  "llm": {
+    "error": {
+      "allProvidersFailed": "No se pudo conectar con ningún proveedor de IA. Intentá de nuevo más tarde.",
+      "invalidPrompt": "La consulta no puede estar vacía."
+    }
   }
 }

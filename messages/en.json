@@ -25,5 +25,11 @@
       "label": "Filter by Mine"
     },
     "empty": "No data available"
+  },
+  "llm": {
+    "error": {
+      "allProvidersFailed": "Could not reach any AI provider. Please try again later.",
+      "invalidPrompt": "Prompt cannot be empty."
+    }
   }
 }
