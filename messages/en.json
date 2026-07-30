@@ -8,5 +8,22 @@
   },
   "health": {
     "ok": "Operational"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "kpi": {
+      "totalTonnage": "Total Tonnage",
+      "avgCostPerTonne": "Average Cost per Tonne",
+      "activeMines": "Mine"
+    },
+    "chart": {
+      "costTrend": "Cost per Tonne Trend",
+      "costByDriver": "Cost Breakdown by Driver"
+    },
+    "filter": {
+      "allMines": "All Mines",
+      "label": "Filter by Mine"
+    },
+    "empty": "No data available"
   }
 }

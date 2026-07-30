@@ -8,5 +8,22 @@
   },
   "health": {
     "ok": "Operativo"
+  },
+  "dashboard": {
+    "title": "Panel de Control",
+    "kpi": {
+      "totalTonnage": "Tonelaje Total",
+      "avgCostPerTonne": "Costo Promedio por Tonelada",
+      "activeMines": "Mina"
+    },
+    "chart": {
+      "costTrend": "Tendencia de Costo por Tonelada",
+      "costByDriver": "Desglose de Costos por Categoría"
+    },
+    "filter": {
+      "allMines": "Todas las Minas",
+      "label": "Filtrar por Mina"
+    },
+    "empty": "Sin datos disponibles"
   }
 }
