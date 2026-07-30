@@ -10,6 +10,7 @@ import { KpiCard } from "@/components/kpi-card";
 import { MineSelector } from "@/components/mine-selector";
 import { CostTrendChart } from "@/components/charts/cost-trend-chart";
 import { CostBreakdownChart } from "@/components/charts/cost-breakdown-chart";
+import { QueryPanel } from "@/components/query-panel/query-panel";
 
 interface HomeProps {
   searchParams: Promise<{ mine?: string }>;
@@ -66,6 +67,11 @@ export default async function Home({ searchParams }: HomeProps) {
           </h2>
           <CostBreakdownChart data={breakdownData} />
         </div>
+      </section>
+
+      {/* Text-to-Query Panel */}
+      <section className="bg-surface border border-border p-4 rounded-[var(--radius)]">
+        <QueryPanel />
       </section>
     </main>
   );
