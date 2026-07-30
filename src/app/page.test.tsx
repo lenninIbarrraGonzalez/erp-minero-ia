@@ -95,7 +95,7 @@ describe("Home (dashboard page)", () => {
     const element = await Home({ searchParams });
     render(element);
 
-    expect(screen.getByText("Mina Norte")).toBeInTheDocument();
-    expect(screen.getByText("Mina Sur")).toBeInTheDocument();
+    expect(screen.getAllByText("Mina Norte").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Mina Sur").length).toBeGreaterThan(0);
   });
 });

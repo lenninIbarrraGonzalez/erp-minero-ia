@@ -46,5 +46,23 @@
     "insight": {
       "label": "Análisis"
     }
+  },
+  "costVariance": {
+    "title": "Explicador de Costos",
+    "selectMine": "Seleccioná una mina",
+    "selectPeriod": "Período",
+    "submit": "Analizar",
+    "loading": "Calculando variación...",
+    "driver": "Categoría",
+    "prior": "Mes anterior",
+    "current": "Mes actual",
+    "delta": "Variación",
+    "deltaPct": "Variación %",
+    "narrative": "Análisis",
+    "error": {
+      "generic": "Ocurrió un error inesperado. Intentá de nuevo más tarde.",
+      "mineNotFound": "La mina especificada no fue encontrada.",
+      "noPriorPeriod": "No hay datos del mes anterior para comparar."
+    }
   }
 }

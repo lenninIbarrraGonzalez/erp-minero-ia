@@ -46,5 +46,23 @@
     "insight": {
       "label": "Analysis"
     }
+  },
+  "costVariance": {
+    "title": "Cost Variance Explainer",
+    "selectMine": "Select a mine",
+    "selectPeriod": "Period",
+    "submit": "Analyze",
+    "loading": "Calculating variance...",
+    "driver": "Driver",
+    "prior": "Prior month",
+    "current": "Current month",
+    "delta": "Change",
+    "deltaPct": "Change %",
+    "narrative": "Analysis",
+    "error": {
+      "generic": "An unexpected error occurred. Please try again later.",
+      "mineNotFound": "The specified mine was not found.",
+      "noPriorPeriod": "No data available for the prior month to compare."
+    }
   }
 }

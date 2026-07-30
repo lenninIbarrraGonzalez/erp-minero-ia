@@ -11,6 +11,7 @@ import { MineSelector } from "@/components/mine-selector";
 import { CostTrendChart } from "@/components/charts/cost-trend-chart";
 import { CostBreakdownChart } from "@/components/charts/cost-breakdown-chart";
 import { QueryPanel } from "@/components/query-panel/query-panel";
+import { CostVariancePanel } from "@/components/cost-variance-panel/cost-variance-panel";
 
 interface HomeProps {
   searchParams: Promise<{ mine?: string }>;
@@ -72,6 +73,11 @@ export default async function Home({ searchParams }: HomeProps) {
       {/* Text-to-Query Panel */}
       <section className="bg-surface border border-border p-4 rounded-[var(--radius)]">
         <QueryPanel />
+      </section>
+
+      {/* Cost Variance Explainer */}
+      <section className="bg-surface border border-border p-4 rounded-[var(--radius)]">
+        <CostVariancePanel mines={mines} />
       </section>
     </main>
   );
