@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { MineOption } from "@/lib/queries/dashboard";
 import { MineSelector } from "@/components/mine-selector";
 
@@ -8,12 +9,14 @@ interface SidebarProps {
 }
 
 export function Sidebar({ mines }: SidebarProps) {
+  const t = useTranslations("shell");
+
   return (
     <aside
       className="w-[240px] flex-shrink-0 h-screen bg-white border-r border-border flex flex-col sticky top-0"
     >
       <div className="px-4 py-5 border-b border-border">
-        <span className="text-base font-semibold text-text">ERP Minero</span>
+        <span className="text-base font-semibold text-text">{t("appName")}</span>
       </div>
       <nav className="flex-1 px-2 py-4 flex flex-col gap-1">
         <a
@@ -21,14 +24,14 @@ export function Sidebar({ mines }: SidebarProps) {
           className="flex items-center gap-2 px-3 py-2 rounded text-sm text-text-muted hover:bg-surface-2"
         >
           <GridIcon />
-          Dashboard
+          {t("nav.dashboard")}
         </a>
         <a
           href="/?panel=cost-variance"
           className="flex items-center gap-2 px-3 py-2 rounded text-sm text-text-muted hover:bg-surface-2"
         >
           <ChartBarIcon />
-          Cost Variance
+          {t("nav.costVariance")}
         </a>
       </nav>
       <div className="px-4 py-4 border-t border-border">

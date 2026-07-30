@@ -3,8 +3,7 @@
     "name": "ERP Minero"
   },
   "home": {
-    "title": "ERP Minero",
-    "subtitle": "Dashboard en construcción"
+    "title": "ERP Minero"
   },
   "health": {
     "ok": "Operativo"
@@ -45,6 +44,13 @@
     },
     "insight": {
       "label": "Análisis"
+    }
+  },
+  "shell": {
+    "appName": "ERP Minero",
+    "nav": {
+      "dashboard": "Dashboard",
+      "costVariance": "Variación de Costos"
     }
   },
   "costVariance": {

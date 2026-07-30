@@ -106,7 +106,12 @@ export function QueryResults({ result }: QueryResultsProps) {
 
       {/* Insight */}
       {insightText && (
-        <p className="text-sm text-text italic">{insightText}</p>
+        <div className="flex flex-col gap-1">
+          <span className="text-xs font-medium text-text-muted uppercase tracking-wide">
+            {t("insight.label")}
+          </span>
+          <p className="text-sm text-text italic">{insightText}</p>
+        </div>
       )}
     </div>
   );

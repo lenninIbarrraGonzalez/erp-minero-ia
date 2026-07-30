@@ -6,7 +6,16 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => key,
+  useTranslations: (namespace: string) => (key: string) => {
+    const translations: Record<string, Record<string, string>> = {
+      shell: {
+        appName: "ERP Minero",
+        "nav.dashboard": "Dashboard",
+        "nav.costVariance": "Cost Variance",
+      },
+    };
+    return translations[namespace]?.[key] ?? key;
+  },
 }));
 
 // Mock MineSelector — Sidebar imports it
@@ -26,17 +35,17 @@ const mines = [
 ];
 
 describe("Sidebar", () => {
-  it("renders the app name", () => {
+  it("renders the translated app name", () => {
     render(<Sidebar mines={mines} />);
     expect(screen.getByText("ERP Minero")).toBeInTheDocument();
   });
 
-  it("renders a Dashboard navigation link", () => {
+  it("renders a translated Dashboard navigation link", () => {
     render(<Sidebar mines={mines} />);
     expect(screen.getByRole("link", { name: /dashboard/i })).toBeInTheDocument();
   });
 
-  it("renders a Cost Variance navigation link", () => {
+  it("renders a translated Cost Variance navigation link", () => {
     render(<Sidebar mines={mines} />);
     expect(screen.getByRole("link", { name: /cost variance/i })).toBeInTheDocument();
   });
