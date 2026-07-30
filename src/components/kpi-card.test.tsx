@@ -28,4 +28,29 @@ describe("KpiCard", () => {
     // Should not find any +/- delta text
     expect(screen.queryByText(/[+-]\d/)).toBeNull();
   });
+
+  it("renders positive delta inside a Badge with positive variant", () => {
+    render(<KpiCard label="Cost" value="$20" delta={5.2} />);
+
+    const deltaEl = screen.getByText("+5.2%");
+    // Badge renders as a span; check it carries the positive token class
+    expect(deltaEl.className).toContain("text-positive");
+    expect(deltaEl.className).toContain("bg-[#E6F4EF]");
+  });
+
+  it("renders negative delta inside a Badge with negative variant", () => {
+    render(<KpiCard label="Cost" value="$20" delta={-3.1} />);
+
+    const deltaEl = screen.getByText("-3.1%");
+    expect(deltaEl.className).toContain("text-negative");
+    expect(deltaEl.className).toContain("bg-[#FDECEA]");
+  });
+
+  it("renders zero delta inside a Badge with neutral variant", () => {
+    render(<KpiCard label="Cost" value="$20" delta={0} />);
+
+    const deltaEl = screen.getByText("0%");
+    expect(deltaEl.className).toContain("text-text-muted");
+    expect(deltaEl.className).toContain("bg-surface-2");
+  });
 });

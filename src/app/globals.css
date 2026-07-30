@@ -1,29 +1,30 @@
 @import "tailwindcss";
 
 /*
- * Design tokens — single theme, no dark mode.
- * These are PLACEHOLDER values. The real palette (provided later) plugs in here
- * without touching components: only edit the raw values under :root.
+ * Design tokens — Odoo light palette.
+ * All color and radius values are defined here as the single source of truth.
+ * No component or stylesheet outside globals.css SHALL declare these values directly.
  */
 :root {
   /* Surfaces */
-  --color-bg: #0f1115;
-  --color-surface: #171a21;
-  --color-surface-2: #1f232c;
-  --color-border: #2a2f3a;
+  --color-bg: #F8F8F8;
+  --color-surface: #FFFFFF;
+  --color-surface-2: #F0F0F0;
+  --color-border: #E2E8F0;
 
   /* Text */
-  --color-text: #e6e8ec;
-  --color-text-muted: #9aa1ac;
+  --color-text: #212B36;
+  --color-text-muted: #6B7280;
 
-  /* Brand / accent (mineral amber — placeholder) */
-  --color-primary: #d97706;
-  --color-primary-contrast: #0f1115;
+  /* Brand / accent */
+  --color-primary: #714B67;
+  --color-primary-hover: #5C3D54;
+  --color-primary-contrast: #FFFFFF;
 
   /* Semantic (KPI deltas) */
-  --color-positive: #22c55e;
-  --color-negative: #ef4444;
-  --color-warning: #eab308;
+  --color-positive: #00875A;
+  --color-negative: #DE350B;
+  --color-warning: #FF8B00;
 
   --radius: 0.5rem;
 }
@@ -37,6 +38,7 @@
   --color-text: var(--color-text);
   --color-text-muted: var(--color-text-muted);
   --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
   --color-primary-contrast: var(--color-primary-contrast);
   --color-positive: var(--color-positive);
   --color-negative: var(--color-negative);

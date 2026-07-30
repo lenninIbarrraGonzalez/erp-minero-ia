@@ -10,7 +10,9 @@ vi.mock("recharts", () => ({
   LineChart: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="line-chart">{children}</div>
   ),
-  Line: () => <div data-testid="line" />,
+  Line: ({ stroke }: { stroke?: string }) => (
+    <div data-testid="line" data-stroke={stroke} />
+  ),
   XAxis: ({ dataKey }: { dataKey: string }) => (
     <div data-testid="x-axis" data-key={dataKey} />
   ),
@@ -19,6 +21,18 @@ vi.mock("recharts", () => ({
   ResponsiveContainer: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="responsive-container">{children}</div>
   ),
+}));
+
+// ---------------------------------------------------------------------------
+// Mock useChartColors — hook returns resolved token colors
+// ---------------------------------------------------------------------------
+
+vi.mock("@/hooks/use-chart-colors", () => ({
+  useChartColors: () => ({
+    primary: "#714B67",
+    positive: "#00875A",
+    negative: "#DE350B",
+  }),
 }));
 
 const { CostTrendChart } = await import("./cost-trend-chart");
@@ -43,6 +57,14 @@ describe("CostTrendChart", () => {
     const xAxis = screen.getByTestId("x-axis");
     expect(xAxis).toBeInTheDocument();
     expect(xAxis.getAttribute("data-key")).toBe("period");
+  });
+
+  it("renders Line with color from useChartColors, not hardcoded #d97706", () => {
+    render(<CostTrendChart data={trendData} />);
+
+    const line = screen.getByTestId("line");
+    expect(line.getAttribute("data-stroke")).toBe("#714B67");
+    expect(line.getAttribute("data-stroke")).not.toBe("#d97706");
   });
 
   it("renders an empty state message when data is empty", () => {

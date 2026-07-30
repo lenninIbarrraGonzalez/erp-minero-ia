@@ -10,8 +10,8 @@ vi.mock("recharts", () => ({
   BarChart: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="bar-chart">{children}</div>
   ),
-  Bar: ({ dataKey }: { dataKey: string }) => (
-    <div data-testid="bar" data-key={dataKey} />
+  Bar: ({ dataKey, fill }: { dataKey: string; fill?: string }) => (
+    <div data-testid="bar" data-key={dataKey} data-fill={fill} />
   ),
   XAxis: ({ dataKey }: { dataKey: string }) => (
     <div data-testid="x-axis" data-key={dataKey} />
@@ -21,6 +21,18 @@ vi.mock("recharts", () => ({
   ResponsiveContainer: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="responsive-container">{children}</div>
   ),
+}));
+
+// ---------------------------------------------------------------------------
+// Mock useChartColors — hook returns resolved token colors
+// ---------------------------------------------------------------------------
+
+vi.mock("@/hooks/use-chart-colors", () => ({
+  useChartColors: () => ({
+    primary: "#714B67",
+    positive: "#00875A",
+    negative: "#DE350B",
+  }),
 }));
 
 const { CostBreakdownChart } = await import("./cost-breakdown-chart");
@@ -53,6 +65,14 @@ describe("CostBreakdownChart", () => {
 
     const bar = screen.getByTestId("bar");
     expect(bar.getAttribute("data-key")).toBe("totalCost");
+  });
+
+  it("renders Bar with color from useChartColors, not hardcoded #d97706", () => {
+    render(<CostBreakdownChart data={breakdownData} />);
+
+    const bar = screen.getByTestId("bar");
+    expect(bar.getAttribute("data-fill")).toBe("#714B67");
+    expect(bar.getAttribute("data-fill")).not.toBe("#d97706");
   });
 
   it("renders an empty state message when data is empty", () => {

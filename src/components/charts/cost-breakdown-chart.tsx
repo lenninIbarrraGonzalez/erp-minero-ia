@@ -9,12 +9,15 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { CostByDriverPoint } from "@/lib/queries/dashboard";
+import { useChartColors } from "@/hooks/use-chart-colors";
 
 interface CostBreakdownChartProps {
   data: CostByDriverPoint[];
 }
 
 export function CostBreakdownChart({ data }: CostBreakdownChartProps) {
+  const { primary } = useChartColors();
+
   if (data.length === 0) {
     return (
       <div
@@ -41,7 +44,7 @@ export function CostBreakdownChart({ data }: CostBreakdownChartProps) {
             "Total Cost",
           ]}
         />
-        <Bar dataKey="totalCost" fill="#d97706" />
+        <Bar dataKey="totalCost" fill={primary} />
       </BarChart>
     </ResponsiveContainer>
   );

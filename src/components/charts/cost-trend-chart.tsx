@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { CostTrendPoint } from "@/lib/queries/dashboard";
+import { useChartColors } from "@/hooks/use-chart-colors";
 
 interface CostTrendChartProps {
   data: CostTrendPoint[];
@@ -20,6 +21,8 @@ function formatPeriodLabel(period: string): string {
 }
 
 export function CostTrendChart({ data }: CostTrendChartProps) {
+  const { primary } = useChartColors();
+
   if (data.length === 0) {
     return (
       <div
@@ -50,7 +53,7 @@ export function CostTrendChart({ data }: CostTrendChartProps) {
         <Line
           type="monotone"
           dataKey="costPerTonne"
-          stroke="#d97706"
+          stroke={primary}
           strokeWidth={2}
           dot={false}
         />

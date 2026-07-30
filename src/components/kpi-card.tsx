@@ -1,16 +1,23 @@
+import { Badge } from "@/components/ui/badge";
+import type { BadgeVariant } from "@/components/ui/badge";
+
 interface KpiCardProps {
   label: string;
   value: string;
   delta?: number;
 }
 
+function getDeltaVariant(delta: number): BadgeVariant {
+  if (delta > 0) return "positive";
+  if (delta < 0) return "negative";
+  return "neutral";
+}
+
 export function KpiCard({ label, value, delta }: KpiCardProps) {
   const hasDelta = delta !== undefined;
-  const isPositive = hasDelta && delta > 0;
-  const isNegative = hasDelta && delta < 0;
 
   const deltaText = hasDelta
-    ? `${isPositive ? "+" : ""}${delta}%`
+    ? `${delta > 0 ? "+" : ""}${delta}%`
     : null;
 
   return (
@@ -21,17 +28,9 @@ export function KpiCard({ label, value, delta }: KpiCardProps) {
       <span className="text-sm text-text-muted">{label}</span>
       <span className="text-2xl font-semibold text-text">{value}</span>
       {hasDelta && deltaText && (
-        <span
-          className={
-            isPositive
-              ? "text-sm text-positive"
-              : isNegative
-                ? "text-sm text-negative"
-                : "text-sm text-text-muted"
-          }
-        >
+        <Badge variant={getDeltaVariant(delta as number)}>
           {deltaText}
-        </span>
+        </Badge>
       )}
     </div>
   );
