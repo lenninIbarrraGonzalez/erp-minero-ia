@@ -53,10 +53,7 @@ interface MineRow {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function buildCostQuery(
-  db: SupabaseClient,
-  mine: MineFilter,
-): ReturnType<SupabaseClient["from"]> {
+function buildCostQuery(db: SupabaseClient, mine: MineFilter) {
   const q = db.from("cost_entries").select("mine_id, period, driver, amount");
   if (mine !== undefined) {
     return q.eq("mine_id", mine);
@@ -64,10 +61,7 @@ function buildCostQuery(
   return q;
 }
 
-function buildProdQuery(
-  db: SupabaseClient,
-  mine: MineFilter,
-): ReturnType<SupabaseClient["from"]> {
+function buildProdQuery(db: SupabaseClient, mine: MineFilter) {
   const q = db.from("production_runs").select("mine_id, period, tonnage");
   if (mine !== undefined) {
     return q.eq("mine_id", mine);
