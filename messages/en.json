@@ -31,5 +31,20 @@
       "allProvidersFailed": "Could not reach any AI provider. Please try again later.",
       "invalidPrompt": "Prompt cannot be empty."
     }
+  },
+  "textQuery": {
+    "placeholder": "Ask about costs, tonnage, or breakdown by category...",
+    "submit": "Query",
+    "loading": "Processing query...",
+    "emptyResult": "No data found for this query.",
+    "error": {
+      "parseFailure": "Could not interpret the query. Try rephrasing.",
+      "unsupportedMetric": "Unsupported metric. Try 'cost per tonne', 'tonnage', or 'cost by driver'.",
+      "mineNotFound": "The specified mine was not found.",
+      "generic": "An unexpected error occurred. Please try again later."
+    },
+    "insight": {
+      "label": "Analysis"
+    }
   }
 }

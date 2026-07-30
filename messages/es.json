@@ -31,5 +31,20 @@
       "allProvidersFailed": "No se pudo conectar con ningún proveedor de IA. Intentá de nuevo más tarde.",
       "invalidPrompt": "La consulta no puede estar vacía."
     }
+  },
+  "textQuery": {
+    "placeholder": "Preguntá sobre costos, tonelaje o desglose por categoría...",
+    "submit": "Consultar",
+    "loading": "Procesando consulta...",
+    "emptyResult": "No se encontraron datos para esta consulta.",
+    "error": {
+      "parseFailure": "No se pudo interpretar la consulta. Intentá con otros términos.",
+      "unsupportedMetric": "Métrica no soportada. Intentá con 'costo por tonelada', 'tonelaje' o 'costo por categoría'.",
+      "mineNotFound": "La mina especificada no fue encontrada.",
+      "generic": "Ocurrió un error inesperado. Intentá de nuevo más tarde."
+    },
+    "insight": {
+      "label": "Análisis"
+    }
   }
 }
