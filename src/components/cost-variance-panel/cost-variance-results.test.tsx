@@ -35,8 +35,8 @@ const resultWithPositiveDelta = {
   period: "2024-08-01",
   comparisonPeriod: "2024-07-01",
   drivers: [
-    { driver: "fuel", currentAmount: 690000, priorAmount: 600000, delta: 90000, deltaPct: 15 },
-    { driver: "supplies", currentAmount: 350000, priorAmount: 400000, delta: -50000, deltaPct: -12.5 },
+    { driver: "fuel" as const, currentAmount: 690000, priorAmount: 600000, delta: 90000, deltaPct: 15 },
+    { driver: "supplies" as const, currentAmount: 350000, priorAmount: 400000, delta: -50000, deltaPct: -12.5 },
   ],
   totalCurrent: 1040000,
   totalPrior: 1000000,

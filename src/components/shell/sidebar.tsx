@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import type { MineOption } from "@/lib/queries/dashboard";
 import { MineSelector } from "@/components/mine-selector";
 
@@ -19,20 +20,20 @@ export function Sidebar({ mines }: SidebarProps) {
         <span className="text-base font-semibold text-text">{t("appName")}</span>
       </div>
       <nav className="flex-1 px-2 py-4 flex flex-col gap-1">
-        <a
+        <Link
           href="/"
           className="flex items-center gap-2 px-3 py-2 rounded text-sm text-text-muted hover:bg-surface-2"
         >
           <GridIcon />
           {t("nav.dashboard")}
-        </a>
-        <a
+        </Link>
+        <Link
           href="/?panel=cost-variance"
           className="flex items-center gap-2 px-3 py-2 rounded text-sm text-text-muted hover:bg-surface-2"
         >
           <ChartBarIcon />
           {t("nav.costVariance")}
-        </a>
+        </Link>
       </nav>
       <div className="px-4 py-4 border-t border-border">
         <MineSelector mines={mines} />

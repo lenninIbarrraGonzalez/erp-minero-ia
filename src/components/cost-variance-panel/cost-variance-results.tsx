@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { CostVarianceResult } from "@/lib/cost-variance/types";
+import { useChartColors } from "@/hooks/use-chart-colors";
 
 interface CostVarianceResultsProps {
   result: CostVarianceResult | null;
@@ -32,6 +33,7 @@ export function deltaClass(delta: number): string {
 
 export function CostVarianceResults({ result }: CostVarianceResultsProps) {
   const t = useTranslations("costVariance");
+  const chartColors = useChartColors();
 
   if (!result) return null;
 
@@ -99,7 +101,7 @@ export function CostVarianceResults({ result }: CostVarianceResultsProps) {
           <XAxis dataKey="driver" />
           <YAxis />
           <Tooltip />
-          <Bar dataKey="delta" fill="#d97706" />
+          <Bar dataKey="delta" fill={chartColors.primary} />
         </BarChart>
       </ResponsiveContainer>
 

@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { ChartType, QueryRow } from "@/lib/text-query/types";
+import { useChartColors } from "@/hooks/use-chart-colors";
 
 interface QueryResultsData {
   rows: QueryRow[];
@@ -25,6 +26,7 @@ interface QueryResultsProps {
 
 export function QueryResults({ result }: QueryResultsProps) {
   const t = useTranslations("textQuery");
+  const chartColors = useChartColors();
 
   if (!result) return null;
 
@@ -85,7 +87,7 @@ export function QueryResults({ result }: QueryResultsProps) {
             <Line
               type="monotone"
               dataKey={dataKey}
-              stroke="#d97706"
+              stroke={chartColors.primary}
               strokeWidth={2}
               dot={false}
             />
@@ -99,7 +101,7 @@ export function QueryResults({ result }: QueryResultsProps) {
             <XAxis dataKey={columns[0]} />
             <YAxis />
             <Tooltip />
-            <Bar dataKey={dataKey} fill="#d97706" />
+            <Bar dataKey={dataKey} fill={chartColors.primary} />
           </BarChart>
         </ResponsiveContainer>
       )}
