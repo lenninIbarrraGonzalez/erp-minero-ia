@@ -29,7 +29,7 @@ function isCostVarianceError(
     err instanceof Error &&
     typeof (err as { code?: unknown }).code === "string" &&
     ["invalid_input", "mine_not_found", "no_prior_period"].includes(
-      (err as { code: string }).code
+      (err as unknown as { code: string }).code
     )
   );
 }
