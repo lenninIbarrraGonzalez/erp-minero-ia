@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 
 interface QueryInputProps {
   onSubmit: (question: string) => void;
@@ -28,15 +29,15 @@ export function QueryInput({ onSubmit, disabled = false }: QueryInputProps) {
         onChange={(e) => setValue(e.target.value)}
         placeholder={t("placeholder")}
         disabled={disabled}
-        className="flex-1 rounded border border-border bg-surface px-3 py-2 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-50"
+        className="flex-1 rounded border border-border bg-surface px-3 py-2 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
       />
-      <button
+      <Button
         type="submit"
+        variant="primary"
         disabled={disabled || value.trim() === ""}
-        className="rounded bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50"
       >
         {t("submit")}
-      </button>
+      </Button>
     </form>
   );
 }

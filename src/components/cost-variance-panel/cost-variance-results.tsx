@@ -24,6 +24,12 @@ function fmtPct(n: number | null): string {
   return `${n >= 0 ? "+" : ""}${n.toFixed(1)}%`;
 }
 
+export function deltaClass(delta: number): string {
+  if (delta > 0) return "text-negative";
+  if (delta < 0) return "text-positive";
+  return "text-text";
+}
+
 export function CostVarianceResults({ result }: CostVarianceResultsProps) {
   const t = useTranslations("costVariance");
 
@@ -71,25 +77,13 @@ export function CostVarianceResults({ result }: CostVarianceResultsProps) {
                   {fmt(d.currentAmount)}
                 </td>
                 <td
-                  className={`border border-border px-3 py-2 text-right font-medium ${
-                    d.delta > 0
-                      ? "text-red-600"
-                      : d.delta < 0
-                        ? "text-green-600"
-                        : "text-text"
-                  }`}
+                  className={`border border-border px-3 py-2 text-right font-medium ${deltaClass(d.delta)}`}
                 >
                   {d.delta >= 0 ? "+" : ""}
                   {fmt(d.delta)}
                 </td>
                 <td
-                  className={`border border-border px-3 py-2 text-right ${
-                    (d.deltaPct ?? 0) > 0
-                      ? "text-red-600"
-                      : (d.deltaPct ?? 0) < 0
-                        ? "text-green-600"
-                        : "text-text"
-                  }`}
+                  className={`border border-border px-3 py-2 text-right ${deltaClass(d.deltaPct ?? 0)}`}
                 >
                   {fmtPct(d.deltaPct)}
                 </td>

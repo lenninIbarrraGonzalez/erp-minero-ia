@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 
 interface Mine {
   id: string;
@@ -46,7 +47,7 @@ export function CostVarianceInput({
           value={mineId}
           onChange={(e) => setMineId(e.target.value)}
           disabled={disabled}
-          className="rounded border border-border bg-surface px-3 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-50"
+          className="rounded border border-border bg-surface px-3 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
         >
           {mines.map((m) => (
             <option key={m.id} value={m.id}>
@@ -70,17 +71,13 @@ export function CostVarianceInput({
           onChange={(e) => setMonth(e.target.value)}
           disabled={disabled}
           aria-label={t("selectPeriod")}
-          className="rounded border border-border bg-surface px-3 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-50"
+          className="rounded border border-border bg-surface px-3 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={!canSubmit}
-        className="rounded bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50"
-      >
+      <Button type="submit" variant="primary" disabled={!canSubmit}>
         {t("submit")}
-      </button>
+      </Button>
     </form>
   );
 }

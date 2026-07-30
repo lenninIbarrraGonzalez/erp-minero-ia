@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { fetchMines } from "@/lib/queries/dashboard";
+import { AppShell } from "@/components/shell/app-shell";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,13 +28,20 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const locale = await getLocale();
+  const db = createSupabaseServerClient();
+  const mines = await fetchMines(db);
+
   return (
     <html
       lang={locale}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+      <body className="min-h-full">
+        <NextIntlClientProvider>
+          <AppShell mines={mines}>
+            {children}
+          </AppShell>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
