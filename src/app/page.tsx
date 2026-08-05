@@ -7,7 +7,6 @@ import {
   fetchCostByDriver,
 } from "@/lib/queries/dashboard";
 import { KpiCard } from "@/components/kpi-card";
-import { MineSelector } from "@/components/mine-selector";
 import { CostTrendChart } from "@/components/charts/cost-trend-chart";
 import { CostBreakdownChart } from "@/components/charts/cost-breakdown-chart";
 import { QueryPanel } from "@/components/query-panel/query-panel";
@@ -80,10 +79,6 @@ export default async function Home({ searchParams }: HomeProps) {
         </Card>
       </section>
 
-      {/* Mine Selector — visible on mobile when sidebar is hidden */}
-      <div className="sr-only">
-        <MineSelector mines={mines} selectedId={mineId} />
-      </div>
     </main>
   );
 }

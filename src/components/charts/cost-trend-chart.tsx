@@ -34,11 +34,19 @@ export function CostTrendChart({ data }: CostTrendChartProps) {
     );
   }
 
+  const values = data.map((d) => d.costPerTonne);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const padding = (max - min) * 0.3 || 1;
+  const domainMin = Math.floor(min - padding);
+  const domainMax = Math.ceil(max + padding);
+
   return (
     <ResponsiveContainer width="100%" height={240}>
       <LineChart data={data}>
         <XAxis dataKey="period" tickFormatter={formatPeriodLabel} />
         <YAxis
+          domain={[domainMin, domainMax]}
           tickFormatter={(value: number) =>
             `$${value.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
           }
