@@ -10,17 +10,18 @@ import type { ChartType, ParsedIntent, QueryRow } from "./types";
  * Decision table:
  * - empty rows → 'none'
  * - cost_by_driver → always 'bar' (drivers are categorical, not temporal)
- * - cost_per_tonne with period.month OR tonnage with groupBy=month → 'line' (temporal series)
+ * - rows have a 'period' column → 'line' (temporal series, regardless of intent flags)
  * - everything else → 'bar'
  */
 export function getChartType(intent: ParsedIntent, rows: QueryRow[]): ChartType {
   if (rows.length === 0) return "none";
 
-  if (intent.metric === "cost_by_driver") return "bar";
+  if (intent.metric === "cost_by_driver") {
+    // Multi-mine full breakdown has both mine and driver columns — too complex for a simple chart
+    if ("mine" in rows[0] && "driver" in rows[0]) return "none";
+    return "bar";
+  }
 
-  const isTemporal =
-    (intent.period?.month !== undefined) ||
-    intent.groupBy === "month";
-
-  return isTemporal ? "line" : "bar";
+  const hasPeriodColumn = "period" in rows[0];
+  return hasPeriodColumn ? "line" : "bar";
 }

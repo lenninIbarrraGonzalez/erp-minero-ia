@@ -14,6 +14,15 @@ import {
 import type { ChartType, QueryRow } from "@/lib/text-query/types";
 import { useChartColors } from "@/hooks/use-chart-colors";
 
+const numFmt = new Intl.NumberFormat("en-US", {
+  maximumFractionDigits: 2,
+});
+
+function formatCell(value: string | number): string {
+  if (typeof value === "number") return numFmt.format(value);
+  return value;
+}
+
 interface QueryResultsData {
   rows: QueryRow[];
   chartType: ChartType;
@@ -68,7 +77,7 @@ export function QueryResults({ result }: QueryResultsProps) {
                     key={col}
                     className="border border-border px-3 py-2 text-text"
                   >
-                    {String(row[col])}
+                    {formatCell(row[col])}
                   </td>
                 ))}
               </tr>

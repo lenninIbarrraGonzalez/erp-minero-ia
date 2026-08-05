@@ -22,6 +22,8 @@ const monthSchema = z.union([
 export const ParsedIntentSchema = z.object({
   metric: z.enum(["cost_per_tonne", "tonnage", "cost_by_driver"]),
   mineName: z.string().optional(),
+  mineNames: z.array(z.string()).min(2).optional(),
+  driverFilter: z.enum(["fuel", "supplies", "equipment", "labor"]).optional(),
   period: z
     .object({
       year: z.number().int().min(2000).max(2100),

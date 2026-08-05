@@ -17,14 +17,22 @@ describe("getChartType", () => {
     expect(getChartType(intent, rows)).toBe("line");
   });
 
-  it("returns 'bar' for cost_per_tonne without a period (no temporal)", () => {
+  it("returns 'line' for cost_per_tonne without a period when rows have period column", () => {
     const intent: ParsedIntent = {
       metric: "cost_per_tonne",
     };
-    expect(getChartType(intent, rows)).toBe("bar");
+    expect(getChartType(intent, rows)).toBe("line");
   });
 
-  it("returns 'line' for tonnage with groupBy=month (temporal)", () => {
+  it("returns 'bar' for cost_per_tonne when rows have no period column", () => {
+    const intent: ParsedIntent = {
+      metric: "cost_per_tonne",
+    };
+    const nonTemporalRows: QueryRow[] = [{ driver: "fuel", amount: 100 }];
+    expect(getChartType(intent, nonTemporalRows)).toBe("bar");
+  });
+
+  it("returns 'line' for tonnage with period column in rows", () => {
     const intent: ParsedIntent = {
       metric: "tonnage",
       groupBy: "month",

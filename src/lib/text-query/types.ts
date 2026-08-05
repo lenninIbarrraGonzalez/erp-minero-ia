@@ -9,6 +9,8 @@ export type Metric = "cost_per_tonne" | "tonnage" | "cost_by_driver";
 export interface ParsedIntent {
   metric: Metric;
   mineName?: string;
+  mineNames?: string[]; // 2+ mines for comparison queries
+  driverFilter?: "fuel" | "supplies" | "equipment" | "labor";
   period?: {
     year: number;
     month?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
@@ -31,6 +33,7 @@ export interface TextQueryError {
     | "mine_not_found"
     | "empty_result"
     | "llm_error"
-    | "db_error";
+    | "db_error"
+    | "out_of_scope";
   message: string;
 }

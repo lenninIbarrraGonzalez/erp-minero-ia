@@ -40,6 +40,7 @@
       "parseFailure": "No se pudo interpretar la consulta. Intentá con otros términos.",
       "unsupportedMetric": "Métrica no soportada. Intentá con 'costo por tonelada', 'tonelaje' o 'costo por categoría'.",
       "mineNotFound": "La mina especificada no fue encontrada.",
+      "outOfScope": "Esta consulta no está relacionada con operaciones mineras. Podés preguntar sobre costos, tonelaje o desglose por categoría.",
       "generic": "Ocurrió un error inesperado. Intentá de nuevo más tarde."
     },
     "insight": {

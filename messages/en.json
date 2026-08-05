@@ -40,6 +40,7 @@
       "parseFailure": "Could not interpret the query. Try rephrasing.",
       "unsupportedMetric": "Unsupported metric. Try 'cost per tonne', 'tonnage', or 'cost by driver'.",
       "mineNotFound": "The specified mine was not found.",
+      "outOfScope": "This query is not related to mining operations. You can ask about costs, tonnage, or cost breakdown by driver.",
       "generic": "An unexpected error occurred. Please try again later."
     },
     "insight": {

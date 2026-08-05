@@ -78,6 +78,7 @@ function mapErrorCode(code: string): string {
     parse_failure: "error.parseFailure",
     unsupported_metric: "error.unsupportedMetric",
     mine_not_found: "error.mineNotFound",
+    out_of_scope: "error.outOfScope",
     llm_error: "error.generic",
     db_error: "error.generic",
     internal_error: "error.generic",

@@ -10,20 +10,29 @@ import { LLMProviderError } from "@/lib/llm/types";
 
 const SCHEMA_DESCRIPTION = `{
   "metric": "cost_per_tonne" | "tonnage" | "cost_by_driver",
-  "mineName": string (optional),
+  "mineName": string (optional — use for exactly ONE specific mine),
+  "mineNames": string[] (optional — use ONLY when comparing 2 or more mines, e.g. ["Cerro Rojo", "Veta Dorada"]),
+  "driverFilter": "fuel" | "supplies" | "equipment" | "labor" (optional — use when the user asks about a specific cost driver),
   "period": { "year": number, "month": 1-12 (optional) } (optional),
   "groupBy": "mine" | "driver" | "month" (optional)
 }`;
 
 function buildPrompt(question: string): string {
-  return `You are a mining ERP query parser. Extract the intent from the user's question and respond with ONLY a JSON object matching this schema:
+  return `You are a mining ERP query parser. This system only handles queries about mining operations: costs, tonnage, production, and cost drivers (fuel, supplies, equipment, labor).
+
+If the question is completely unrelated to mining operations, respond with ONLY: {"out_of_scope": true}
+
+Otherwise, extract the intent and respond with ONLY a JSON object matching this schema:
 
 ${SCHEMA_DESCRIPTION}
 
 Rules:
 - metric must be exactly one of: "cost_per_tonne", "tonnage", "cost_by_driver"
 - Convert any date mentions (e.g. "March 2024", "marzo 2024") to year/month numbers
-- If no specific mine is mentioned, omit mineName entirely. Phrases like "all mines", "todas las minas", "todas" mean no specific mine — omit mineName
+- If the user compares or lists 2 or more mines, use "mineNames" (array) and omit "mineName"
+- If the user mentions exactly one specific mine, use "mineName" (string) and omit "mineNames"
+- If no specific mine is mentioned, omit both mineName and mineNames. Phrases like "all mines", "todas las minas", "todas" mean no specific mine
+- If the user asks about a specific cost driver, set "driverFilter": "fuel" (combustible/fuel), "supplies" (insumos/supplies), "equipment" (equipos/equipment), "labor" (mano de obra/labor)
 - If no time period is mentioned, omit period entirely (do not set year or month to null)
 - Respond with ONLY valid JSON, no explanation, no markdown, no code blocks
 
@@ -67,6 +76,15 @@ export async function parseIntent(
     parsed = JSON.parse(cleaned);
   } catch {
     throw makeError("parse_failure", `LLM returned invalid JSON: ${cleaned}`);
+  }
+
+  // Reject out-of-scope questions before schema validation
+  if (
+    typeof parsed === "object" &&
+    parsed !== null &&
+    (parsed as Record<string, unknown>).out_of_scope === true
+  ) {
+    throw makeError("out_of_scope", "Question is not related to mining operations");
   }
 
   // Some models return null for optional fields instead of omitting them.
