@@ -23,8 +23,8 @@ ${SCHEMA_DESCRIPTION}
 Rules:
 - metric must be exactly one of: "cost_per_tonne", "tonnage", "cost_by_driver"
 - Convert any date mentions (e.g. "March 2024", "marzo 2024") to year/month numbers
-- If no mine is mentioned, omit mineName
-- If no time period is mentioned, omit period
+- If no specific mine is mentioned, omit mineName entirely. Phrases like "all mines", "todas las minas", "todas" mean no specific mine — omit mineName
+- If no time period is mentioned, omit period entirely (do not set year or month to null)
 - Respond with ONLY valid JSON, no explanation, no markdown, no code blocks
 
 User question: ${question}`;
@@ -59,31 +59,37 @@ export async function parseIntent(
     throw makeError("llm_error", "Unknown LLM error");
   }
 
+  // Strip markdown code fences if the model wraps the JSON
+  const cleaned = text.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "").trim();
+
   let parsed: unknown;
   try {
-    parsed = JSON.parse(text);
+    parsed = JSON.parse(cleaned);
   } catch {
-    throw makeError("parse_failure", `LLM returned invalid JSON: ${text}`);
+    throw makeError("parse_failure", `LLM returned invalid JSON: ${cleaned}`);
   }
 
-  const result = ParsedIntentSchema.safeParse(parsed);
+  // Some models return null for optional fields instead of omitting them.
+  // Strip null/undefined values AND empty objects so Zod optional() works correctly.
+  function stripNulls(obj: unknown): unknown {
+    if (obj === null || obj === undefined) return undefined;
+    if (typeof obj !== "object" || Array.isArray(obj)) return obj;
+    const entries = Object.entries(obj as Record<string, unknown>)
+      .map(([k, v]) => [k, stripNulls(v)] as [string, unknown])
+      .filter(([, v]) => v !== undefined);
+    if (entries.length === 0) return undefined;
+    return Object.fromEntries(entries);
+  }
+  const cleaned2 = stripNulls(parsed);
+  const result = ParsedIntentSchema.safeParse(cleaned2);
   if (!result.success) {
-    // Check specifically for unsupported metric
     const raw = parsed as Record<string, unknown>;
     const knownMetrics = ["cost_per_tonne", "tonnage", "cost_by_driver"];
-    if (
-      typeof raw?.metric === "string" &&
-      !knownMetrics.includes(raw.metric)
-    ) {
-      throw makeError(
-        "unsupported_metric",
-        `Unsupported metric: ${raw.metric}`
-      );
+    if (typeof raw?.metric === "string" && !knownMetrics.includes(raw.metric)) {
+      throw makeError("unsupported_metric", `Unsupported metric: ${raw.metric}`);
     }
-    throw makeError(
-      "parse_failure",
-      `Intent does not match expected schema: ${result.error.message}`
-    );
+    const detail = JSON.stringify(result.error.issues ?? result.error);
+    throw makeError("parse_failure", `Intent does not match expected schema: ${detail}`);
   }
 
   return result.data as ParsedIntent;

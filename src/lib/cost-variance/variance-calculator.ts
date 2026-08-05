@@ -21,7 +21,7 @@ interface MineRow {
 // ---------------------------------------------------------------------------
 
 function makeCostVarianceError(
-  code: "mine_not_found" | "no_prior_period",
+  code: "mine_not_found" | "no_prior_period" | "no_data_in_period",
   message: string
 ): Error & { code: string } {
   const err = new Error(message) as Error & { code: string };
@@ -70,7 +70,15 @@ export async function computeVariance(
   const currentRows = currentData ?? [];
   const priorRows = priorData ?? [];
 
-  // Check for no_prior_period: prior has 0 rows
+  // If selected period itself has no data, the mine+period combination doesn't exist
+  if (currentRows.length === 0 && priorRows.length === 0) {
+    throw makeCostVarianceError(
+      "no_data_in_period",
+      `No cost entries found for period: ${period}`
+    );
+  }
+
+  // Prior period is missing but current exists — genuine first-period case
   if (priorRows.length === 0) {
     throw makeCostVarianceError(
       "no_prior_period",

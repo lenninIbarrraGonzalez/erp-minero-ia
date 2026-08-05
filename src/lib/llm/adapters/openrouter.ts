@@ -5,7 +5,7 @@ import {
   LLMProviderError,
 } from "@/lib/llm/types";
 
-const DEFAULT_MODEL = "meta-llama/llama-3.3-70b-instruct:free";
+const DEFAULT_MODEL = "meta-llama/llama-3.1-8b-instruct";
 const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 const REFERER = "https://erp-minero.vercel.app";
 

@@ -47,7 +47,8 @@ export type CostVarianceResult = z.infer<typeof CostVarianceResultSchema>;
 export type CostVarianceErrorCode =
   | "invalid_input"
   | "mine_not_found"
-  | "no_prior_period";
+  | "no_prior_period"
+  | "no_data_in_period";
 
 export interface CostVarianceError {
   code: CostVarianceErrorCode;

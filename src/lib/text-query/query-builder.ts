@@ -58,10 +58,20 @@ function buildProdQuery(db: SupabaseClient, mineId?: string): AnyQuery {
 // Mine name resolution
 // ---------------------------------------------------------------------------
 
+const GENERIC_MINE_TERMS = new Set([
+  "all", "todas", "todas las minas", "all mines", "minas", "mines",
+  "every mine", "each mine", "cualquier mina",
+]);
+
 async function resolveMineId(
   db: SupabaseClient,
   mineName: string
-): Promise<string> {
+): Promise<string | undefined> {
+  // Generic terms mean "no specific mine" — return undefined to query all
+  if (GENERIC_MINE_TERMS.has(mineName.toLowerCase().trim())) {
+    return undefined;
+  }
+
   const { data, error } = await db.from("mines").select("id, name");
 
   if (error ?? !data) {
@@ -70,7 +80,9 @@ async function resolveMineId(
 
   const mines = data as MineRow[];
   const lower = mineName.toLowerCase();
-  const match = mines.find((m) => m.name.toLowerCase() === lower);
+  const match = mines.find(
+    (m) => m.name.toLowerCase() === lower || m.name.toLowerCase().includes(lower)
+  );
 
   if (!match) {
     throw makeError("mine_not_found", `Mine not found: ${mineName}`);

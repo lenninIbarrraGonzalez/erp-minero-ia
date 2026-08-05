@@ -68,7 +68,8 @@
     "error": {
       "generic": "Ocurrió un error inesperado. Intentá de nuevo más tarde.",
       "mineNotFound": "La mina especificada no fue encontrada.",
-      "noPriorPeriod": "No hay datos del mes anterior para comparar."
+      "noPriorPeriod": "No hay datos del mes anterior para comparar.",
+      "noDataInPeriod": "No hay datos para el período seleccionado. Los datos disponibles son de enero a diciembre de 2024."
     }
   }
 }

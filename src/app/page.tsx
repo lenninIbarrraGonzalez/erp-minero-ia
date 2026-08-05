@@ -5,6 +5,7 @@ import {
   fetchKpiSummary,
   fetchCostTrend,
   fetchCostByDriver,
+  fetchPeriodRange,
 } from "@/lib/queries/dashboard";
 import { KpiCard } from "@/components/kpi-card";
 import { CostTrendChart } from "@/components/charts/cost-trend-chart";
@@ -22,11 +23,12 @@ export default async function Home({ searchParams }: HomeProps) {
   const db = createSupabaseServerClient();
   const t = await getTranslations("dashboard");
 
-  const [mines, kpis, trendData, breakdownData] = await Promise.all([
+  const [mines, kpis, trendData, breakdownData, periodRange] = await Promise.all([
     fetchMines(db),
     fetchKpiSummary(db, mineId),
     fetchCostTrend(db, mineId),
     fetchCostByDriver(db, mineId),
+    fetchPeriodRange(db),
   ]);
 
   return (
@@ -75,7 +77,7 @@ export default async function Home({ searchParams }: HomeProps) {
       {/* Cost Variance Explainer */}
       <section>
         <Card className="p-4">
-          <CostVariancePanel mines={mines} />
+          <CostVariancePanel mines={mines} periodRange={periodRange} />
         </Card>
       </section>
 

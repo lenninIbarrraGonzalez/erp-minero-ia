@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { CostVarianceInput } from "./cost-variance-input";
 import { CostVarianceResults } from "./cost-variance-results";
 import type { CostVarianceResult } from "@/lib/cost-variance/types";
+import type { PeriodRange } from "@/lib/queries/dashboard";
 
 interface Mine {
   id: string;
@@ -13,9 +14,10 @@ interface Mine {
 
 interface CostVariancePanelProps {
   mines: Mine[];
+  periodRange: PeriodRange | null;
 }
 
-export function CostVariancePanel({ mines }: CostVariancePanelProps) {
+export function CostVariancePanel({ mines, periodRange }: CostVariancePanelProps) {
   const t = useTranslations("costVariance");
   const [isPending, startTransition] = useTransition();
   const [result, setResult] = useState<CostVarianceResult | null>(null);
@@ -55,6 +57,8 @@ export function CostVariancePanel({ mines }: CostVariancePanelProps) {
         mines={mines}
         onSubmit={handleSubmit}
         disabled={isPending}
+        minPeriod={periodRange?.min}
+        maxPeriod={periodRange?.max}
       />
 
       {isPending && (
@@ -76,6 +80,7 @@ function mapErrorCode(code: string): string {
   const map: Record<string, string> = {
     mine_not_found: "error.mineNotFound",
     no_prior_period: "error.noPriorPeriod",
+    no_data_in_period: "error.noDataInPeriod",
     invalid_input: "error.generic",
     internal_error: "error.generic",
   };

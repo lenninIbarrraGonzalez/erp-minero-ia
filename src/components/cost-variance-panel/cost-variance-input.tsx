@@ -13,16 +13,20 @@ interface CostVarianceInputProps {
   mines: Mine[];
   onSubmit: (mineId: string, period: string) => void;
   disabled?: boolean;
+  minPeriod?: string; // YYYY-MM — earliest available period
+  maxPeriod?: string; // YYYY-MM — latest available period
 }
 
 export function CostVarianceInput({
   mines,
   onSubmit,
   disabled = false,
+  minPeriod,
+  maxPeriod,
 }: CostVarianceInputProps) {
   const t = useTranslations("costVariance");
   const [mineId, setMineId] = useState(mines[0]?.id ?? "");
-  const [month, setMonth] = useState("");
+  const [month, setMonth] = useState(maxPeriod ?? "");
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -68,6 +72,8 @@ export function CostVarianceInput({
           id="cv-period"
           type="month"
           value={month}
+          min={minPeriod}
+          max={maxPeriod}
           onChange={(e) => setMonth(e.target.value)}
           disabled={disabled}
           aria-label={t("selectPeriod")}

@@ -68,7 +68,8 @@
     "error": {
       "generic": "An unexpected error occurred. Please try again later.",
       "mineNotFound": "The specified mine was not found.",
-      "noPriorPeriod": "No data available for the prior month to compare."
+      "noPriorPeriod": "No data available for the prior month to compare.",
+      "noDataInPeriod": "No data available for the selected period. Available data covers January to December 2024."
     }
   }
 }

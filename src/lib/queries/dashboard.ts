@@ -70,6 +70,31 @@ function buildProdQuery(db: SupabaseClient, mine: MineFilter) {
 }
 
 // ---------------------------------------------------------------------------
+// fetchPeriodRange
+// ---------------------------------------------------------------------------
+
+export interface PeriodRange {
+  min: string; // YYYY-MM
+  max: string; // YYYY-MM
+}
+
+export async function fetchPeriodRange(
+  db: SupabaseClient,
+): Promise<PeriodRange | null> {
+  const [minResult, maxResult] = await Promise.all([
+    db.from("cost_entries").select("period").order("period", { ascending: true }).limit(1),
+    db.from("cost_entries").select("period").order("period", { ascending: false }).limit(1),
+  ]);
+
+  const minPeriod = (minResult.data as Array<{ period: string }> | null)?.[0]?.period;
+  const maxPeriod = (maxResult.data as Array<{ period: string }> | null)?.[0]?.period;
+
+  if (!minPeriod || !maxPeriod) return null;
+
+  return { min: minPeriod.slice(0, 7), max: maxPeriod.slice(0, 7) };
+}
+
+// ---------------------------------------------------------------------------
 // fetchMines
 // ---------------------------------------------------------------------------
 
