@@ -49,16 +49,28 @@ interface PeriodRange {
   end: string; // exclusive upper bound
 }
 
+function pad(n: number): string {
+  return String(n).padStart(2, "0");
+}
+
 function buildPeriodRange(period: ParsedIntent["period"]): PeriodRange | undefined {
   if (!period) return undefined;
-  const { year, month } = period;
+  const { year, month, quarter } = period;
+
+  if (quarter !== undefined) {
+    const startMonth = (quarter - 1) * 3 + 1; // Q1→1, Q2→4, Q3→7, Q4→10
+    const endMonth = quarter * 3;              // Q1→3, Q2→6, Q3→9, Q4→12
+    const nextMonth = endMonth === 12 ? 1 : endMonth + 1;
+    const nextYear = endMonth === 12 ? year + 1 : year;
+    return { start: `${year}-${pad(startMonth)}-01`, end: `${nextYear}-${pad(nextMonth)}-01` };
+  }
+
   if (month !== undefined) {
-    const mm = String(month).padStart(2, "0");
     const nextMonth = month === 12 ? 1 : month + 1;
     const nextYear = month === 12 ? year + 1 : year;
-    const nmm = String(nextMonth).padStart(2, "0");
-    return { start: `${year}-${mm}-01`, end: `${nextYear}-${nmm}-01` };
+    return { start: `${year}-${pad(month)}-01`, end: `${nextYear}-${pad(nextMonth)}-01` };
   }
+
   return { start: `${year}-01-01`, end: `${year + 1}-01-01` };
 }
 
@@ -204,6 +216,49 @@ async function queryCostByDriver(
   }));
 }
 
+async function queryTonnageByMine(
+  db: SupabaseClient,
+  range?: PeriodRange
+): Promise<QueryRow[]> {
+  const [minesResult, prodResult] = await Promise.all([
+    db.from("mines").select("id, name"),
+    buildProdQuery(db, undefined, range),
+  ]);
+
+  const mines = (minesResult.data ?? []) as MineRow[];
+  const prodRows = (prodResult.data ?? []) as ProductionRunRow[];
+
+  const tonnageByMineId = new Map<string, number>();
+  for (const row of prodRows) {
+    tonnageByMineId.set(row.mine_id, (tonnageByMineId.get(row.mine_id) ?? 0) + Number(row.tonnage));
+  }
+
+  return mines
+    .filter((m) => tonnageByMineId.has(m.id))
+    .map((m) => ({ mine: m.name, total_tonnage: tonnageByMineId.get(m.id) ?? 0 }))
+    .sort((a, b) => (b.total_tonnage as number) - (a.total_tonnage as number));
+}
+
+async function queryCostByDriverTimeSeries(
+  db: SupabaseClient,
+  driverFilter: string,
+  mineId?: string,
+  range?: PeriodRange
+): Promise<QueryRow[]> {
+  const result = await buildCostQuery(db, mineId, range);
+  const rows = (result.data ?? []) as CostEntryRow[];
+
+  const filtered = rows.filter((r) => r.driver === driverFilter);
+
+  const amountByPeriod = new Map<string, number>();
+  for (const row of filtered) {
+    amountByPeriod.set(row.period, (amountByPeriod.get(row.period) ?? 0) + Number(row.amount));
+  }
+
+  const periods = Array.from(amountByPeriod.keys()).sort();
+  return periods.map((period) => ({ period, amount: amountByPeriod.get(period) ?? 0 }));
+}
+
 // ---------------------------------------------------------------------------
 // Multi-mine comparison
 // ---------------------------------------------------------------------------
@@ -304,10 +359,18 @@ export async function buildAndExecuteQuery(
       rows = await queryCostPerTonne(db, mineId, periodRange);
       break;
     case "tonnage":
-      rows = await queryTonnage(db, mineId, periodRange);
+      if (intent.groupBy === "mine") {
+        rows = await queryTonnageByMine(db, periodRange);
+      } else {
+        rows = await queryTonnage(db, mineId, periodRange);
+      }
       break;
     case "cost_by_driver":
-      rows = await queryCostByDriver(db, mineId, periodRange, intent.driverFilter);
+      if (intent.groupBy === "month" && intent.driverFilter) {
+        rows = await queryCostByDriverTimeSeries(db, intent.driverFilter, mineId, periodRange);
+      } else {
+        rows = await queryCostByDriver(db, mineId, periodRange, intent.driverFilter);
+      }
       break;
     default: {
       const _exhaustive: never = intent.metric;

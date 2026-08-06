@@ -19,6 +19,8 @@ export function getChartType(intent: ParsedIntent, rows: QueryRow[]): ChartType 
   if (intent.metric === "cost_by_driver") {
     // Multi-mine full breakdown has both mine and driver columns — too complex for a simple chart
     if ("mine" in rows[0] && "driver" in rows[0]) return "none";
+    // Time-series result (groupBy: "month") has a period column → line chart
+    if ("period" in rows[0]) return "line";
     return "bar";
   }
 

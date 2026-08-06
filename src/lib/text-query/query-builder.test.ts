@@ -267,6 +267,107 @@ describe("buildAndExecuteQuery", () => {
     expect(rows[0]).toMatchObject({ period: "2024-03-01", cost_per_tonne: 9 });
   });
 
+  it("expands Q2 period to April–June date range", async () => {
+    const intent: ParsedIntent = {
+      metric: "cost_per_tonne",
+      period: { year: 2024, quarter: 2 },
+    };
+
+    const db = makeSupabaseMock({
+      cost_entries: {
+        data: [
+          { mine_id: "m1", period: "2024-04-01", driver: "fuel", amount: 900 },
+          { mine_id: "m1", period: "2024-05-01", driver: "fuel", amount: 800 },
+          { mine_id: "m1", period: "2024-06-01", driver: "fuel", amount: 700 },
+        ],
+        error: null,
+      },
+      production_runs: {
+        data: [
+          { mine_id: "m1", period: "2024-04-01", tonnage: 100 },
+          { mine_id: "m1", period: "2024-05-01", tonnage: 100 },
+          { mine_id: "m1", period: "2024-06-01", tonnage: 100 },
+        ],
+        error: null,
+      },
+    });
+
+    const rows = await buildAndExecuteQuery(db as never, intent);
+
+    expect(rows).toHaveLength(3);
+    expect(rows.map((r) => r.period)).toEqual(["2024-04-01", "2024-05-01", "2024-06-01"]);
+  });
+
+  it("returns tonnage per mine when groupBy is 'mine'", async () => {
+    const intent: ParsedIntent = {
+      metric: "tonnage",
+      groupBy: "mine",
+    };
+
+    const db = makeSupabaseMock({
+      mines: {
+        data: [
+          { id: "mine-1", name: "Cerro Rojo" },
+          { id: "mine-2", name: "Veta Dorada" },
+        ],
+        error: null,
+      },
+      production_runs: {
+        data: [
+          { mine_id: "mine-1", period: "2024-01-01", tonnage: 200 },
+          { mine_id: "mine-1", period: "2024-02-01", tonnage: 300 },
+          { mine_id: "mine-2", period: "2024-01-01", tonnage: 150 },
+        ],
+        error: null,
+      },
+    });
+
+    const rows = await buildAndExecuteQuery(db as never, intent);
+
+    expect(rows).toHaveLength(2);
+    expect(rows[0]).toHaveProperty("mine");
+    expect(rows[0]).toHaveProperty("total_tonnage");
+    const cerro = rows.find((r) => r.mine === "Cerro Rojo");
+    expect(cerro?.total_tonnage).toBe(500);
+    const veta = rows.find((r) => r.mine === "Veta Dorada");
+    expect(veta?.total_tonnage).toBe(150);
+  });
+
+  it("returns monthly time-series for a driver when groupBy is 'month'", async () => {
+    const intent: ParsedIntent = {
+      metric: "cost_by_driver",
+      driverFilter: "fuel",
+      mineName: "Cerro Rojo",
+      groupBy: "month",
+      period: { year: 2024 },
+    };
+
+    const db = makeSupabaseMock({
+      mines: {
+        data: [{ id: "mine-1", name: "Cerro Rojo" }],
+        error: null,
+      },
+      cost_entries: {
+        data: [
+          { mine_id: "mine-1", period: "2024-01-01", driver: "fuel", amount: 500 },
+          { mine_id: "mine-1", period: "2024-01-01", driver: "labor", amount: 200 },
+          { mine_id: "mine-1", period: "2024-02-01", driver: "fuel", amount: 600 },
+          { mine_id: "mine-1", period: "2024-03-01", driver: "fuel", amount: 550 },
+        ],
+        error: null,
+      },
+    });
+
+    const rows = await buildAndExecuteQuery(db as never, intent);
+
+    expect(rows).toHaveLength(3);
+    expect(rows[0]).toMatchObject({ period: "2024-01-01", amount: 500 });
+    expect(rows[1]).toMatchObject({ period: "2024-02-01", amount: 600 });
+    expect(rows[2]).toMatchObject({ period: "2024-03-01", amount: 550 });
+    // Should NOT include labor rows
+    expect(rows.every((r) => !("driver" in r))).toBe(true);
+  });
+
   it("throws TextQueryError with code 'empty_result' when query returns no rows", async () => {
     const intent: ParsedIntent = {
       metric: "tonnage",

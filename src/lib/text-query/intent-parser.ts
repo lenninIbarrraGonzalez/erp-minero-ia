@@ -13,7 +13,7 @@ const SCHEMA_DESCRIPTION = `{
   "mineName": string (optional — use for exactly ONE specific mine),
   "mineNames": string[] (optional — use ONLY when comparing 2 or more mines, e.g. ["Cerro Rojo", "Veta Dorada"]),
   "driverFilter": "fuel" | "supplies" | "equipment" | "labor" (optional — use when the user asks about a specific cost driver),
-  "period": { "year": number, "month": 1-12 (optional) } (optional),
+  "period": { "year": number, "month": 1-12 (optional), "quarter": 1-4 (optional) } (optional),
   "groupBy": "mine" | "driver" | "month" (optional)
 }`;
 
@@ -29,10 +29,13 @@ ${SCHEMA_DESCRIPTION}
 Rules:
 - metric must be exactly one of: "cost_per_tonne", "tonnage", "cost_by_driver"
 - Convert any date mentions (e.g. "March 2024", "marzo 2024") to year/month numbers
+- For quarter mentions (primer/segundo/tercer/cuarto trimestre, Q1–Q4), set period.quarter (1–4) and period.year. Do NOT set period.month for quarters. Quarter 1 = months 1–3, Quarter 2 = months 4–6, Quarter 3 = months 7–9, Quarter 4 = months 10–12
 - If the user compares or lists 2 or more mines, use "mineNames" (array) and omit "mineName"
 - If the user mentions exactly one specific mine, use "mineName" (string) and omit "mineNames"
 - If no specific mine is mentioned, omit both mineName and mineNames. Phrases like "all mines", "todas las minas", "todas" mean no specific mine
 - If the user asks about a specific cost driver, set "driverFilter": "fuel" (combustible/fuel), "supplies" (insumos/supplies), "equipment" (equipos/equipment), "labor" (mano de obra/labor)
+- If the user asks about "each mine", "all mines separately", "por mina", "cada mina", or wants a per-mine breakdown, set groupBy: "mine"
+- If the user asks how a specific driver cost evolved "month by month", "mes a mes", "over time", or "monthly trend", set groupBy: "month" (also requires driverFilter)
 - If no time period is mentioned, omit period entirely (do not set year or month to null)
 - Respond with ONLY valid JSON, no explanation, no markdown, no code blocks
 

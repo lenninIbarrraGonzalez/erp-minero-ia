@@ -28,6 +28,7 @@ export const ParsedIntentSchema = z.object({
     .object({
       year: z.number().int().min(2000).max(2100),
       month: monthSchema.optional(),
+      quarter: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]).optional(),
     })
     .optional(),
   groupBy: z.enum(["mine", "driver", "month"]).optional(),

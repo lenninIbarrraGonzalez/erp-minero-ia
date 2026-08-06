@@ -40,12 +40,13 @@ describe("getChartType", () => {
     expect(getChartType(intent, rows)).toBe("line");
   });
 
-  it("returns 'bar' for cost_by_driver regardless of period", () => {
+  it("returns 'bar' for cost_by_driver when rows have driver-category shape", () => {
     const intent: ParsedIntent = {
       metric: "cost_by_driver",
       period: { year: 2024, month: 1 },
     };
-    expect(getChartType(intent, rows)).toBe("bar");
+    const driverRows: QueryRow[] = [{ driver: "fuel", amount: 500000 }];
+    expect(getChartType(intent, driverRows)).toBe("bar");
   });
 
   it("returns 'none' when rows are empty", () => {
@@ -54,5 +55,18 @@ describe("getChartType", () => {
       period: { year: 2024, month: 1 },
     };
     expect(getChartType(intent, emptyRows)).toBe("none");
+  });
+
+  it("returns 'line' for cost_by_driver when rows have a period column (time-series)", () => {
+    const intent: ParsedIntent = {
+      metric: "cost_by_driver",
+      driverFilter: "fuel",
+      groupBy: "month",
+    };
+    const timeSeriesRows: QueryRow[] = [
+      { period: "2024-01-01", amount: 500000 },
+      { period: "2024-02-01", amount: 480000 },
+    ];
+    expect(getChartType(intent, timeSeriesRows)).toBe("line");
   });
 });

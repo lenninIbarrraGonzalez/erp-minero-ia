@@ -49,8 +49,9 @@ export function QueryResults({ result }: QueryResultsProps) {
 
   const columns = Object.keys(rows[0]);
 
-  // Determine the numeric data key for charts (first non-period key)
-  const dataKey = columns.find((c) => c !== "period") ?? columns[0];
+  // Numeric key for chart Y-axis — must be the first column that holds a number value
+  const numericKey =
+    columns.find((c) => typeof rows[0][c] === "number") ?? columns[columns.length - 1];
 
   return (
     <div className="mt-4 flex flex-col gap-4">
@@ -95,7 +96,7 @@ export function QueryResults({ result }: QueryResultsProps) {
             <Tooltip />
             <Line
               type="monotone"
-              dataKey={dataKey}
+              dataKey={numericKey}
               stroke={chartColors.primary}
               strokeWidth={2}
               dot={false}
@@ -110,7 +111,7 @@ export function QueryResults({ result }: QueryResultsProps) {
             <XAxis dataKey={columns[0]} />
             <YAxis />
             <Tooltip />
-            <Bar dataKey={dataKey} fill={chartColors.primary} />
+            <Bar dataKey={numericKey} fill={chartColors.primary} />
           </BarChart>
         </ResponsiveContainer>
       )}

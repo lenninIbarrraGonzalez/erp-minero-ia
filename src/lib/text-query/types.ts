@@ -14,6 +14,7 @@ export interface ParsedIntent {
   period?: {
     year: number;
     month?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+    quarter?: 1 | 2 | 3 | 4;
   };
   groupBy?: "mine" | "driver" | "month";
 }
