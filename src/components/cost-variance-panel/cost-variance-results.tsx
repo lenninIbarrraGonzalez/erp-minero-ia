@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import {
   BarChart,
   Bar,
+  Cell,
   XAxis,
   YAxis,
   Tooltip,
@@ -37,9 +38,17 @@ export function CostVarianceResults({ result }: CostVarianceResultsProps) {
 
   if (!result) return null;
 
+  const KNOWN_DRIVERS = ["fuel", "supplies", "equipment", "labor"] as const;
+  type KnownDriver = (typeof KNOWN_DRIVERS)[number];
+  const driverLabel = (driver: string) =>
+    KNOWN_DRIVERS.includes(driver as KnownDriver)
+      ? t(`drivers.${driver}`)
+      : driver;
+
   const chartData = result.drivers.map((d) => ({
-    driver: d.driver,
-    delta: d.delta,
+    driver: driverLabel(d.driver),
+    absDelta: Math.abs(d.delta),
+    increase: d.delta > 0,
   }));
 
   return (
@@ -70,7 +79,7 @@ export function CostVarianceResults({ result }: CostVarianceResultsProps) {
             {result.drivers.map((d) => (
               <tr key={d.driver}>
                 <td className="border border-border px-3 py-2 text-text font-medium">
-                  {d.driver}
+                  {driverLabel(d.driver)}
                 </td>
                 <td className="border border-border px-3 py-2 text-right text-text">
                   {fmt(d.priorAmount)}
@@ -95,13 +104,33 @@ export function CostVarianceResults({ result }: CostVarianceResultsProps) {
         </table>
       </div>
 
-      {/* Delta BarChart */}
+      {/* Delta BarChart — absolute values, colored by direction */}
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={chartData}>
           <XAxis dataKey="driver" />
-          <YAxis />
-          <Tooltip />
-          <Bar dataKey="delta" fill={chartColors.primary} />
+          <YAxis
+            tickFormatter={(v: number) =>
+              v.toLocaleString("en-US", { maximumFractionDigits: 0 })
+            }
+          />
+          <Tooltip
+            formatter={(value, _name, item) => {
+              const n = typeof value === "number" ? value : Number(value ?? 0);
+              const increase = (item as { payload?: { increase?: boolean } }).payload?.increase;
+              return [
+                n.toLocaleString("en-US", { maximumFractionDigits: 0 }),
+                increase ? "▲ Aumento" : "▼ Reducción",
+              ];
+            }}
+          />
+          <Bar dataKey="absDelta">
+            {chartData.map((entry, idx) => (
+              <Cell
+                key={idx}
+                fill={entry.increase ? chartColors.negative : chartColors.positive}
+              />
+            ))}
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
 

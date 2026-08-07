@@ -9,6 +9,10 @@ vi.mock("next-intl", () => ({
       current: "Current",
       delta: "Change",
       deltaPct: "Change %",
+      "drivers.fuel": "Combustible",
+      "drivers.supplies": "Insumos",
+      "drivers.equipment": "Equipos",
+      "drivers.labor": "Mano de Obra",
     };
     return map[key] ?? key;
   },
@@ -21,7 +25,8 @@ vi.mock("recharts", () => ({
   BarChart: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="bar-chart">{children}</div>
   ),
-  Bar: () => null,
+  Bar: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
+  Cell: () => null,
   XAxis: () => null,
   YAxis: () => null,
   Tooltip: () => null,
@@ -51,10 +56,10 @@ describe("CostVarianceResults", () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it("renders driver names in the table", () => {
+  it("renders translated driver names in the table", () => {
     render(<CostVarianceResults result={resultWithPositiveDelta} />);
-    expect(screen.getByText("fuel")).toBeInTheDocument();
-    expect(screen.getByText("supplies")).toBeInTheDocument();
+    expect(screen.getByText("Combustible")).toBeInTheDocument();
+    expect(screen.getByText("Insumos")).toBeInTheDocument();
   });
 
   it("applies text-negative class to positive delta cells (cost increase)", () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { CostVarianceInput } from "./cost-variance-input";
 import { CostVarianceResults } from "./cost-variance-results";
 import type { CostVarianceResult } from "@/lib/cost-variance/types";
@@ -19,6 +19,7 @@ interface CostVariancePanelProps {
 
 export function CostVariancePanel({ mines, periodRange }: CostVariancePanelProps) {
   const t = useTranslations("costVariance");
+  const locale = useLocale();
   const [isPending, startTransition] = useTransition();
   const [result, setResult] = useState<CostVarianceResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +33,7 @@ export function CostVariancePanel({ mines, periodRange }: CostVariancePanelProps
         const res = await fetch("/api/cost-variance", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mineId, period }),
+          body: JSON.stringify({ mineId, period, locale }),
         });
 
         const data = await res.json();

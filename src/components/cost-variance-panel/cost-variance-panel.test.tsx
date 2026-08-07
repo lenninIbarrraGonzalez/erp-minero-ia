@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
 vi.mock("next-intl", () => ({
+  useLocale: () => "es",
   useTranslations: () => (key: string) => {
     const map: Record<string, string> = {
       title: "Cost Variance Explainer",
@@ -18,6 +19,10 @@ vi.mock("next-intl", () => ({
       "error.generic": "An unexpected error occurred.",
       "error.mineNotFound": "The specified mine was not found.",
       "error.noPriorPeriod": "No data available for the prior month to compare.",
+      "drivers.fuel": "Combustible",
+      "drivers.supplies": "Insumos",
+      "drivers.equipment": "Equipos",
+      "drivers.labor": "Mano de Obra",
     };
     return map[key] ?? key;
   },
@@ -30,7 +35,8 @@ vi.mock("recharts", () => ({
   BarChart: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="bar-chart">{children}</div>
   ),
-  Bar: () => null,
+  Bar: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
+  Cell: () => null,
   XAxis: () => null,
   YAxis: () => null,
   Tooltip: () => null,
@@ -76,14 +82,14 @@ describe("CostVariancePanel", () => {
   });
 
   it("renders mine selector with options from props", () => {
-    render(<CostVariancePanel mines={mines} />);
+    render(<CostVariancePanel mines={mines} periodRange={null} />);
 
     expect(screen.getByText("Cerro Rojo")).toBeInTheDocument();
     expect(screen.getByText("Loma Grande")).toBeInTheDocument();
   });
 
   it("renders period input and submit button", () => {
-    render(<CostVariancePanel mines={mines} />);
+    render(<CostVariancePanel mines={mines} periodRange={null} />);
 
     expect(screen.getByRole("button", { name: "Analyze" })).toBeInTheDocument();
   });
@@ -93,7 +99,7 @@ describe("CostVariancePanel", () => {
     const pending = new Promise((res) => { resolve = res; });
     vi.mocked(global.fetch).mockReturnValue(pending as never);
 
-    render(<CostVariancePanel mines={mines} />);
+    render(<CostVariancePanel mines={mines} periodRange={null} />);
 
     const select = screen.getByRole("combobox");
     fireEvent.change(select, { target: { value: mines[0].id } });
@@ -115,7 +121,7 @@ describe("CostVariancePanel", () => {
       makeSuccessResponse(sampleVarianceResult) as never
     );
 
-    render(<CostVariancePanel mines={mines} />);
+    render(<CostVariancePanel mines={mines} periodRange={null} />);
 
     const select = screen.getByRole("combobox");
     fireEvent.change(select, { target: { value: mines[0].id } });
@@ -126,10 +132,10 @@ describe("CostVariancePanel", () => {
     fireEvent.click(screen.getByRole("button", { name: "Analyze" }));
 
     await waitFor(() => {
-      expect(screen.getByText("fuel")).toBeInTheDocument();
-      expect(screen.getByText("supplies")).toBeInTheDocument();
-      expect(screen.getByText("equipment")).toBeInTheDocument();
-      expect(screen.getByText("labor")).toBeInTheDocument();
+      expect(screen.getByText("Combustible")).toBeInTheDocument();
+      expect(screen.getByText("Insumos")).toBeInTheDocument();
+      expect(screen.getByText("Equipos")).toBeInTheDocument();
+      expect(screen.getByText("Mano de Obra")).toBeInTheDocument();
     });
   });
 
@@ -138,7 +144,7 @@ describe("CostVariancePanel", () => {
       makeSuccessResponse(sampleVarianceResult) as never
     );
 
-    render(<CostVariancePanel mines={mines} />);
+    render(<CostVariancePanel mines={mines} periodRange={null} />);
 
     const select = screen.getByRole("combobox");
     fireEvent.change(select, { target: { value: mines[0].id } });
@@ -160,7 +166,7 @@ describe("CostVariancePanel", () => {
       makeErrorResponse("mine_not_found") as never
     );
 
-    render(<CostVariancePanel mines={mines} />);
+    render(<CostVariancePanel mines={mines} periodRange={null} />);
 
     const select = screen.getByRole("combobox");
     fireEvent.change(select, { target: { value: mines[0].id } });
@@ -181,7 +187,7 @@ describe("CostVariancePanel", () => {
       makeErrorResponse("no_prior_period") as never
     );
 
-    render(<CostVariancePanel mines={mines} />);
+    render(<CostVariancePanel mines={mines} periodRange={null} />);
 
     const select = screen.getByRole("combobox");
     fireEvent.change(select, { target: { value: mines[0].id } });
@@ -201,7 +207,7 @@ describe("CostVariancePanel", () => {
       makeSuccessResponse(sampleVarianceResult) as never
     );
 
-    render(<CostVariancePanel mines={mines} />);
+    render(<CostVariancePanel mines={mines} periodRange={null} />);
 
     const select = screen.getByRole("combobox");
     fireEvent.change(select, { target: { value: mines[0].id } });
@@ -219,6 +225,7 @@ describe("CostVariancePanel", () => {
           body: JSON.stringify({
             mineId: mines[0].id,
             period: "2024-08-01",
+            locale: "es",
           }),
         })
       );

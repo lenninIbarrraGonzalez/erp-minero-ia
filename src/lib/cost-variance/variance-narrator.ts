@@ -2,13 +2,17 @@ import "server-only";
 import type { LLMProvider } from "@/lib/llm/types";
 import type { CostVarianceResult } from "./types";
 
-function buildPrompt(result: Omit<CostVarianceResult, "narrative">): string {
+function buildPrompt(
+  result: Omit<CostVarianceResult, "narrative">,
+  locale: string
+): string {
   const topDriver = [...result.drivers].sort(
     (a, b) => Math.abs(b.delta) - Math.abs(a.delta)
   )[0];
   const direction = result.totalDelta >= 0 ? "increased" : "decreased";
+  const lang = locale === "es" ? "Spanish" : "English";
 
-  return `You are a mining ERP analyst. Summarize the following cost variance in 2-3 sentences. No markdown, no lists, plain text only.
+  return `You are a mining ERP analyst. Summarize the following cost variance in 2-3 sentences. No markdown, no lists, plain text only. Respond in ${lang}.
 
 Mine: ${result.mineName}
 Period: ${result.period} vs ${result.comparisonPeriod}
@@ -20,10 +24,11 @@ Variance summary:`;
 
 export async function narrateVariance(
   result: Omit<CostVarianceResult, "narrative">,
-  llm: LLMProvider
+  llm: LLMProvider,
+  locale = "es"
 ): Promise<string> {
   try {
-    const response = await llm.complete(buildPrompt(result), {
+    const response = await llm.complete(buildPrompt(result, locale), {
       maxTokens: 150,
       temperature: 0.3,
     });

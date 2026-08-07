@@ -45,13 +45,102 @@
     },
     "insight": {
       "label": "Análisis"
-    }
+    },
+    "examplesLabel": "Ejemplos",
+    "examples": [
+      "Costo por tonelada de Cerro Rojo en 2024",
+      "Tonelaje de Loma Grande en 2024",
+      "Desglose de costos por categoría en marzo 2024"
+    ]
   },
   "shell": {
     "appName": "ERP Minero",
     "nav": {
       "dashboard": "Dashboard",
-      "costVariance": "Variación de Costos"
+      "costVariance": "Variación de Costos",
+      "about": "Acerca de"
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "Analítica Minera con IA",
+      "title": "ERP Minero IA",
+      "subtitle": "Inteligencia artificial para la gestión de costos mineros",
+      "description": "Una plataforma especializada que transforma datos operativos de yacimientos en insights accionables — mediante consultas en lenguaje natural, explicaciones generadas por IA y desglose de costos en tiempo real.",
+      "ctaDashboard": "Ir al Dashboard",
+      "ctaAnalysis": "Ver Variación de Costos"
+    },
+    "features": {
+      "title": "Capacidades Principales",
+      "textQuery": {
+        "title": "Consultas en Lenguaje Natural",
+        "description": "Hacé preguntas sobre costos, tonelaje o desgloses en lenguaje cotidiano. La IA interpreta tu intención, consulta la base de datos y devuelve una tabla, un gráfico y un análisis generado por IA — todo de una sola vez."
+      },
+      "costVariance": {
+        "title": "Explicador de Variación de Costos",
+        "description": "Seleccioná una mina y un mes para ver la descomposición determinística del cambio de costos en 4 categorías: combustible, insumos, equipos y mano de obra — con una explicación narrada por IA."
+      },
+      "multiMine": {
+        "title": "Análisis Cruzado Multi-mina",
+        "description": "Comparar costos, tonelaje y eficiencia entre múltiples minas simultáneamente. Identificá outliers, patrones estacionales y brechas de desempeño con una sola consulta."
+      }
+    },
+    "pipeline": {
+      "title": "Cómo Funciona",
+      "subtitle": "De una pregunta simple a un análisis completo en segundos",
+      "step1": "Pregunta natural",
+      "step2": "Parser LLM",
+      "step3": "Consulta Supabase",
+      "step4": "Tabla + Gráfico + Análisis",
+      "step1Desc": "En español o inglés",
+      "step2Desc": "Extrae mina, período, métrica",
+      "step3Desc": "Ejecución SQL precisa",
+      "step4Desc": "Resultado narrado por IA"
+    },
+    "screenshots": {
+      "title": "El Sistema en Acción",
+      "subtitle": "Pantallazos reales de la aplicación en funcionamiento",
+      "img1Alt": "Dashboard completo con todos los paneles activos",
+      "img1Caption": "Vista General del Dashboard",
+      "img2Alt": "Consulta en texto libre que devuelve gráfico y tabla",
+      "img2Caption": "Consulta en Lenguaje Natural",
+      "img3Alt": "Análisis de IA mostrado en español",
+      "img3Caption": "Insight Bilingüe con IA",
+      "img4Alt": "Panel de variación de costos con desglose por categoría",
+      "img4Caption": "Análisis de Variación de Costos",
+      "img5Alt": "Resultado de consulta formateado con tabla de datos",
+      "img5Caption": "Resultado Estructurado"
+    },
+    "questions": {
+      "title": "15 Preguntas de Ejemplo que Podés Hacer",
+      "subtitle": "Estas consultas cruzadas muestran todo el alcance de lo que el sistema puede responder",
+      "cat1": "Mina + Período",
+      "cat2": "Categoría de Costo",
+      "cat3": "Comparación entre Minas",
+      "cat4": "Comparación Temporal",
+      "cat5": "Análisis Agregado",
+      "q1": "¿Cuánto gastó Mina Norte en combustible durante 2024?",
+      "q2": "¿Cuál fue el costo total de Mina Sur en el primer trimestre?",
+      "q3": "Mostrá los costos mensuales de Mina Central en el segundo semestre",
+      "q4": "¿En qué mina fue mayor el gasto en equipos en diciembre?",
+      "q5": "Comparar costos de mano de obra entre todas las minas en Q3",
+      "q6": "¿Cómo evolucionaron los costos de insumos a lo largo de 2024?",
+      "q7": "¿Qué mina tuvo el mayor costo total en 2024?",
+      "q8": "Comparar el gasto en combustible entre Mina Norte y Mina Sur en octubre",
+      "q9": "¿Cuál fue la mina más eficiente en costos durante el cuarto trimestre?",
+      "q10": "¿Cuánto aumentaron los costos de noviembre a diciembre en Mina Norte?",
+      "q11": "Comparar costos de equipos del primer y segundo trimestre",
+      "q12": "¿Qué mes de 2024 tuvo el pico de costos totales?",
+      "q13": "¿Cuál fue el costo acumulado de todas las minas en Q4 2024?",
+      "q14": "Mostrá la tendencia de costos laborales en el segundo semestre",
+      "q15": "¿Qué porcentaje del costo total representa el combustible en Mina Sur?"
+    },
+    "stack": {
+      "title": "Tecnologías Utilizadas"
+    },
+    "importance": {
+      "title": "¿Por qué IA en operaciones mineras?",
+      "body": "La gestión de costos mineros genera miles de puntos de datos mensuales — consumo de combustible, desgaste de equipos, horas de trabajo e insumos en múltiples yacimientos. Las herramientas BI tradicionales requieren conocimiento de SQL y dashboards pre-construidos. ERP Minero IA elimina esa barrera: cualquier operador, gerente o analista puede hacer una pregunta en lenguaje cotidiano y obtener una respuesta precisa y respaldada por datos en segundos. La capa de IA no reemplaza la experiencia de dominio — la hace accesible a toda la organización."
     }
   },
   "costVariance": {
@@ -66,6 +155,12 @@
     "delta": "Variación",
     "deltaPct": "Variación %",
     "narrative": "Análisis",
+    "drivers": {
+      "fuel": "Combustible",
+      "supplies": "Insumos",
+      "equipment": "Equipos",
+      "labor": "Mano de Obra"
+    },
     "error": {
       "generic": "Ocurrió un error inesperado. Intentá de nuevo más tarde.",
       "mineNotFound": "La mina especificada no fue encontrada.",

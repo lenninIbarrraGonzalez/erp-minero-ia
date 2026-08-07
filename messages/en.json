@@ -45,13 +45,102 @@
     },
     "insight": {
       "label": "Analysis"
-    }
+    },
+    "examplesLabel": "Examples",
+    "examples": [
+      "Cost per tonne for Cerro Rojo in 2024",
+      "Tonnage for Loma Grande in 2024",
+      "Cost breakdown by category for March 2024"
+    ]
   },
   "shell": {
     "appName": "ERP Minero",
     "nav": {
       "dashboard": "Dashboard",
-      "costVariance": "Cost Variance"
+      "costVariance": "Cost Variance",
+      "about": "About"
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "AI-Powered Mining Analytics",
+      "title": "ERP Minero IA",
+      "subtitle": "Artificial intelligence for mining cost management",
+      "description": "A specialized analytics platform that transforms raw operational data from mining sites into actionable insights — using natural language queries, AI-powered explanations, and real-time cost breakdowns.",
+      "ctaDashboard": "Go to Dashboard",
+      "ctaAnalysis": "Explore Cost Variance"
+    },
+    "features": {
+      "title": "Core Capabilities",
+      "textQuery": {
+        "title": "Natural Language Queries",
+        "description": "Ask questions about costs, tonnage, or breakdowns in plain language. The AI interprets your intent, queries the database, and returns a table, chart, and AI-generated insight — all in one shot."
+      },
+      "costVariance": {
+        "title": "Cost Variance Explainer",
+        "description": "Select any mine and month to see a deterministic decomposition of cost changes across 4 drivers: fuel, supplies, equipment, and labor — with a narrated AI explanation of what moved and why."
+      },
+      "multiMine": {
+        "title": "Multi-mine Cross Analysis",
+        "description": "Compare costs, tonnage, and efficiency metrics across multiple mines simultaneously. Identify outliers, seasonal patterns, and performance gaps with a single query."
+      }
+    },
+    "pipeline": {
+      "title": "How It Works",
+      "subtitle": "From a plain question to a full analysis in seconds",
+      "step1": "Natural question",
+      "step2": "LLM intent parser",
+      "step3": "Supabase query",
+      "step4": "Table + Chart + Insight",
+      "step1Desc": "Type in Spanish or English",
+      "step2Desc": "Extracts mine, period, metric",
+      "step3Desc": "Precise SQL execution",
+      "step4Desc": "AI-narrated result"
+    },
+    "screenshots": {
+      "title": "The System in Action",
+      "subtitle": "Real screenshots from the live application",
+      "img1Alt": "Full dashboard with all panels active",
+      "img1Caption": "Dashboard Overview",
+      "img2Alt": "AI text query returning chart and table",
+      "img2Caption": "Natural Language Query",
+      "img3Alt": "AI insight displayed in Spanish",
+      "img3Caption": "Bilingual AI Insight",
+      "img4Alt": "Cost variance panel with driver breakdown",
+      "img4Caption": "Cost Variance Analysis",
+      "img5Alt": "Formatted query result with data table",
+      "img5Caption": "Structured Data Output"
+    },
+    "questions": {
+      "title": "15 Example Questions You Can Ask",
+      "subtitle": "These cross-dimensional queries show the full range of what the system can answer",
+      "cat1": "Mine + Period",
+      "cat2": "Cost Driver",
+      "cat3": "Cross-mine",
+      "cat4": "Temporal",
+      "cat5": "Aggregated",
+      "q1": "How much did Mina Norte spend on fuel during 2024?",
+      "q2": "What was the total cost for Mina Sur in Q1?",
+      "q3": "Show me monthly costs for Mina Central in H2 2024",
+      "q4": "Which mine had the highest equipment spending in December?",
+      "q5": "Compare labor costs across all mines in Q3",
+      "q6": "How did supply costs evolve throughout 2024?",
+      "q7": "Which mine had the highest total cost in 2024?",
+      "q8": "Compare fuel spending between Mina Norte and Mina Sur in October",
+      "q9": "Which mine was most cost-efficient in Q4?",
+      "q10": "How much did costs increase from November to December in Mina Norte?",
+      "q11": "Compare Q1 vs Q2 equipment costs",
+      "q12": "Which month in 2024 had the peak total cost?",
+      "q13": "What was the cumulative cost across all mines in Q4 2024?",
+      "q14": "Show me the labor cost trend in H2",
+      "q15": "What percentage of total cost is fuel in Mina Sur?"
+    },
+    "stack": {
+      "title": "Built With"
+    },
+    "importance": {
+      "title": "Why AI for Mining Operations?",
+      "body": "Mining cost management generates thousands of data points monthly — fuel consumption, equipment wear, labor hours, and supplies across multiple sites. Traditional BI tools require SQL knowledge and pre-built dashboards. ERP Minero IA removes that barrier: any operator, manager, or analyst can ask a plain-language question and get an accurate, data-backed answer instantly. The AI layer doesn't replace domain expertise — it makes that expertise accessible to everyone in the organization."
     }
   },
   "costVariance": {
@@ -66,6 +155,12 @@
     "delta": "Change",
     "deltaPct": "Change %",
     "narrative": "Analysis",
+    "drivers": {
+      "fuel": "Fuel",
+      "supplies": "Supplies",
+      "equipment": "Equipment",
+      "labor": "Labor"
+    },
     "error": {
       "generic": "An unexpected error occurred. Please try again later.",
       "mineNotFound": "The specified mine was not found.",

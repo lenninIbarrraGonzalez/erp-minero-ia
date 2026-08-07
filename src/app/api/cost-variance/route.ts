@@ -14,6 +14,7 @@ const RequestSchema = z.object({
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "comparisonPeriod must be YYYY-MM-DD")
     .optional(),
+  locale: z.string().optional().default("es"),
 });
 
 function priorMonth(isoDate: string): string {
@@ -47,7 +48,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid_input" }, { status: 422 });
   }
 
-  const { mineId, period } = parsed.data;
+  const { mineId, period, locale } = parsed.data;
   const comparisonPeriod = parsed.data.comparisonPeriod ?? priorMonth(period);
 
   const db = createSupabaseServerClient();
@@ -55,7 +56,7 @@ export async function POST(request: Request) {
 
   try {
     const varianceResult = await computeVariance(db, mineId, period, comparisonPeriod);
-    const narrative = await narrateVariance(varianceResult, llm);
+    const narrative = await narrateVariance(varianceResult, llm, locale);
 
     return NextResponse.json({ ...varianceResult, narrative }, { status: 200 });
   } catch (err) {
