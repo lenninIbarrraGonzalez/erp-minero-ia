@@ -55,11 +55,11 @@ export function QueryPanel() {
       <QueryInput onSubmit={handleSubmit} disabled={isPending} />
 
       {isPending && (
-        <p className="text-sm text-text-muted">{t("loading")}</p>
+        <p data-testid="query-loading" className="text-sm text-text-muted">{t("loading")}</p>
       )}
 
       {error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" data-testid="query-error" className="text-sm text-red-600">
           {error}
         </p>
       )}

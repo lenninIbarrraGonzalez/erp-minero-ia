@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: vi.fn() }),
+  usePathname: () => "/",
 }));
 
 vi.mock("next-intl", () => ({
@@ -12,6 +13,7 @@ vi.mock("next-intl", () => ({
         appName: "ERP Minero",
         "nav.dashboard": "Dashboard",
         "nav.costVariance": "Cost Variance",
+        "nav.about": "About",
       },
     };
     return translations[namespace]?.[key] ?? key;

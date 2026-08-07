@@ -33,9 +33,10 @@ Rules:
 - If the user compares or lists 2 or more mines, use "mineNames" (array) and omit "mineName"
 - If the user mentions exactly one specific mine, use "mineName" (string) and omit "mineNames"
 - If no specific mine is mentioned, omit both mineName and mineNames. Phrases like "all mines", "todas las minas", "todas" mean no specific mine
-- If the user asks about a specific cost driver, set "driverFilter": "fuel" (combustible/fuel), "supplies" (insumos/supplies), "equipment" (equipos/equipment), "labor" (mano de obra/labor)
-- If the user asks about "each mine", "all mines separately", "por mina", "cada mina", or wants a per-mine breakdown, set groupBy: "mine"
-- If the user asks how a specific driver cost evolved "month by month", "mes a mes", "over time", or "monthly trend", set groupBy: "month" (also requires driverFilter)
+- Only set "driverFilter" when the user names ONE specific driver explicitly (e.g. "fuel", "combustible", "insumos", "equipos", "mano de obra"). Do NOT set driverFilter when the user asks for a general breakdown, "all drivers", "all categories", "desglose", "todas las categorías", or a full cost breakdown — in those cases omit driverFilter entirely.
+- Set "driverFilter": "fuel" for fuel/combustible, "supplies" for insumos/supplies/reagentes, "equipment" for equipos/equipment/maquinaria, "labor" for mano de obra/labor/personal.
+- If the user asks about "each mine", "all mines separately", "por mina", "cada mina", "qué mina tuvo el mayor/menor", "which mine had the most/least", or wants a per-mine ranking or breakdown, set groupBy: "mine"
+- If the user asks how a specific driver cost evolved over time — using phrases like "month by month", "mes a mes", "monthly trend", "monthly evolution", "evolución mensual", "tendencia mensual", "mes por mes", "how did ... change month" — set groupBy: "month" (requires driverFilter to also be set)
 - If no time period is mentioned, omit period entirely (do not set year or month to null)
 - Respond with ONLY valid JSON, no explanation, no markdown, no code blocks
 
@@ -78,6 +79,7 @@ export async function parseIntent(
   try {
     parsed = JSON.parse(cleaned);
   } catch {
+    console.error("[text-query] LLM returned invalid JSON:", cleaned);
     throw makeError("parse_failure", `LLM returned invalid JSON: ${cleaned}`);
   }
 
@@ -91,25 +93,73 @@ export async function parseIntent(
   }
 
   // Some models return null for optional fields instead of omitting them.
-  // Strip null/undefined values AND empty objects so Zod optional() works correctly.
+  // Strip null/undefined values, empty objects, AND empty arrays so Zod optional() works correctly.
   function stripNulls(obj: unknown): unknown {
     if (obj === null || obj === undefined) return undefined;
-    if (typeof obj !== "object" || Array.isArray(obj)) return obj;
+    if (Array.isArray(obj)) return obj.length === 0 ? undefined : obj;
+    if (typeof obj !== "object") return obj;
     const entries = Object.entries(obj as Record<string, unknown>)
       .map(([k, v]) => [k, stripNulls(v)] as [string, unknown])
       .filter(([, v]) => v !== undefined);
     if (entries.length === 0) return undefined;
     return Object.fromEntries(entries);
   }
+
+  // Normalize mineNames before Zod validation to handle LLM hallucinations:
+  // - mineNames with 0 or 1 elements cannot be a multi-mine comparison (schema requires min 2)
+  // - When a single element is a generic term ("all mines", "cada mina") → no mine filter
+  // - When a single element looks like a year or non-mine token → strip it (LLM confusion)
+  // - When a single element looks like a real mine name → promote to mineName
+  const GENERIC_TERMS = new Set([
+    "all", "todas", "todas las minas", "all mines", "minas", "mines",
+    "every mine", "each mine", "cualquier mina", "cada mina",
+  ]);
+  if (
+    typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)
+  ) {
+    const p = parsed as Record<string, unknown>;
+    if (Array.isArray(p.mineNames)) {
+      const names = p.mineNames as unknown[];
+
+      if (names.length === 0) {
+        // Empty array → no mine filter
+        delete p.mineNames;
+      } else if (names.length === 1) {
+        const sole = names[0];
+        const soleStr = typeof sole === "string" ? sole.trim() : "";
+        const isGeneric = GENERIC_TERMS.has(soleStr.toLowerCase());
+        const isNumeric = /^\d+$/.test(soleStr); // year or other number crept in
+
+        if (isGeneric || isNumeric || soleStr === "") {
+          // Generic or nonsensical single element → no mine filter
+          delete p.mineNames;
+        } else {
+          // Looks like a real mine name — promote to mineName (single-mine path)
+          // Only if mineName is not already set
+          if (!p.mineName) p.mineName = soleStr;
+          delete p.mineNames;
+        }
+      } else {
+        // ≥2 elements: check if ALL are generic (e.g. ["all mines", "todas"])
+        const allGeneric = names.every(
+          (n) => typeof n === "string" && GENERIC_TERMS.has(n.toLowerCase().trim())
+        );
+        if (allGeneric) delete p.mineNames;
+      }
+    }
+  }
+
   const cleaned2 = stripNulls(parsed);
   const result = ParsedIntentSchema.safeParse(cleaned2);
   if (!result.success) {
     const raw = parsed as Record<string, unknown>;
     const knownMetrics = ["cost_per_tonne", "tonnage", "cost_by_driver"];
     if (typeof raw?.metric === "string" && !knownMetrics.includes(raw.metric)) {
+      console.error("[text-query] Unsupported metric from LLM:", raw.metric, "| raw:", JSON.stringify(raw));
       throw makeError("unsupported_metric", `Unsupported metric: ${raw.metric}`);
     }
     const detail = JSON.stringify(result.error.issues ?? result.error);
+    console.error("[text-query] Schema validation failed | raw LLM JSON:", JSON.stringify(raw), "| zod issues:", detail);
     throw makeError("parse_failure", `Intent does not match expected schema: ${detail}`);
   }
 

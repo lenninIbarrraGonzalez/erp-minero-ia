@@ -7,7 +7,7 @@ import type { QueryRow } from "@/lib/text-query/types";
 // ---------------------------------------------------------------------------
 
 vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => {
+  useTranslations: () => {
     const map: Record<string, string> = {
       placeholder: "Ask about costs, tonnage...",
       submit: "Query",
@@ -18,8 +18,14 @@ vi.mock("next-intl", () => ({
       "error.mineNotFound": "Mine not found.",
       "error.generic": "An unexpected error occurred.",
       "insight.label": "Analysis",
+      examplesLabel: "Examples",
     };
-    return map[key] ?? key;
+    const t = (key: string) => map[key] ?? key;
+    t.raw = (key: string) => {
+      if (key === "examples") return ["Example question 1", "Example question 2"];
+      return [];
+    };
+    return t;
   },
 }));
 
@@ -87,9 +93,9 @@ describe("QueryPanel", () => {
     fireEvent.change(input, { target: { value: "tonelaje" } });
     fireEvent.click(button);
 
-    // During pending: button should be disabled
+    // During pending: submit button should be disabled
     await waitFor(() => {
-      expect(screen.getByRole("button")).toBeDisabled();
+      expect(screen.getByRole("button", { name: "Query" })).toBeDisabled();
     });
 
     // Resolve fetch so test doesn't leak

@@ -3,12 +3,18 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => {
+  useTranslations: () => {
     const map: Record<string, string> = {
       placeholder: "Ask a question...",
       submit: "Send",
+      examplesLabel: "Examples",
     };
-    return map[key] ?? key;
+    const t = (key: string) => map[key] ?? key;
+    t.raw = (key: string) => {
+      if (key === "examples") return ["Example question 1", "Example question 2"];
+      return [];
+    };
+    return t;
   },
 }));
 

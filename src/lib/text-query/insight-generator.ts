@@ -18,8 +18,8 @@ function roundNumbers(rows: QueryRow[]): QueryRow[] {
 }
 
 function buildPrompt(question: string, rows: QueryRow[]): string {
-  const dataPreview = JSON.stringify(roundNumbers(rows.slice(0, 10)));
-  return `You are a mining ERP analyst. Given the user's question and the data below, write ONE concise sentence summarizing the key insight. No markdown, no lists, just one sentence. Respond in Spanish, unless the user's question is clearly written in English or another language.
+  const dataPreview = JSON.stringify(roundNumbers(rows.slice(0, 24)));
+  return `You are a mining ERP analyst. Given the user's question and the data below, write 2–3 sentences: (1) the main finding with the most relevant number, (2) a visible trend or anomaly if present, (3) a brief operational implication or recommendation. No markdown, no lists, plain prose only. Respond in Spanish, unless the user's question is clearly written in English or another language.
 
 IMPORTANT: Before making any comparison (highest, lowest, greater, lesser), verify the claim against EVERY value in the data. Do not assume — read all rows carefully.
 
@@ -37,7 +37,7 @@ export async function generateInsight(
 ): Promise<string> {
   try {
     const response = await llm.complete(buildPrompt(question, rows), {
-      maxTokens: 150,
+      maxTokens: 350,
       temperature: 0.3,
     });
     return response.text.trim();

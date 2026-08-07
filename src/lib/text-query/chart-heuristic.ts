@@ -20,10 +20,19 @@ export function getChartType(intent: ParsedIntent, rows: QueryRow[]): ChartType 
     // Multi-mine full breakdown has both mine and driver columns — too complex for a simple chart
     if ("mine" in rows[0] && "driver" in rows[0]) return "none";
     // Time-series result (groupBy: "month") has a period column → line chart
-    if ("period" in rows[0]) return "line";
+    if ("period" in rows[0]) {
+      // Single-point line charts are not useful; render as none
+      if (rows.length === 1) return "none";
+      return "line";
+    }
     return "bar";
   }
 
   const hasPeriodColumn = "period" in rows[0];
-  return hasPeriodColumn ? "line" : "bar";
+  if (hasPeriodColumn) {
+    // Single-point line charts carry no trend information; show table only
+    if (rows.length === 1) return "none";
+    return "line";
+  }
+  return "bar";
 }

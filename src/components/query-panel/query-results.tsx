@@ -54,10 +54,10 @@ export function QueryResults({ result }: QueryResultsProps) {
     columns.find((c) => typeof rows[0][c] === "number") ?? columns[columns.length - 1];
 
   return (
-    <div className="mt-4 flex flex-col gap-4">
+    <div data-testid="query-results" className="mt-4 flex flex-col gap-4">
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-sm">
+        <table data-testid="query-table" className="w-full border-collapse text-sm">
           <thead>
             <tr>
               {columns.map((col) => (
@@ -89,11 +89,22 @@ export function QueryResults({ result }: QueryResultsProps) {
 
       {/* Chart */}
       {chartType === "line" && (
+        <div data-testid="query-chart-line">
         <ResponsiveContainer width="100%" height={240}>
           <LineChart data={rows}>
             <XAxis dataKey="period" />
-            <YAxis />
-            <Tooltip />
+            <YAxis
+              width={80}
+              tickFormatter={(v: number) =>
+                v.toLocaleString("en-US", { maximumFractionDigits: 2 })
+              }
+            />
+            <Tooltip
+              formatter={(value) => [
+                Number(value).toLocaleString("en-US", { maximumFractionDigits: 2 }),
+                numericKey,
+              ]}
+            />
             <Line
               type="monotone"
               dataKey={numericKey}
@@ -103,17 +114,30 @@ export function QueryResults({ result }: QueryResultsProps) {
             />
           </LineChart>
         </ResponsiveContainer>
+        </div>
       )}
 
       {chartType === "bar" && (
+        <div data-testid="query-chart-bar">
         <ResponsiveContainer width="100%" height={240}>
           <BarChart data={rows}>
             <XAxis dataKey={columns[0]} />
-            <YAxis />
-            <Tooltip />
+            <YAxis
+              width={90}
+              tickFormatter={(v: number) =>
+                v.toLocaleString("en-US", { maximumFractionDigits: 0 })
+              }
+            />
+            <Tooltip
+              formatter={(value) => [
+                Number(value).toLocaleString("en-US", { maximumFractionDigits: 2 }),
+                numericKey,
+              ]}
+            />
             <Bar dataKey={numericKey} fill={chartColors.primary} />
           </BarChart>
         </ResponsiveContainer>
+        </div>
       )}
 
       {/* Insight */}
@@ -122,7 +146,7 @@ export function QueryResults({ result }: QueryResultsProps) {
           <span className="text-xs font-medium text-text-muted uppercase tracking-wide">
             {t("insight.label")}
           </span>
-          <p className="text-sm text-text italic">{insightText}</p>
+          <p data-testid="query-insight" className="text-sm text-text italic">{insightText}</p>
         </div>
       )}
     </div>

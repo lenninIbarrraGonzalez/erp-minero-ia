@@ -4,7 +4,10 @@ import { getChartType } from "./chart-heuristic";
 
 const rows: QueryRow[] = [
   { period: "2024-01-01", value: 10 },
+  { period: "2024-02-01", value: 12 },
 ];
+
+const singleRow: QueryRow[] = [{ period: "2024-08-01", value: 10 }];
 
 const emptyRows: QueryRow[] = [];
 
@@ -55,6 +58,14 @@ describe("getChartType", () => {
       period: { year: 2024, month: 1 },
     };
     expect(getChartType(intent, emptyRows)).toBe("none");
+  });
+
+  it("returns 'none' for a single-row temporal result (no trend to show)", () => {
+    const intent: ParsedIntent = {
+      metric: "cost_per_tonne",
+      period: { year: 2024, month: 8 },
+    };
+    expect(getChartType(intent, singleRow)).toBe("none");
   });
 
   it("returns 'line' for cost_by_driver when rows have a period column (time-series)", () => {
