@@ -37,6 +37,7 @@ Rules:
 - Set "driverFilter": "fuel" for fuel/combustible, "supplies" for insumos/supplies/reagentes, "equipment" for equipos/equipment/maquinaria, "labor" for mano de obra/labor/personal.
 - If the user asks about "each mine", "all mines separately", "por mina", "cada mina", "qué mina tuvo el mayor/menor", "which mine had the most/least", or wants a per-mine ranking or breakdown, set groupBy: "mine"
 - If the user asks how a specific driver cost evolved over time — using phrases like "month by month", "mes a mes", "monthly trend", "monthly evolution", "evolución mensual", "tendencia mensual", "mes por mes", "how did ... change month" — set groupBy: "month" (requires driverFilter to also be set)
+- For questions asking which cost driver is most or least expensive — e.g. "qué driver fue el más caro", "cuál driver es el más costoso", "qué categoría es la más cara", "which driver costs the most", "most expensive driver" — use metric: "cost_by_driver" WITHOUT driverFilter so all 4 drivers are returned for comparison
 - If no time period is mentioned, omit period entirely (do not set year or month to null)
 - Respond with ONLY valid JSON, no explanation, no markdown, no code blocks
 
@@ -163,5 +164,38 @@ export async function parseIntent(
     throw makeError("parse_failure", `Intent does not match expected schema: ${detail}`);
   }
 
-  return result.data as ParsedIntent;
+  const intentData = result.data as ParsedIntent;
+  const qLower = question.toLowerCase();
+
+  // P2: Force groupBy:mine when the question explicitly asks for per-mine breakdown
+  // but the LLM missed it. Only applies when no specific mine is already targeted.
+  if (!intentData.groupBy && !intentData.mineNames && !intentData.mineName) {
+    const PER_MINE_TRIGGERS = [
+      "por mina", "cada mina", "por cada mina",
+      "for each mine", "for every mine", "each mine", "every mine",
+      "between all mines",
+    ];
+    if (PER_MINE_TRIGGERS.some((p) => qLower.includes(p))) {
+      (intentData as unknown as Record<string, unknown>).groupBy = "mine";
+    }
+  }
+
+  // P4: Force driverFilter when the question STARTS with a driver keyword
+  // (e.g. "Mano de obra de Cerro Rojo en Q1" → driverFilter: "labor")
+  if (intentData.metric === "cost_by_driver" && !intentData.driverFilter) {
+    const DRIVER_START_MAP: Array<[string, string]> = [
+      ["mano de obra", "labor"],
+      ["insumos", "supplies"],
+      ["combustible", "fuel"],
+      ["equipos", "equipment"],
+    ];
+    for (const [prefix, driver] of DRIVER_START_MAP) {
+      if (qLower.startsWith(prefix + " ") || qLower.startsWith(prefix + ",")) {
+        (intentData as unknown as Record<string, unknown>).driverFilter = driver;
+        break;
+      }
+    }
+  }
+
+  return intentData;
 }

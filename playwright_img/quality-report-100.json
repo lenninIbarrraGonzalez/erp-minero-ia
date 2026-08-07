@@ -1,0 +1,1273 @@
+{
+  "timestamp": "2026-08-07T18:27:41.115Z",
+  "totalQuestions": 100,
+  "totalPoints": 484,
+  "maxPoints": 500,
+  "qualityPct": 96.8,
+  "grade": "A",
+  "byCategory": {
+    "A-simple": {
+      "questions": 10,
+      "points": 50,
+      "maxPoints": 50,
+      "pct": 100
+    },
+    "B-month": {
+      "questions": 10,
+      "points": 50,
+      "maxPoints": 50,
+      "pct": 100
+    },
+    "C-quarter": {
+      "questions": 10,
+      "points": 49,
+      "maxPoints": 50,
+      "pct": 98
+    },
+    "D-timeseries": {
+      "questions": 10,
+      "points": 50,
+      "maxPoints": 50,
+      "pct": 100
+    },
+    "E-all-mines": {
+      "questions": 8,
+      "points": 36,
+      "maxPoints": 40,
+      "pct": 90
+    },
+    "F-multi-mine": {
+      "questions": 10,
+      "points": 48,
+      "maxPoints": 50,
+      "pct": 96
+    },
+    "G-anomaly": {
+      "questions": 8,
+      "points": 40,
+      "maxPoints": 40,
+      "pct": 100
+    },
+    "H-complex": {
+      "questions": 10,
+      "points": 47,
+      "maxPoints": 50,
+      "pct": 94
+    },
+    "I-english": {
+      "questions": 8,
+      "points": 40,
+      "maxPoints": 40,
+      "pct": 100
+    },
+    "J-error": {
+      "questions": 6,
+      "points": 25,
+      "maxPoints": 30,
+      "pct": 83.33333333333334
+    },
+    "K-driver-quarter": {
+      "questions": 10,
+      "points": 49,
+      "maxPoints": 50,
+      "pct": 98
+    }
+  },
+  "questions": [
+    {
+      "id": 1,
+      "category": "A-simple",
+      "question": "Costo por tonelada de Cerro Rojo en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 2,
+      "category": "A-simple",
+      "question": "Tonelaje de Loma Grande en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 3,
+      "category": "A-simple",
+      "question": "Desglose de costos de Veta Dorada en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 4,
+      "category": "A-simple",
+      "question": "Costo por tonelada de Peña Azul en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 5,
+      "category": "A-simple",
+      "question": "How much tonnage did Quebrada Sur produce in 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 6,
+      "category": "A-simple",
+      "question": "Costo por tonelada de Veta Dorada en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 7,
+      "category": "A-simple",
+      "question": "Tonelaje total de Cerro Rojo en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 8,
+      "category": "A-simple",
+      "question": "Desglose de costos de Peña Azul por categoría en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 9,
+      "category": "A-simple",
+      "question": "Costo de mano de obra de Loma Grande en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 10,
+      "category": "A-simple",
+      "question": "Costo de combustible de Cerro Rojo en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 11,
+      "category": "B-month",
+      "question": "Costo por tonelada de Cerro Rojo en agosto 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 12,
+      "category": "B-month",
+      "question": "Tonelaje de Loma Grande en noviembre 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 13,
+      "category": "B-month",
+      "question": "Costo de combustible de Cerro Rojo en agosto 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": [
+        {
+          "name": "data:amount[row0] gt 620000",
+          "passed": true,
+          "detail": "actual value: 706591.52"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "category": "B-month",
+      "question": "Costo de insumos de Peña Azul en enero 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 15,
+      "category": "B-month",
+      "question": "Tonnage for Quebrada Sur in June 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": [
+        {
+          "name": "data:tonnage[row0] lt 12000",
+          "passed": true,
+          "detail": "actual value: 9000"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "category": "B-month",
+      "question": "Costo por tonelada de Loma Grande en marzo 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 17,
+      "category": "B-month",
+      "question": "Costo de equipos de Veta Dorada en diciembre 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 18,
+      "category": "B-month",
+      "question": "Tonelaje de Peña Azul en julio 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 19,
+      "category": "B-month",
+      "question": "Cost per tonne for Peña Azul in September 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 20,
+      "category": "B-month",
+      "question": "Costo de mano de obra de Quebrada Sur en junio 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 21,
+      "category": "C-quarter",
+      "question": "Costo por tonelada de Cerro Rojo en Q1 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 22,
+      "category": "C-quarter",
+      "question": "Tonelaje de Loma Grande en Q3 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 23,
+      "category": "C-quarter",
+      "question": "Desglose de costos de Veta Dorada en Q4 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 24,
+      "category": "C-quarter",
+      "question": "Cost per tonne for Quebrada Sur in Q2 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 25,
+      "category": "C-quarter",
+      "question": "Tonelaje de Peña Azul en Q3 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 26,
+      "category": "C-quarter",
+      "question": "Costo de combustible de Loma Grande en Q3 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 27,
+      "category": "C-quarter",
+      "question": "Costo de insumos de Cerro Rojo en Q2 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 28,
+      "category": "C-quarter",
+      "question": "Tonelaje de Veta Dorada en Q1 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 29,
+      "category": "C-quarter",
+      "question": "Cost breakdown for Peña Azul in Q4 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 30,
+      "category": "C-quarter",
+      "question": "Costo de equipos de Quebrada Sur en Q3 2024",
+      "score": 4,
+      "maxScore": 5,
+      "pct": 80,
+      "llmDependent": false,
+      "failures": [
+        "row_count: 4 rows (expected 1–1)"
+      ],
+      "bonusChecks": []
+    },
+    {
+      "id": 31,
+      "category": "D-timeseries",
+      "question": "¿Cómo evolucionó el costo de combustible de Cerro Rojo mes a mes en 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 32,
+      "category": "D-timeseries",
+      "question": "Monthly trend of equipment costs for Loma Grande in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 33,
+      "category": "D-timeseries",
+      "question": "Evolución mensual del costo de mano de obra de Veta Dorada en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 34,
+      "category": "D-timeseries",
+      "question": "¿Cómo cambiaron los costos de insumos de Peña Azul mes a mes en 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 35,
+      "category": "D-timeseries",
+      "question": "Monthly evolution of fuel costs for Quebrada Sur in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 36,
+      "category": "D-timeseries",
+      "question": "¿Cómo evolucionó el costo de equipos de Cerro Rojo mes a mes en 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 37,
+      "category": "D-timeseries",
+      "question": "Monthly trend of supplies cost for Loma Grande in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 38,
+      "category": "D-timeseries",
+      "question": "Evolución mensual del costo de combustible de Veta Dorada en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 39,
+      "category": "D-timeseries",
+      "question": "¿Cómo variaron los costos de mano de obra de Peña Azul mes a mes en 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 40,
+      "category": "D-timeseries",
+      "question": "Monthly equipment costs for Quebrada Sur in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 41,
+      "category": "E-all-mines",
+      "question": "¿Cuál fue el tonelaje de cada mina en 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 42,
+      "category": "E-all-mines",
+      "question": "Costo por tonelada de todas las minas en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 43,
+      "category": "E-all-mines",
+      "question": "Cost breakdown by driver for all mines in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 44,
+      "category": "E-all-mines",
+      "question": "Costo total de combustible por mina en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 45,
+      "category": "E-all-mines",
+      "question": "Costo de insumos por mina en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 46,
+      "category": "E-all-mines",
+      "question": "Costo de equipos por mina en 2024",
+      "score": 1,
+      "maxScore": 5,
+      "pct": 20,
+      "llmDependent": true,
+      "failures": [
+        "results_shown: unexpected error shown",
+        "row_count: table not visible",
+        "chart_type: bar chart not found",
+        "insight: insight element not visible"
+      ],
+      "bonusChecks": []
+    },
+    {
+      "id": 47,
+      "category": "E-all-mines",
+      "question": "Mano de obra total por mina en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 48,
+      "category": "E-all-mines",
+      "question": "Show cost per tonne for every mine in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 49,
+      "category": "F-multi-mine",
+      "question": "Comparar costo por tonelada entre Cerro Rojo y Loma Grande en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 50,
+      "category": "F-multi-mine",
+      "question": "Compare tonnage of Veta Dorada and Peña Azul in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 51,
+      "category": "F-multi-mine",
+      "question": "Costo de combustible: Cerro Rojo vs Loma Grande en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 52,
+      "category": "F-multi-mine",
+      "question": "Comparar tonelaje de Quebrada Sur y Peña Azul en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 53,
+      "category": "F-multi-mine",
+      "question": "Cost per tonne: Veta Dorada, Peña Azul, Loma Grande in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 54,
+      "category": "F-multi-mine",
+      "question": "Desglose completo de costos de Cerro Rojo y Veta Dorada en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 55,
+      "category": "F-multi-mine",
+      "question": "Compare labor costs: Cerro Rojo, Loma Grande, Peña Azul in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 56,
+      "category": "F-multi-mine",
+      "question": "Costo de insumos entre Veta Dorada y Quebrada Sur en 2024",
+      "score": 3,
+      "maxScore": 5,
+      "pct": 60,
+      "llmDependent": false,
+      "failures": [
+        "row_count: 8 rows (expected 2–2)",
+        "chart_type: bar chart not found"
+      ],
+      "bonusChecks": []
+    },
+    {
+      "id": 57,
+      "category": "F-multi-mine",
+      "question": "Total tonnage: Cerro Rojo vs Veta Dorada vs Peña Azul in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 58,
+      "category": "F-multi-mine",
+      "question": "Comparar costos de equipos entre Loma Grande y Peña Azul en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 59,
+      "category": "G-anomaly",
+      "question": "Costo por tonelada de Quebrada Sur en junio 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": [
+        {
+          "name": "data:cost_per_tonne[row0] gt 55",
+          "passed": true,
+          "detail": "actual value: 65.36"
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "category": "G-anomaly",
+      "question": "Costo de combustible de Cerro Rojo en octubre 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": [
+        {
+          "name": "data:amount[row0] gt 620000",
+          "passed": true,
+          "detail": "actual value: 697709.96"
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "category": "G-anomaly",
+      "question": "Tonelaje de Quebrada Sur en junio 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": [
+        {
+          "name": "data:tonnage[row0] lt 12000",
+          "passed": true,
+          "detail": "actual value: 9000"
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "category": "G-anomaly",
+      "question": "Costo de combustible de Loma Grande en Q4 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 63,
+      "category": "G-anomaly",
+      "question": "Costo por tonelada de Quebrada Sur en Q2 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 64,
+      "category": "G-anomaly",
+      "question": "¿Cómo evolucionó el combustible de Cerro Rojo mes a mes en 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 65,
+      "category": "G-anomaly",
+      "question": "Monthly fuel costs for Loma Grande in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 66,
+      "category": "G-anomaly",
+      "question": "Costo de combustible de Cerro Rojo en septiembre 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": [
+        {
+          "name": "data:amount[row0] gt 620000",
+          "passed": true,
+          "detail": "actual value: 663969.87"
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "category": "H-complex",
+      "question": "¿Cuál mina tuvo mayor costo por tonelada en 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 68,
+      "category": "H-complex",
+      "question": "Which mine had lowest cost per tonne in 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 69,
+      "category": "H-complex",
+      "question": "¿Qué driver de costo fue el más caro en 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 70,
+      "category": "H-complex",
+      "question": "Costo por tonelada por mina en Q4 2024",
+      "score": 3,
+      "maxScore": 5,
+      "pct": 60,
+      "llmDependent": true,
+      "failures": [
+        "row_count: 3 rows (expected 5–5)",
+        "chart_type: bar chart not found"
+      ],
+      "bonusChecks": []
+    },
+    {
+      "id": 71,
+      "category": "H-complex",
+      "question": "Costo total de todas las minas en 2024 por categoría",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 72,
+      "category": "H-complex",
+      "question": "Desglose de costos de todas las minas en Q3 2024",
+      "score": 4,
+      "maxScore": 5,
+      "pct": 80,
+      "llmDependent": false,
+      "failures": [
+        "row_count: 5 rows (expected 4–4)"
+      ],
+      "bonusChecks": []
+    },
+    {
+      "id": 73,
+      "category": "H-complex",
+      "question": "Which cost driver costs the most overall?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 74,
+      "category": "H-complex",
+      "question": "Tonelaje de cada mina en Q3 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 75,
+      "category": "H-complex",
+      "question": "Costo de cada driver para todas las minas en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 76,
+      "category": "H-complex",
+      "question": "¿Qué mina tiene el mayor costo total en 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 77,
+      "category": "I-english",
+      "question": "What is the cost per tonne for Cerro Rojo in 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 78,
+      "category": "I-english",
+      "question": "Show me the total tonnage for each mine in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 79,
+      "category": "I-english",
+      "question": "What were the fuel costs for Loma Grande in August 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": [
+        {
+          "name": "data:amount[row0] gt 900000",
+          "passed": true,
+          "detail": "actual value: 1040260.57"
+        }
+      ]
+    },
+    {
+      "id": 80,
+      "category": "I-english",
+      "question": "Compare cost per tonne between all mines in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 81,
+      "category": "I-english",
+      "question": "Show monthly evolution of equipment costs for Peña Azul in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 82,
+      "category": "I-english",
+      "question": "What is the cost breakdown by driver for Veta Dorada in 2024?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 83,
+      "category": "I-english",
+      "question": "Show me labor costs for Quebrada Sur month by month in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": true,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 84,
+      "category": "I-english",
+      "question": "Compare supplies costs between Cerro Rojo and Veta Dorada in 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 85,
+      "category": "J-error",
+      "question": "¿Cuál es el precio del petróleo hoy en el mercado internacional?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 86,
+      "category": "J-error",
+      "question": "What is the current gold price per ounce?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 87,
+      "category": "J-error",
+      "question": "Costo por tonelada de Mina Inexistente en 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 88,
+      "category": "J-error",
+      "question": "¿Cuántos empleados tiene Loma Grande?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 89,
+      "category": "J-error",
+      "question": "¿Cuál es el tipo de cambio dólar/peso?",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 90,
+      "category": "J-error",
+      "question": "Cost per tonne for all mines in 2023",
+      "score": 0,
+      "maxScore": 5,
+      "pct": 0,
+      "llmDependent": false,
+      "failures": [
+        "response_received: timeout after 35s"
+      ],
+      "bonusChecks": []
+    },
+    {
+      "id": 91,
+      "category": "K-driver-quarter",
+      "question": "Costo de combustible de Veta Dorada en Q2 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 92,
+      "category": "K-driver-quarter",
+      "question": "Costo de equipos de Loma Grande en Q1 2024",
+      "score": 4,
+      "maxScore": 5,
+      "pct": 80,
+      "llmDependent": false,
+      "failures": [
+        "row_count: 4 rows (expected 1–1)"
+      ],
+      "bonusChecks": []
+    },
+    {
+      "id": 93,
+      "category": "K-driver-quarter",
+      "question": "Insumos de Cerro Rojo en Q4 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 94,
+      "category": "K-driver-quarter",
+      "question": "Mano de obra de Quebrada Sur en Q2 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 95,
+      "category": "K-driver-quarter",
+      "question": "Fuel cost for Peña Azul in Q3 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 96,
+      "category": "K-driver-quarter",
+      "question": "Costo de equipos de Veta Dorada en Q3 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 97,
+      "category": "K-driver-quarter",
+      "question": "Costo de insumos de Loma Grande en Q4 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 98,
+      "category": "K-driver-quarter",
+      "question": "Costo de combustible de Quebrada Sur en Q4 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 99,
+      "category": "K-driver-quarter",
+      "question": "Mano de obra de Cerro Rojo en Q1 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    },
+    {
+      "id": 100,
+      "category": "K-driver-quarter",
+      "question": "Labor costs for Veta Dorada in Q4 2024",
+      "score": 5,
+      "maxScore": 5,
+      "pct": 100,
+      "llmDependent": false,
+      "failures": [],
+      "bonusChecks": []
+    }
+  ],
+  "improvementPlan": [
+    {
+      "id": "I7",
+      "issue": "Category D (time-series) scored 100.0%",
+      "impact": "MEDIUM",
+      "root_cause": "LLM inconsistency: 'mes a mes', 'monthly trend', 'evolución mensual' trigger groupBy:month unreliably — sometimes returning a 1-row aggregate instead of 12-row time-series.",
+      "fix": "Harden intent-parser prompt: add explicit few-shot examples mapping these phrases to groupBy:month. Add post-parse rule: if driverFilter is set AND question contains 'mes a mes'/'monthly', enforce groupBy:month.",
+      "priority": 1
+    },
+    {
+      "id": "I6",
+      "issue": "Category E (all-mines grouped) scored 90.0%",
+      "impact": "MEDIUM",
+      "root_cause": "LLM inconsistency: 'cada mina', 'por mina', 'every mine' trigger groupBy:mine unreliably — sometimes returning a time-series instead of 5-row per-mine grouping.",
+      "fix": "Add post-parse rule: if mineNames is empty/generic AND question contains 'por mina'/'cada mina'/'every mine', enforce groupBy:mine. Add 3 few-shot examples to intent-parser prompt.",
+      "priority": 2
+    },
+    {
+      "id": "I8",
+      "issue": "Category A/B (cost breakdown) LLM sometimes injects driverFilter spuriously",
+      "impact": "HIGH",
+      "root_cause": "When the question asks for 'desglose' or 'breakdown by category' without naming a specific driver, the LLM occasionally sets driverFilter to a specific driver, returning 1 row instead of the full 4-row breakdown.",
+      "fix": "Strengthen prompt: clarify that driverFilter should ONLY be set if the user names exactly one driver. Add negative few-shot example where 'desglose de costos' maps to no driverFilter.",
+      "priority": 3
+    },
+    {
+      "id": "J-scope",
+      "issue": "Category J (out-of-scope/errors) scored 83.3% — some error queries not rejected",
+      "impact": "HIGH",
+      "root_cause": "Out-of-scope guard not triggering consistently for all off-topic queries (FX rates, HR data, commodity prices).",
+      "fix": "Expand out-of-scope keyword list and few-shot examples. Add domain guard: if no mine/cost/tonnage intent detected AND no mine name matched, treat as out-of-scope.",
+      "priority": 4
+    }
+  ]
+}

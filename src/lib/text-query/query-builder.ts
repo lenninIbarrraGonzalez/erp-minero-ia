@@ -259,6 +259,71 @@ async function queryCostByDriverTimeSeries(
   return periods.map((period) => ({ period, amount: amountByPeriod.get(period) ?? 0 }));
 }
 
+async function queryCostPerTonneByMine(
+  db: SupabaseClient,
+  range?: PeriodRange
+): Promise<QueryRow[]> {
+  const [minesResult, costResult, prodResult] = await Promise.all([
+    db.from("mines").select("id, name"),
+    buildCostQuery(db, undefined, range),
+    buildProdQuery(db, undefined, range),
+  ]);
+
+  const mines = (minesResult.data ?? []) as MineRow[];
+  const costRows = (costResult.data ?? []) as CostEntryRow[];
+  const prodRows = (prodResult.data ?? []) as ProductionRunRow[];
+
+  const costByMineId = new Map<string, number>();
+  for (const row of costRows) {
+    costByMineId.set(row.mine_id, (costByMineId.get(row.mine_id) ?? 0) + Number(row.amount));
+  }
+
+  const tonnageByMineId = new Map<string, number>();
+  for (const row of prodRows) {
+    tonnageByMineId.set(row.mine_id, (tonnageByMineId.get(row.mine_id) ?? 0) + Number(row.tonnage));
+  }
+
+  return mines
+    .filter((m) => costByMineId.has(m.id))
+    .map((m) => {
+      const totalCost = costByMineId.get(m.id) ?? 0;
+      const totalTonnage = tonnageByMineId.get(m.id) ?? 1;
+      return {
+        mine: m.name,
+        avg_cost_per_tonne: parseFloat((totalCost / totalTonnage).toFixed(2)),
+      };
+    })
+    .sort((a, b) => (b.avg_cost_per_tonne as number) - (a.avg_cost_per_tonne as number));
+}
+
+async function queryCostByDriverByMine(
+  db: SupabaseClient,
+  driverFilter?: string,
+  range?: PeriodRange
+): Promise<QueryRow[]> {
+  const [minesResult, costResult] = await Promise.all([
+    db.from("mines").select("id, name"),
+    buildCostQuery(db, undefined, range),
+  ]);
+
+  const mines = (minesResult.data ?? []) as MineRow[];
+  const costRows = (costResult.data ?? []) as CostEntryRow[];
+
+  const filtered = driverFilter
+    ? costRows.filter((r) => r.driver === driverFilter)
+    : costRows;
+
+  const amountByMineId = new Map<string, number>();
+  for (const row of filtered) {
+    amountByMineId.set(row.mine_id, (amountByMineId.get(row.mine_id) ?? 0) + Number(row.amount));
+  }
+
+  return mines
+    .filter((m) => amountByMineId.has(m.id))
+    .map((m) => ({ mine: m.name, amount: amountByMineId.get(m.id) ?? 0 }))
+    .sort((a, b) => (b.amount as number) - (a.amount as number));
+}
+
 // ---------------------------------------------------------------------------
 // Multi-mine comparison
 // ---------------------------------------------------------------------------
@@ -351,12 +416,28 @@ export async function buildAndExecuteQuery(
     mineId = await resolveMineId(db, intent.mineName);
   }
 
+  // P1: Fast empty_result for years outside the available data range (2024 only)
+  const DATA_YEAR_MIN = 2024;
+  const DATA_YEAR_MAX = 2024;
+  if (intent.period?.year !== undefined) {
+    if (intent.period.year < DATA_YEAR_MIN || intent.period.year > DATA_YEAR_MAX) {
+      throw makeError(
+        "empty_result",
+        `No data available for year ${intent.period.year}. Available data: ${DATA_YEAR_MIN}–${DATA_YEAR_MAX}.`
+      );
+    }
+  }
+
   const periodRange = buildPeriodRange(intent.period);
 
   let rows: QueryRow[];
   switch (intent.metric) {
     case "cost_per_tonne":
-      rows = await queryCostPerTonne(db, mineId, periodRange);
+      if (intent.groupBy === "mine") {
+        rows = await queryCostPerTonneByMine(db, periodRange);
+      } else {
+        rows = await queryCostPerTonne(db, mineId, periodRange);
+      }
       break;
     case "tonnage":
       if (intent.groupBy === "mine") {
@@ -368,6 +449,8 @@ export async function buildAndExecuteQuery(
     case "cost_by_driver":
       if (intent.groupBy === "month" && intent.driverFilter) {
         rows = await queryCostByDriverTimeSeries(db, intent.driverFilter, mineId, periodRange);
+      } else if (intent.groupBy === "mine") {
+        rows = await queryCostByDriverByMine(db, intent.driverFilter, periodRange);
       } else {
         rows = await queryCostByDriver(db, mineId, periodRange, intent.driverFilter);
       }

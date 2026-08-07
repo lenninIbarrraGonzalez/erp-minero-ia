@@ -30,19 +30,30 @@ Data: ${dataPreview}
 Insight:`;
 }
 
+const MIN_INSIGHT_LENGTH = 30;
+
 export async function generateInsight(
   question: string,
   rows: QueryRow[],
   llm: LLMProvider
 ): Promise<string> {
+  const prompt = buildPrompt(question, rows);
+
   try {
-    const response = await llm.complete(buildPrompt(question, rows), {
-      maxTokens: 350,
-      temperature: 0.3,
-    });
-    return response.text.trim();
+    const response = await llm.complete(prompt, { maxTokens: 350, temperature: 0.3 });
+    const text = response.text.trim();
+    if (text.length >= MIN_INSIGHT_LENGTH) return text;
+
+    // P5: Retry with higher temperature when response is empty or too short
+    const retry = await llm.complete(prompt, { maxTokens: 350, temperature: 0.7 });
+    return retry.text.trim();
   } catch {
-    // Graceful degrade — insight is non-critical
-    return "";
+    try {
+      // P5: Retry once on transient LLM error
+      const retry = await llm.complete(prompt, { maxTokens: 350, temperature: 0.7 });
+      return retry.text.trim();
+    } catch {
+      return "";
+    }
   }
 }
