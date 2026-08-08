@@ -37,6 +37,7 @@
     "loading": "Processing query...",
     "emptyResult": "No data found for this query.",
     "error": {
+      "invalidQuestion": "The query is invalid. Make sure it is text up to 500 characters.",
       "parseFailure": "Could not interpret the query. Try rephrasing.",
       "unsupportedMetric": "Unsupported metric. Try 'cost per tonne', 'tonnage', or 'cost by driver'.",
       "mineNotFound": "The specified mine was not found.",

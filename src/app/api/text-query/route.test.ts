@@ -156,4 +156,60 @@ describe("POST /api/text-query", () => {
     const body = await res.json();
     expect(body.error).toBeDefined();
   });
+
+  // QW-2: Zod validation tests
+  it("returns 422 with invalidQuestion when question exceeds 500 characters", async () => {
+    const longQuestion = "a".repeat(501);
+    const req = makeRequest({ question: longQuestion });
+    const res = await POST(req);
+
+    expect(res.status).toBe(422);
+    const body = await res.json();
+    expect(body.error).toBe("textQuery.error.invalidQuestion");
+    expect(mockParseIntent).not.toHaveBeenCalled();
+  });
+
+  it("returns 422 with invalidQuestion when mineId is not a valid UUID", async () => {
+    const req = makeRequest({ question: "costo por tonelada", mineId: "not-a-uuid" });
+    const res = await POST(req);
+
+    expect(res.status).toBe(422);
+    const body = await res.json();
+    expect(body.error).toBe("textQuery.error.invalidQuestion");
+    expect(mockParseIntent).not.toHaveBeenCalled();
+  });
+
+  it("succeeds when mineId is a valid UUID", async () => {
+    const intent = { metric: "cost_per_tonne" as const };
+    const rows = [{ period: "2024-01-01", cost_per_tonne: 15 }];
+    mockParseIntent.mockResolvedValue(intent);
+    mockBuildAndExecuteQuery.mockResolvedValue(rows);
+    mockGetChartType.mockReturnValue("line");
+    mockGenerateInsight.mockResolvedValue("Cost trend.");
+
+    const req = makeRequest({
+      question: "costo por tonelada",
+      mineId: "123e4567-e89b-12d3-a456-426614174000",
+    });
+    const res = await POST(req);
+
+    expect(res.status).toBe(200);
+    // mineId must NOT be injected into the intent passed to buildAndExecuteQuery
+    const calledIntent = mockBuildAndExecuteQuery.mock.calls[0]?.[1] as unknown as Record<string, unknown>;
+    expect(calledIntent._mineIdDirect).toBeUndefined();
+  });
+
+  it("succeeds when mineId is absent", async () => {
+    const intent = { metric: "tonnage" as const };
+    const rows = [{ period: "2024-01-01", tonnage: 100 }];
+    mockParseIntent.mockResolvedValue(intent);
+    mockBuildAndExecuteQuery.mockResolvedValue(rows);
+    mockGetChartType.mockReturnValue("bar");
+    mockGenerateInsight.mockResolvedValue("Tonnage insight.");
+
+    const req = makeRequest({ question: "tonelaje total" });
+    const res = await POST(req);
+
+    expect(res.status).toBe(200);
+  });
 });

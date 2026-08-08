@@ -1,23 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-
-// Chainable Supabase mock — mirrors query-builder.test.ts pattern
-function makeChainableQuery(result: { data: unknown[] | null; error: unknown }) {
-  const chain: Record<string, unknown> = {};
-  chain.select = vi.fn().mockReturnValue(chain);
-  chain.eq = vi.fn().mockReturnValue(chain);
-  chain.then = (resolve: (val: typeof result) => unknown) => resolve(result);
-  return chain;
-}
-
-type TableResults = Record<string, { data: unknown[] | null; error: unknown }>;
-
-function makeSupabaseMock(tableResults: TableResults) {
-  return {
-    from: vi.fn((table: string) =>
-      makeChainableQuery(tableResults[table] ?? { data: [], error: null })
-    ),
-  };
-}
+import { makeChainableQuery, makeSupabaseMock } from "@/test/supabase-mock";
 
 // We need a more sophisticated mock where the same table can be queried twice
 // with different .eq("period", ...) values returning different data

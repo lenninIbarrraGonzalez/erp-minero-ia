@@ -37,6 +37,7 @@
     "loading": "Procesando consulta...",
     "emptyResult": "No se encontraron datos para esta consulta.",
     "error": {
+      "invalidQuestion": "La consulta es inválida. Verificá que sea un texto de hasta 500 caracteres.",
       "parseFailure": "No se pudo interpretar la consulta. Intentá con otros términos.",
       "unsupportedMetric": "Métrica no soportada. Intentá con 'costo por tonelada', 'tonelaje' o 'costo por categoría'.",
       "mineNotFound": "La mina especificada no fue encontrada.",

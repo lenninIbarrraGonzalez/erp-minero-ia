@@ -31,6 +31,7 @@ vi.mock("@/lib/queries/dashboard", () => ({
   fetchCostByDriver: vi.fn().mockResolvedValue([
     { driver: "fuel", totalCost: 5000 },
   ]),
+  fetchPeriodRange: vi.fn().mockResolvedValue({ min: "2024-01", max: "2024-12" }),
 }));
 
 // ---------------------------------------------------------------------------
@@ -63,7 +64,12 @@ vi.mock("next/navigation", () => ({
 // ---------------------------------------------------------------------------
 
 vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => key,
+  useTranslations: () => {
+    const t = (key: string) => key;
+    t.raw = (key: string) => (key === "examples" ? [] : key);
+    return t;
+  },
+  useLocale: () => "es",
 }));
 
 // ---------------------------------------------------------------------------

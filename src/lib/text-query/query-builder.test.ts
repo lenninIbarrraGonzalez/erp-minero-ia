@@ -1,26 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { ParsedIntent, TextQueryError } from "./types";
-
-// We need to mock the Supabase client with a chainable API
-// The pattern mirrors dashboard.ts: db.from(...).select(...).eq(...)
-function makeChainableQuery(result: { data: unknown[] | null; error: unknown }) {
-  const chain = {
-    select: vi.fn().mockReturnThis(),
-    eq: vi.fn().mockReturnThis(),
-    ilike: vi.fn().mockReturnThis(),
-    like: vi.fn().mockReturnThis(),
-    gte: vi.fn().mockReturnThis(),
-    lt: vi.fn().mockReturnThis(),
-    then: (resolve: (val: typeof result) => unknown) => resolve(result),
-  };
-  return chain;
-}
-
-function makeSupabaseMock(tableResults: Record<string, { data: unknown[] | null; error: unknown }>) {
-  return {
-    from: vi.fn((table: string) => makeChainableQuery(tableResults[table] ?? { data: [], error: null })),
-  };
-}
+import { makeSupabaseMock } from "@/test/supabase-mock";
 
 import { buildAndExecuteQuery } from "./query-builder";
 

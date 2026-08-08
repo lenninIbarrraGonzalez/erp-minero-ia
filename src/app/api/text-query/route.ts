@@ -1,5 +1,6 @@
 import "server-only";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { parseIntent } from "@/lib/text-query/intent-parser";
 import { buildAndExecuteQuery } from "@/lib/text-query/query-builder";
 import { getChartType } from "@/lib/text-query/chart-heuristic";
@@ -7,6 +8,11 @@ import { generateInsight } from "@/lib/text-query/insight-generator";
 import { createLlmChain } from "@/lib/llm/create-llm-provider";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { TextQueryError } from "@/lib/text-query/types";
+
+const RequestSchema = z.object({
+  question: z.string().min(1).max(500),
+  mineId: z.string().uuid().optional(),
+});
 
 function isTextQueryError(err: unknown): err is TextQueryError & Error {
   return (
@@ -16,10 +22,10 @@ function isTextQueryError(err: unknown): err is TextQueryError & Error {
 }
 
 export async function POST(request: Request) {
-  let body: Record<string, unknown>;
+  let rawBody: unknown;
 
   try {
-    body = await request.json();
+    rawBody = await request.json();
   } catch {
     return NextResponse.json(
       { error: "textQuery.error.invalidQuestion" },
@@ -27,17 +33,15 @@ export async function POST(request: Request) {
     );
   }
 
-  const { question, mineId } = body as {
-    question?: unknown;
-    mineId?: unknown;
-  };
-
-  if (!question || typeof question !== "string" || question.trim() === "") {
+  const parsed = RequestSchema.safeParse(rawBody);
+  if (!parsed.success) {
     return NextResponse.json(
       { error: "textQuery.error.invalidQuestion" },
       { status: 422 }
     );
   }
+
+  const { question } = parsed.data;
 
   const llm = createLlmChain();
   const db = createSupabaseServerClient();
@@ -45,14 +49,7 @@ export async function POST(request: Request) {
   try {
     const intent = await parseIntent(question.trim(), llm);
 
-    // If mineId is provided as a string, inject it directly into the intent
-    // so query-builder skips mine-name resolution
-    const resolvedIntent =
-      typeof mineId === "string" && mineId.trim() !== ""
-        ? { ...intent, mineName: undefined, _mineIdDirect: mineId }
-        : intent;
-
-    const rows = await buildAndExecuteQuery(db, resolvedIntent as typeof intent);
+    const rows = await buildAndExecuteQuery(db, intent);
     const chartType = getChartType(intent, rows);
     const insightText = await generateInsight(question.trim(), rows, llm);
 
