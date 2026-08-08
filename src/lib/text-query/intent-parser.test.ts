@@ -64,4 +64,36 @@ describe("parseIntent", () => {
       code: "llm_error",
     } satisfies Partial<TextQueryError>);
   });
+
+  // QW4: question truncation — oversized question must be trimmed to 500 chars before LLM call
+  it("truncates question to 500 characters before passing to LLM", async () => {
+    const longQuestion = "a".repeat(501);
+    // LLM returns a valid intent regardless of prompt length
+    const validPayload: ParsedIntent = { metric: "tonnage" };
+    const completeMock = vi.fn().mockResolvedValue(makeLLMResponse(JSON.stringify(validPayload)));
+    const llm: LLMProvider = { name: "mock", complete: completeMock };
+
+    await parseIntent(longQuestion, llm);
+
+    const promptArg = completeMock.mock.calls[0][0] as string;
+    // The prompt embeds the question; the question portion must be <= 500 chars
+    // buildPrompt appends "User question: {question}" at the end
+    const marker = "User question: ";
+    const questionInPrompt = promptArg.slice(promptArg.lastIndexOf(marker) + marker.length);
+    expect(questionInPrompt.length).toBeLessThanOrEqual(500);
+  });
+
+  it("does not truncate a question of exactly 500 characters", async () => {
+    const exactQuestion = "b".repeat(500);
+    const validPayload: ParsedIntent = { metric: "tonnage" };
+    const completeMock = vi.fn().mockResolvedValue(makeLLMResponse(JSON.stringify(validPayload)));
+    const llm: LLMProvider = { name: "mock", complete: completeMock };
+
+    await parseIntent(exactQuestion, llm);
+
+    const promptArg = completeMock.mock.calls[0][0] as string;
+    const marker = "User question: ";
+    const questionInPrompt = promptArg.slice(promptArg.lastIndexOf(marker) + marker.length);
+    expect(questionInPrompt).toBe(exactQuestion);
+  });
 });

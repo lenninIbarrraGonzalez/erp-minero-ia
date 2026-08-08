@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { ParsedIntent, QueryRow, TextQueryError } from "./types";
+import type { ParsedIntent, QueryRow } from "./types";
+import { makeError, GENERIC_MINE_TERMS } from "./errors";
 
 // ---------------------------------------------------------------------------
 // Internal raw row types
@@ -21,20 +22,6 @@ interface ProductionRunRow {
 interface MineRow {
   id: string;
   name: string;
-}
-
-// ---------------------------------------------------------------------------
-// Error helper
-// ---------------------------------------------------------------------------
-
-function makeError(
-  code: TextQueryError["code"],
-  message: string
-): TextQueryError & Error {
-  const err = new Error(message) as Error & TextQueryError;
-  err.code = code;
-  err.message = message;
-  return err;
 }
 
 // ---------------------------------------------------------------------------
@@ -91,11 +78,6 @@ function buildProdQuery(db: SupabaseClient, mineId?: string, range?: PeriodRange
 // ---------------------------------------------------------------------------
 // Mine name resolution
 // ---------------------------------------------------------------------------
-
-const GENERIC_MINE_TERMS = new Set([
-  "all", "todas", "todas las minas", "all mines", "minas", "mines",
-  "every mine", "each mine", "cualquier mina",
-]);
 
 async function resolveMineId(
   db: SupabaseClient,
@@ -287,10 +269,10 @@ async function queryCostPerTonneByMine(
     .filter((m) => costByMineId.has(m.id))
     .map((m) => {
       const totalCost = costByMineId.get(m.id) ?? 0;
-      const totalTonnage = tonnageByMineId.get(m.id) ?? 1;
+      const totalTonnage = tonnageByMineId.get(m.id) ?? 0;
       return {
         mine: m.name,
-        avg_cost_per_tonne: parseFloat((totalCost / totalTonnage).toFixed(2)),
+        avg_cost_per_tonne: totalTonnage > 0 ? parseFloat((totalCost / totalTonnage).toFixed(2)) : 0,
       };
     })
     .sort((a, b) => (b.avg_cost_per_tonne as number) - (a.avg_cost_per_tonne as number));
@@ -332,7 +314,10 @@ async function buildMultiMineQuery(
   db: SupabaseClient,
   intent: ParsedIntent
 ): Promise<QueryRow[]> {
-  const names = intent.mineNames!;
+  const names = intent.mineNames ?? [];
+  if (names.length < 2) {
+    throw makeError("parse_failure", "Multi-mine comparison requires at least 2 mine names");
+  }
   const periodRange = buildPeriodRange(intent.period);
 
   // Resolve all mine IDs in parallel — throws mine_not_found for any mismatch

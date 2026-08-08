@@ -1,8 +1,9 @@
 import "server-only";
 import { ParsedIntentSchema } from "./intent-schema";
-import type { ParsedIntent, TextQueryError } from "./types";
+import type { ParsedIntent } from "./types";
 import type { LLMProvider } from "@/lib/llm/types";
 import { LLMProviderError } from "@/lib/llm/types";
+import { makeError, GENERIC_MINE_TERMS } from "./errors";
 
 // ---------------------------------------------------------------------------
 // Intent Parser — converts a natural-language question into a ParsedIntent
@@ -44,20 +45,13 @@ Rules:
 User question: ${question}`;
 }
 
-function makeError(
-  code: TextQueryError["code"],
-  message: string
-): TextQueryError & Error {
-  const err = new Error(message) as Error & TextQueryError;
-  err.code = code;
-  err.message = message;
-  return err;
-}
-
 export async function parseIntent(
   question: string,
   llm: LLMProvider
 ): Promise<ParsedIntent> {
+  const MAX_QUESTION_LENGTH = 500;
+  if (question.length > MAX_QUESTION_LENGTH) question = question.slice(0, MAX_QUESTION_LENGTH);
+
   let text: string;
 
   try {
@@ -111,10 +105,6 @@ export async function parseIntent(
   // - When a single element is a generic term ("all mines", "cada mina") → no mine filter
   // - When a single element looks like a year or non-mine token → strip it (LLM confusion)
   // - When a single element looks like a real mine name → promote to mineName
-  const GENERIC_TERMS = new Set([
-    "all", "todas", "todas las minas", "all mines", "minas", "mines",
-    "every mine", "each mine", "cualquier mina", "cada mina",
-  ]);
   if (
     typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)
   ) {
@@ -128,7 +118,7 @@ export async function parseIntent(
       } else if (names.length === 1) {
         const sole = names[0];
         const soleStr = typeof sole === "string" ? sole.trim() : "";
-        const isGeneric = GENERIC_TERMS.has(soleStr.toLowerCase());
+        const isGeneric = GENERIC_MINE_TERMS.has(soleStr.toLowerCase());
         const isNumeric = /^\d+$/.test(soleStr); // year or other number crept in
 
         if (isGeneric || isNumeric || soleStr === "") {
@@ -143,7 +133,7 @@ export async function parseIntent(
       } else {
         // ≥2 elements: check if ALL are generic (e.g. ["all mines", "todas"])
         const allGeneric = names.every(
-          (n) => typeof n === "string" && GENERIC_TERMS.has(n.toLowerCase().trim())
+          (n) => typeof n === "string" && GENERIC_MINE_TERMS.has(n.toLowerCase().trim())
         );
         if (allGeneric) delete p.mineNames;
       }
