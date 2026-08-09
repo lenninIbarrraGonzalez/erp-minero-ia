@@ -43,7 +43,7 @@ export function QueryResults({ result }: QueryResultsProps) {
 
   if (rows.length === 0) {
     return (
-      <p className="text-sm text-text-muted mt-4">{t("emptyResult")}</p>
+      <p data-testid="query-empty" className="text-sm text-text-muted mt-4">{t("emptyResult")}</p>
     );
   }
 

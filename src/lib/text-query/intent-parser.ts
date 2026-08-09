@@ -37,7 +37,8 @@ Rules:
 - Only set "driverFilter" when the user names ONE specific driver explicitly (e.g. "fuel", "combustible", "insumos", "equipos", "mano de obra"). Do NOT set driverFilter when the user asks for a general breakdown, "all drivers", "all categories", "desglose", "todas las categorías", or a full cost breakdown — in those cases omit driverFilter entirely.
 - Set "driverFilter": "fuel" for fuel/combustible, "supplies" for insumos/supplies/reagentes, "equipment" for equipos/equipment/maquinaria, "labor" for mano de obra/labor/personal.
 - If the user asks about "each mine", "all mines separately", "por mina", "cada mina", "qué mina tuvo el mayor/menor", "which mine had the most/least", or wants a per-mine ranking or breakdown, set groupBy: "mine"
-- If the user asks how a specific driver cost evolved over time — using phrases like "month by month", "mes a mes", "monthly trend", "monthly evolution", "evolución mensual", "tendencia mensual", "mes por mes", "how did ... change month" — set groupBy: "month" (requires driverFilter to also be set)
+- If the user asks about monthly evolution or trend — using phrases like "mensual", "mes por mes", "mes a mes", "monthly", "monthly trend", "monthly evolution", "evolución mensual", "tendencia mensual", "month by month", "how did ... change month" — set groupBy: "month". This applies to ALL metrics (tonnage, cost_per_tonne, cost_by_driver). For cost_by_driver with groupBy:month, driverFilter must also be set.
+- If the user asks about "costo de combustible", "costo de insumos", "costo de equipos", "costo de mano de obra" (the cost OF a specific driver) WITHOUT saying "por tonelada", use metric: "cost_by_driver" with the appropriate driverFilter — do NOT use "cost_per_tonne" in this case. Example: "evolución del costo de combustible" → metric: "cost_by_driver", driverFilter: "fuel"
 - For questions asking which cost driver is most or least expensive — e.g. "qué driver fue el más caro", "cuál driver es el más costoso", "qué categoría es la más cara", "which driver costs the most", "most expensive driver" — use metric: "cost_by_driver" WITHOUT driverFilter so all 4 drivers are returned for comparison
 - If no time period is mentioned, omit period entirely (do not set year or month to null)
 - Respond with ONLY valid JSON, no explanation, no markdown, no code blocks
@@ -157,16 +158,106 @@ export async function parseIntent(
   const intentData = result.data as ParsedIntent;
   const qLower = question.toLowerCase();
 
-  // P2: Force groupBy:mine when the question explicitly asks for per-mine breakdown
+  // P2: Force groupBy:mine when the question asks for per-mine breakdown/ranking
   // but the LLM missed it. Only applies when no specific mine is already targeted.
   if (!intentData.groupBy && !intentData.mineNames && !intentData.mineName) {
     const PER_MINE_TRIGGERS = [
       "por mina", "cada mina", "por cada mina",
       "for each mine", "for every mine", "each mine", "every mine",
       "between all mines",
+      // comparative "which mine" patterns (I3 fix)
+      "qué mina", "cuál mina", "cuál fue la mina", "cuál es la mina",
+      "which mine", "what mine",
     ];
     if (PER_MINE_TRIGGERS.some((p) => qLower.includes(p))) {
       (intentData as unknown as Record<string, unknown>).groupBy = "mine";
+    }
+  }
+
+  // P3: Fix I1 — when question uses monthly keywords for tonnage/CPT:
+  //   a) Clear spurious groupBy:mine (which returns 1 row per mine, not 12 months)
+  //   b) Clear spurious period.month if no specific month name appears in question
+  //      (e.g. "tonelaje mensual en 2024" should not resolve to a single month)
+  const MONTHLY_KEYWORDS = [
+    "mensual", "mes por mes", "mes a mes", "monthly",
+    "evolución mensual", "tendencia mensual", "month by month",
+  ];
+  const MONTH_NAMES = [
+    "enero","febrero","marzo","abril","mayo","junio",
+    "julio","agosto","septiembre","octubre","noviembre","diciembre",
+    "january","february","march","april","may","june",
+    "july","august","september","october","november","december",
+  ];
+  const hasMonthlyKeyword = MONTHLY_KEYWORDS.some((kw) => qLower.includes(kw));
+  const hasSpecificMonth = MONTH_NAMES.some((m) => qLower.includes(m));
+
+  if (hasMonthlyKeyword && intentData.metric !== "cost_by_driver") {
+    // a) Clear groupBy:mine — monthly means time-series, not per-mine aggregation
+    if (intentData.groupBy === "mine") {
+      delete (intentData as unknown as Record<string, unknown>).groupBy;
+    }
+    // b) Clear spurious period.month when the question only mentions a year
+    if (!hasSpecificMonth && intentData.period?.month !== undefined) {
+      delete (intentData.period as unknown as Record<string, unknown>).month;
+    }
+  }
+
+  // P6: Clear groupBy:mine for cost_by_driver when a specific mine is already targeted.
+  // A single-mine query with groupBy:mine routes to queryCostByDriverByMine which
+  // ignores the mine filter and returns all 5 mines — incorrect for a single-mine question.
+  if (
+    intentData.metric === "cost_by_driver" &&
+    intentData.mineName &&
+    intentData.groupBy === "mine"
+  ) {
+    delete (intentData as unknown as Record<string, unknown>).groupBy;
+  }
+
+  // P7: Force driverFilter when an explicit driver keyword appears anywhere in the
+  // question for cost_by_driver metric — not just at the start (extends P4).
+  if (intentData.metric === "cost_by_driver" && !intentData.driverFilter) {
+    const DRIVER_ANYWHERE_MAP: Array<[string, "fuel" | "supplies" | "equipment" | "labor"]> = [
+      ["mano de obra", "labor"],
+      ["combustible", "fuel"],
+      ["insumos", "supplies"],
+      ["equipos", "equipment"],
+    ];
+    for (const [keyword, driver] of DRIVER_ANYWHERE_MAP) {
+      if (qLower.includes(keyword)) {
+        (intentData as unknown as Record<string, unknown>).driverFilter = driver;
+        break;
+      }
+    }
+  }
+
+  // P8: Force groupBy:mine for ranking/per-mine requests that P2 missed:
+  //   - "ranking" in question → user wants per-mine ranking
+  //   - "todas las minas" + specific driverFilter → user wants breakdown by mine for that driver
+  if (!intentData.groupBy && !intentData.mineName && !intentData.mineNames) {
+    const needsPerMine =
+      qLower.includes("ranking") ||
+      (qLower.includes("todas las minas") && !!intentData.driverFilter);
+    if (needsPerMine) {
+      (intentData as unknown as Record<string, unknown>).groupBy = "mine";
+    }
+  }
+
+  // P5: Fix I2 — if LLM returned cost_per_tonne but question contains an explicit
+  // driver keyword WITHOUT "por tonelada", the user is asking for cost_by_driver.
+  // Example: "evolución mensual del costo de combustible" → cost_by_driver + fuel.
+  if (intentData.metric === "cost_per_tonne" && !qLower.includes("por tonelada")) {
+    const DRIVER_KEYWORD_MAP: Array<[string, "fuel" | "supplies" | "equipment" | "labor"]> = [
+      ["combustible", "fuel"],
+      ["insumos", "supplies"],
+      ["equipos", "equipment"],
+      ["mano de obra", "labor"],
+    ];
+    for (const [keyword, driver] of DRIVER_KEYWORD_MAP) {
+      if (qLower.includes(keyword)) {
+        (intentData as unknown as Record<string, unknown>).metric = "cost_by_driver";
+        (intentData as unknown as Record<string, unknown>).driverFilter = driver;
+        break;
+      }
     }
   }
 

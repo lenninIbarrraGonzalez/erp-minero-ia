@@ -43,6 +43,19 @@ export async function POST(request: Request) {
 
   const { question } = parsed.data;
 
+  // I4: Pre-flight year check — skip LLM entirely for years outside the data range.
+  // Only 2024 data is available; keep in sync with DATA_YEAR_MIN/MAX in query-builder.ts.
+  const yearMatch = /\b(20\d{2})\b/.exec(question.trim());
+  if (yearMatch) {
+    const year = parseInt(yearMatch[1], 10);
+    if (year < 2024 || year > 2024) {
+      return NextResponse.json(
+        { rows: [], chartType: "none", insightText: "" },
+        { status: 200 }
+      );
+    }
+  }
+
   const llm = createLlmChain();
   const db = createSupabaseServerClient();
 
