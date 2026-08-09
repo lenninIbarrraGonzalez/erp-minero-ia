@@ -35,6 +35,9 @@ export interface TextQueryError {
     | "empty_result"
     | "llm_error"
     | "db_error"
-    | "out_of_scope";
+    | "out_of_scope"
+    | "year_out_of_range"
+    | "ambiguous_query"
+    | "overlapping_period";
   message: string;
 }

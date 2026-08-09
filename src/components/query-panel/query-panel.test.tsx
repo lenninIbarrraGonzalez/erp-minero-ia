@@ -17,6 +17,10 @@ vi.mock("next-intl", () => ({
       "error.unsupportedMetric": "Unsupported metric.",
       "error.mineNotFound": "Mine not found.",
       "error.generic": "An unexpected error occurred.",
+      "error.invalidQuestion": "The query is invalid. Make sure it is text up to 500 characters.",
+      "error.yearOutOfRange": "Only 2024 data is available. Try: 'tonnage in 2024'.",
+      "error.ambiguousQuery": "Query is ambiguous. Specify: 'cost per tonne', 'tonnage', or 'cost by driver'.",
+      "error.overlappingPeriod": "Specify either a quarter or a month, not both.",
       "insight.label": "Analysis",
       examplesLabel: "Examples",
     };
@@ -174,6 +178,44 @@ describe("QueryPanel", () => {
     await waitFor(() => {
       // Error message should be visible (the generic error key)
       expect(screen.getByRole("alert")).toBeInTheDocument();
+    });
+  });
+
+  it("shows specific invalidQuestion message when API returns the full i18n key error", async () => {
+    vi.mocked(global.fetch).mockResolvedValue(
+      makeErrorResponse("textQuery.error.invalidQuestion") as never
+    );
+
+    render(<QueryPanel />);
+
+    fireEvent.change(screen.getByPlaceholderText("Ask about costs, tonnage..."), {
+      target: { value: "?" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Query" }));
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toHaveTextContent(
+        "The query is invalid. Make sure it is text up to 500 characters."
+      );
+    });
+  });
+
+  it("shows yearOutOfRange hint when API returns year_out_of_range error", async () => {
+    vi.mocked(global.fetch).mockResolvedValue(
+      makeErrorResponse("year_out_of_range") as never
+    );
+
+    render(<QueryPanel />);
+
+    fireEvent.change(screen.getByPlaceholderText("Ask about costs, tonnage..."), {
+      target: { value: "tonelaje en 2025" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Query" }));
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toHaveTextContent(
+        "Only 2024 data is available. Try: 'tonnage in 2024'."
+      );
     });
   });
 });

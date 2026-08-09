@@ -158,6 +158,15 @@ export async function parseIntent(
   const intentData = result.data as ParsedIntent;
   const qLower = question.toLowerCase();
 
+  // P9: Reject contradictory temporal constraints — quarter and month cannot both be set.
+  // query-builder cannot resolve "Q1 AND March" into a single unambiguous time window.
+  if (intentData.period?.quarter !== undefined && intentData.period?.month !== undefined) {
+    throw makeError(
+      "overlapping_period",
+      `Contradictory period: quarter=${intentData.period.quarter} and month=${intentData.period.month} both set`
+    );
+  }
+
   // P2: Force groupBy:mine when the question asks for per-mine breakdown/ranking
   // but the LLM missed it. Only applies when no specific mine is already targeted.
   if (!intentData.groupBy && !intentData.mineNames && !intentData.mineName) {
@@ -276,6 +285,13 @@ export async function parseIntent(
         break;
       }
     }
+  }
+
+  // P10: Safety guard — if metric is still falsy after all post-parse rules, the query
+  // is too ambiguous to execute. Fires only when schema relaxation or unexpected LLM
+  // output bypasses the Zod required-metric check.
+  if (!intentData.metric) {
+    throw makeError("ambiguous_query", "No metric could be determined after all post-parse rules");
   }
 
   return intentData;

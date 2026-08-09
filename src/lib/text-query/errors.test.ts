@@ -26,6 +26,9 @@ describe("makeError", () => {
       "llm_error",
       "db_error",
       "out_of_scope",
+      "year_out_of_range",
+      "ambiguous_query",
+      "overlapping_period",
     ] as const;
     for (const code of codes) {
       expect(makeError(code, "m").code).toBe(code);

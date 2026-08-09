@@ -50,8 +50,8 @@ export async function POST(request: Request) {
     const year = parseInt(yearMatch[1], 10);
     if (year < 2024 || year > 2024) {
       return NextResponse.json(
-        { rows: [], chartType: "none", insightText: "" },
-        { status: 200 }
+        { error: "year_out_of_range" },
+        { status: 422 }
       );
     }
   }

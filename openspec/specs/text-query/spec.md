@@ -289,6 +289,82 @@ The system MUST have unit tests for `intent-schema.ts`, `intent-parser.ts`, `que
 
 ---
 
+### Requirement: Year Out-of-Range Pre-flight
+
+The route MUST check for a 4-digit year in the raw question text before calling the LLM. If a year is found and is not 2024 (the only available data year), the route MUST return HTTP 422 with `{ error: "year_out_of_range" }` without making any LLM or DB calls.
+
+#### Scenario: Year before 2024 returns 422
+- GIVEN a question containing "2023" (or any year < 2024)
+- WHEN `POST /api/text-query` is called
+- THEN HTTP 422 is returned with `{ error: "year_out_of_range" }` and no LLM call is made
+
+#### Scenario: Year 2024 proceeds normally
+- GIVEN a question containing "2024"
+- WHEN `POST /api/text-query` is called
+- THEN the pre-flight passes and the pipeline executes normally
+
+#### Scenario: No year mentioned — query proceeds
+- GIVEN a question with no year reference
+- WHEN `POST /api/text-query` is called
+- THEN the pre-flight is skipped and the pipeline executes normally
+
+---
+
+### Requirement: Overlapping Period Guard
+
+The intent parser MUST throw a `TextQueryError` with `code: "overlapping_period"` when both `period.quarter` and `period.month` are set in the parsed intent after Zod validation. The route MUST surface this as HTTP 422 with `{ error: "overlapping_period" }`.
+
+#### Scenario: Quarter and month both set returns 422
+- GIVEN the LLM extracts `period: { year: 2024, quarter: 1, month: 3 }`
+- WHEN the intent parser applies post-parse guards
+- THEN it throws `TextQueryError` with `code: "overlapping_period"`
+- AND the route returns HTTP 422
+
+#### Scenario: Quarter only or month only — valid
+- GIVEN the LLM extracts only one of quarter or month (not both)
+- WHEN the intent parser applies post-parse guards
+- THEN no error is thrown and the query proceeds
+
+---
+
+### Requirement: Ambiguous Query Guard
+
+The intent parser MUST throw a `TextQueryError` with `code: "ambiguous_query"` when `metric` is undefined or falsy after ALL post-parse rules have been applied. The route MUST surface this as HTTP 422 with `{ error: "ambiguous_query" }`. A query with a defined metric but no period constraint is NOT ambiguous and MUST proceed normally.
+
+#### Scenario: Undefined metric after all rules returns 422
+- GIVEN the parsed intent has no `metric` field after all post-parse rules
+- WHEN the intent parser applies all guards
+- THEN it throws `TextQueryError` with `code: "ambiguous_query"`
+
+#### Scenario: Defined metric with no period — valid
+- GIVEN the LLM extracts `metric: "tonnage"` with no `period` field
+- WHEN the intent parser applies all post-parse rules
+- THEN no ambiguous_query error is thrown
+
+---
+
+### Requirement: Error Code Union Extension
+
+`TextQueryError.code` in `types.ts` MUST include `"year_out_of_range"`, `"ambiguous_query"`, and `"overlapping_period"` as union members. All three codes MUST be handled by the existing route error-mapping path (HTTP 422).
+
+---
+
+### Requirement: i18n — Error Hint Keys
+
+Both `messages/es.json` and `messages/en.json` MUST add three keys under `textQuery.error`: `yearOutOfRange`, `ambiguousQuery`, and `overlappingPeriod`. Each value MUST be a fixed hint string (no dynamic interpolation) that tells the user what went wrong and how to fix their query. The `mapErrorCode` function in `query-panel.tsx` MUST include an entry mapping `"textQuery.error.invalidQuestion"` to `"error.invalidQuestion"` so Zod validation failures display the intended message instead of the generic fallback.
+
+#### Scenario: All three new keys present in both catalogs
+- GIVEN the implementation is complete
+- WHEN `messages/es.json` and `messages/en.json` are inspected
+- THEN `textQuery.error.yearOutOfRange`, `textQuery.error.ambiguousQuery`, and `textQuery.error.overlappingPeriod` exist in both files
+
+#### Scenario: invalidQuestion renders correct message
+- GIVEN the route returns HTTP 422 with `{ error: "textQuery.error.invalidQuestion" }`
+- WHEN the QueryPanel renders the error
+- THEN the UI displays the `invalidQuestion` i18n string, not the generic fallback
+
+---
+
 ### Non-Goals
 
 - Multi-turn conversation or chat history
@@ -297,3 +373,4 @@ The system MUST have unit tests for `intent-schema.ts`, `intent-parser.ts`, `que
 - Natural-language relative date parsing ("last quarter", "this year")
 - Authentication or authorization
 - New database schema migrations
+- Dynamic context in error payloads (hint strings are fixed)

@@ -212,4 +212,53 @@ describe("POST /api/text-query", () => {
 
     expect(res.status).toBe(200);
   });
+
+  // I4: year_out_of_range — must return 422, not silent 200
+  it("returns 422 with year_out_of_range when question mentions a year before 2024", async () => {
+    const req = makeRequest({ question: "tonelaje en 2023" });
+    const res = await POST(req);
+
+    expect(res.status).toBe(422);
+    const body = await res.json();
+    expect(body.error).toBe("year_out_of_range");
+    expect(mockParseIntent).not.toHaveBeenCalled();
+  });
+
+  it("returns 422 with year_out_of_range when question mentions a year after 2024", async () => {
+    const req = makeRequest({ question: "costos en 2025" });
+    const res = await POST(req);
+
+    expect(res.status).toBe(422);
+    const body = await res.json();
+    expect(body.error).toBe("year_out_of_range");
+    expect(mockParseIntent).not.toHaveBeenCalled();
+  });
+
+  it("proceeds normally when question mentions 2024", async () => {
+    const intent = { metric: "tonnage" as const };
+    mockParseIntent.mockResolvedValue(intent);
+    mockBuildAndExecuteQuery.mockResolvedValue([]);
+    mockGetChartType.mockReturnValue("none");
+    mockGenerateInsight.mockResolvedValue("");
+
+    const req = makeRequest({ question: "tonelaje en 2024" });
+    const res = await POST(req);
+
+    expect(res.status).toBe(200);
+    expect(mockParseIntent).toHaveBeenCalled();
+  });
+
+  it("proceeds normally when no year is mentioned", async () => {
+    const intent = { metric: "tonnage" as const };
+    mockParseIntent.mockResolvedValue(intent);
+    mockBuildAndExecuteQuery.mockResolvedValue([]);
+    mockGetChartType.mockReturnValue("none");
+    mockGenerateInsight.mockResolvedValue("");
+
+    const req = makeRequest({ question: "tonelaje total" });
+    const res = await POST(req);
+
+    expect(res.status).toBe(200);
+    expect(mockParseIntent).toHaveBeenCalled();
+  });
 });

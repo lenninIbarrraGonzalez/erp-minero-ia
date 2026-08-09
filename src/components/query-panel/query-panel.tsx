@@ -82,6 +82,11 @@ function mapErrorCode(code: string): string {
     llm_error: "error.generic",
     db_error: "error.generic",
     internal_error: "error.generic",
+    // Route returns the full i18n key for Zod validation failures
+    "textQuery.error.invalidQuestion": "error.invalidQuestion",
+    year_out_of_range: "error.yearOutOfRange",
+    ambiguous_query: "error.ambiguousQuery",
+    overlapping_period: "error.overlappingPeriod",
   };
   return map[code] ?? "error.generic";
 }

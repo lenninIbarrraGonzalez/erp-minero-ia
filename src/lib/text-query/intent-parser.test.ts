@@ -7,6 +7,7 @@ vi.mock("server-only", () => ({}));
 
 import { parseIntent } from "./intent-parser";
 import type { ParsedIntent, TextQueryError } from "./types";
+import { ParsedIntentSchema } from "./intent-schema";
 
 function makeLLM(response: LLMResponse | Error): LLMProvider {
   return {
@@ -95,5 +96,35 @@ describe("parseIntent", () => {
     const marker = "User question: ";
     const questionInPrompt = promptArg.slice(promptArg.lastIndexOf(marker) + marker.length);
     expect(questionInPrompt).toBe(exactQuestion);
+  });
+
+  it("throws overlapping_period when quarter and month are both set in parsed intent", async () => {
+    // Zod allows both quarter and month simultaneously — P9 guard catches this
+    const payload = { metric: "cost_per_tonne", period: { year: 2024, quarter: 1, month: 3 } };
+    const llm = makeLLM(makeLLMResponse(JSON.stringify(payload)));
+
+    await expect(
+      parseIntent("costo en Q1 en marzo 2024", llm)
+    ).rejects.toMatchObject({
+      code: "overlapping_period",
+    } satisfies Partial<TextQueryError>);
+  });
+
+  it("throws ambiguous_query when metric is undefined after all post-parse rules", async () => {
+    // metric is required by Zod schema; we bypass it via spyOn to test the P10 safety guard
+    const spy = vi.spyOn(ParsedIntentSchema, "safeParse").mockReturnValue({
+      success: true,
+      data: { period: { year: 2024 } } as unknown as ParsedIntent,
+    });
+    const llm = makeLLM(makeLLMResponse("{}"));
+    try {
+      await expect(
+        parseIntent("¿qué pasó en la mina?", llm)
+      ).rejects.toMatchObject({
+        code: "ambiguous_query",
+      } satisfies Partial<TextQueryError>);
+    } finally {
+      spy.mockRestore();
+    }
   });
 });

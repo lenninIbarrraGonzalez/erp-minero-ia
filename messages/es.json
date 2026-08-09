@@ -42,7 +42,10 @@
       "unsupportedMetric": "Métrica no soportada. Intentá con 'costo por tonelada', 'tonelaje' o 'costo por categoría'.",
       "mineNotFound": "La mina especificada no fue encontrada.",
       "outOfScope": "Esta consulta no está relacionada con operaciones mineras. Podés preguntar sobre costos, tonelaje o desglose por categoría.",
-      "generic": "Ocurrió un error inesperado. Intentá de nuevo más tarde."
+      "generic": "Ocurrió un error inesperado. Intentá de nuevo más tarde.",
+      "yearOutOfRange": "Solo tenemos datos de 2024. Intentá: 'tonelaje en 2024'.",
+      "ambiguousQuery": "La consulta es ambigua. Especificá: 'costo por tonelada', 'tonelaje' o 'costo por categoría'.",
+      "overlappingPeriod": "Indicá un trimestre o un mes, no ambos. Ej: 'costos en Q1 2024' o 'costos en marzo 2024'."
     },
     "insight": {
       "label": "Análisis"
