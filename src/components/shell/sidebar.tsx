@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -38,7 +39,9 @@ export function Sidebar({ mines }: SidebarProps) {
           {t("nav.about")}
         </Link>
         <div className="px-1 pt-3">
-          <MineSelector mines={mines} />
+          <Suspense>
+            <MineSelector mines={mines} />
+          </Suspense>
         </div>
       </nav>
     </aside>
