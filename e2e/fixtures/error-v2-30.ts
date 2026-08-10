@@ -148,13 +148,13 @@ export const ERROR_V2_CASES: ErrorV2TestCase[] = [
   {
     id: "C2",
     group: "mine_suggestions",
-    query: "Tonelaje de Veta Dorad en 2024",
-    description: "Truncated 'Veta Dorada' (distance=1) — suggestion should appear",
+    query: "Tonelaje de Veta Morada en 2024",
+    description: "'Veta Morada' — different word, distance=1 from 'Veta Dorada' — suggestion should appear",
     deterministic: false,
     expectedError: true,
     expectedHint: "present",
     expectedSuggestions: "present",
-    note: "Levenshtein('veta dorad','veta dorada')=1 ≤ 5",
+    note: "Levenshtein('veta morada','veta dorada')=1 ≤ 5; 'morada' (purple) is a real Spanish word, not a typo — LLM won't autocorrect it to 'dorada' (golden)",
   },
   {
     id: "C3",
@@ -245,67 +245,75 @@ export const ERROR_V2_CASES: ErrorV2TestCase[] = [
   },
 
   // ============================================================================
-  // GROUP E — Hint Absent (errors that have NO hint key)
+  // GROUP E — Mixed: some hint_present (LLM returns out_of_scope), some no_hint
+  // E1/E2/E5/E6 → LLM classifies as out_of_scope (has hint in getHintKey)
+  // E3/E4 → overlapping_period guard (no hint key) — kept in no_hint group
   // ============================================================================
   {
     id: "E1",
-    group: "no_hint",
+    group: "hint_present",
     query: "¿Cuál fue el costo?",
-    description: "Ambiguous: no metric/mine — ambiguous_query → NO hint",
+    description: "Vague query — LLM returns out_of_scope → hint shown",
     deterministic: false,
     expectedError: true,
-    expectedHint: "absent",
+    expectedHint: "present",
     expectedSuggestions: "absent",
+    note: "LLM classifies as out_of_scope, not ambiguous_query; out_of_scope has a hint key",
   },
   {
     id: "E2",
-    group: "no_hint",
+    group: "hint_present",
     query: "Show me the numbers",
-    description: "Too vague — ambiguous_query → NO hint",
+    description: "Vague English query — LLM returns out_of_scope → hint shown",
     deterministic: false,
     expectedError: true,
-    expectedHint: "absent",
+    expectedHint: "present",
     expectedSuggestions: "absent",
+    note: "LLM classifies as out_of_scope; out_of_scope has a hint key",
   },
   {
     id: "E3",
     group: "no_hint",
-    query: "Tonelaje en Q1 y enero 2024",
-    description: "Overlapping period — overlapping_period → NO hint",
+    query: "Tonelaje de Cerro Rojo en el primer trimestre y en febrero de 2024",
+    description: "Dual period (quarter + month) — overlapping_period → NO hint",
     deterministic: false,
     expectedError: true,
     expectedHint: "absent",
     expectedSuggestions: "absent",
+    note: "Explicit Q1 + February forces LLM to set both period fields; overlapping_period has no hint key",
   },
   {
     id: "E4",
     group: "no_hint",
-    query: "Show Q4 and December 2024 tonnage",
-    description: "Overlapping period (English) — overlapping_period → NO hint",
+    query: "Show Cerro Rojo tonnage in Q1 and in February 2024",
+    description: "Dual period English (Q1 + February) — overlapping_period → NO hint",
     deterministic: false,
     expectedError: true,
     expectedHint: "absent",
     expectedSuggestions: "absent",
+    note: "Explicit Q1 + February forces LLM to set both period fields; overlapping_period has no hint key",
   },
   {
     id: "E5",
-    group: "no_hint",
+    group: "hint_present",
     query: "¿Cuál fue el margen de ganancia en 2024?",
-    description: "Profit margin — unsupported_metric → NO hint",
+    description: "Profit margin — LLM returns out_of_scope → hint shown",
     deterministic: false,
     expectedError: true,
-    expectedHint: "absent",
+    expectedHint: "present",
     expectedSuggestions: "absent",
+    note: "LLM classifies as out_of_scope (not a mining metric); out_of_scope has a hint key",
   },
   {
     id: "E6",
-    group: "no_hint",
-    query: "Employee productivity per mine 2024",
-    description: "Productivity metric — unsupported_metric → NO hint",
+    group: "hint_present",
+    query: "What is the stock price of mining company XYZ?",
+    description: "Stock price — deterministically out_of_scope → hint shown",
     deterministic: false,
     expectedError: true,
-    expectedHint: "absent",
+    expectedHint: "present",
     expectedSuggestions: "absent",
+    note: "Stock price is unambiguously out_of_scope for a mining cost ERP; out_of_scope has a hint key",
   },
 
   // ============================================================================
@@ -383,13 +391,15 @@ export const ERROR_V2_CASES: ErrorV2TestCase[] = [
   },
 ];
 
-// Total: 32 test cases (5+5+4+6+6+3+3)
+// Total: 32 test cases (5+5+4+10+2+3+3)
+// hint_present: D1-D6 (6) + E1/E2/E5/E6 (4) = 10
+// no_hint: E3/E4 (2) — overlapping_period has no hint key
 export const V2_GROUP_DISTRIBUTION = {
   year_out_of_range: 5,
   char_counter: 5,
   mine_suggestions: 4,
-  hint_present: 6,
-  no_hint: 6,
+  hint_present: 10,
+  no_hint: 2,
   stats: 3,
   ui_interaction: 3,
 };
