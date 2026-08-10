@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="7" fill="#714B67"/>
+  <!-- Two mountain peaks — left shorter, right taller, representing mining terrain -->
+  <path d="M3 27 L11 11 L15 17 L20 7 L29 27 Z" fill="white"/>
+  <!-- Mine tunnel arch at base of right peak -->
+  <path d="M16 27 Q19.5 22 23 27 Z" fill="#714B67"/>
+</svg>
