@@ -70,8 +70,15 @@
     "examplesLabel": "Examples",
     "examples": [
       "Cost per tonne for Cerro Rojo in 2024",
-      "Tonnage for Loma Grande in 2024",
-      "Cost breakdown by category for March 2024"
+      "Tonnage for Loma Grande in November 2024",
+      "Cost breakdown for Veta Dorada in Q4 2024",
+      "Fuel cost for Cerro Rojo in August 2024",
+      "Supplies cost for Peña Azul in January 2024",
+      "What was the tonnage for each mine in 2024?",
+      "Total fuel cost by mine in 2024",
+      "How did Cerro Rojo's fuel cost evolve month by month in 2024?",
+      "Cost per tonne for all mines in 2024",
+      "Cost breakdown for Peña Azul by driver in 2024"
     ]
   },
   "shell": {
@@ -140,21 +147,21 @@
       "cat3": "Cross-mine",
       "cat4": "Temporal",
       "cat5": "Aggregated",
-      "q1": "How much did Mina Norte spend on fuel during 2024?",
-      "q2": "What was the total cost for Mina Sur in Q1?",
-      "q3": "Show me monthly costs for Mina Central in H2 2024",
-      "q4": "Which mine had the highest equipment spending in December?",
-      "q5": "Compare labor costs across all mines in Q3",
-      "q6": "How did supply costs evolve throughout 2024?",
-      "q7": "Which mine had the highest total cost in 2024?",
-      "q8": "Compare fuel spending between Mina Norte and Mina Sur in October",
-      "q9": "Which mine was most cost-efficient in Q4?",
-      "q10": "How much did costs increase from November to December in Mina Norte?",
-      "q11": "Compare Q1 vs Q2 equipment costs",
-      "q12": "Which month in 2024 had the peak total cost?",
-      "q13": "What was the cumulative cost across all mines in Q4 2024?",
-      "q14": "Show me the labor cost trend in H2",
-      "q15": "What percentage of total cost is fuel in Mina Sur?"
+      "q1": "Cost per tonne for Cerro Rojo in 2024",
+      "q2": "Tonnage for Loma Grande in November 2024",
+      "q3": "Cost breakdown for Veta Dorada in Q4 2024",
+      "q4": "Fuel cost for Cerro Rojo in August 2024",
+      "q5": "Supplies cost for Peña Azul in January 2024",
+      "q6": "Equipment cost for Veta Dorada in December 2024",
+      "q7": "What was the tonnage for each mine in 2024?",
+      "q8": "Total fuel cost by mine in 2024",
+      "q9": "Compare cost per tonne between Cerro Rojo and Loma Grande in 2024",
+      "q10": "How did Cerro Rojo's fuel cost evolve month by month in 2024?",
+      "q11": "Monthly labor cost trend for Veta Dorada in 2024",
+      "q12": "How did Peña Azul's supply costs change month by month in 2024?",
+      "q13": "Cost per tonne for all mines in 2024",
+      "q14": "Supplies cost by mine in 2024",
+      "q15": "Cost breakdown for Peña Azul by driver in 2024"
     },
     "stack": {
       "title": "Built With"

@@ -123,11 +123,6 @@ export default async function AboutPage() {
                 {t("hero.ctaDashboard")}
               </Button>
             </Link>
-            <Link href="/?panel=cost-variance">
-              <Button variant="secondary" size="md">
-                {t("hero.ctaAnalysis")}
-              </Button>
-            </Link>
           </div>
         </div>
         {/* Decorative blobs */}
@@ -178,20 +173,20 @@ export default async function AboutPage() {
             subtitle={t("pipeline.subtitle")}
           />
           <Card className="p-6">
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div className="flex items-start">
               {pipelineSteps.map((step, i) => (
-                <div key={step.label} className="flex sm:flex-col flex-row items-center sm:items-stretch gap-2 sm:gap-0 flex-1">
-                  <div className="flex flex-col items-center flex-1">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold flex items-center justify-center mb-2">
+                <div key={step.label} className="flex items-start flex-1">
+                  <div className="flex flex-col items-center text-center flex-1 gap-2">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold flex items-center justify-center flex-shrink-0">
                       {i + 1}
                     </div>
-                    <div className="text-center">
+                    <div>
                       <p className="text-sm font-semibold text-text">{step.label}</p>
                       <p className="text-xs text-text-muted mt-0.5">{step.desc}</p>
                     </div>
                   </div>
                   {i < pipelineSteps.length - 1 && (
-                    <div className="hidden sm:flex items-center self-start mt-3 text-text-muted">
+                    <div className="flex items-center pt-3 flex-shrink-0 text-text-muted px-1">
                       <ArrowRightIcon />
                     </div>
                   )}

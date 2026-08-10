@@ -70,8 +70,15 @@
     "examplesLabel": "Ejemplos",
     "examples": [
       "Costo por tonelada de Cerro Rojo en 2024",
-      "Tonelaje de Loma Grande en 2024",
-      "Desglose de costos por categoría en marzo 2024"
+      "Tonelaje de Loma Grande en noviembre 2024",
+      "Desglose de costos de Veta Dorada en Q4 2024",
+      "Costo de combustible de Cerro Rojo en agosto 2024",
+      "Costo de insumos de Peña Azul en enero 2024",
+      "¿Cuál fue el tonelaje de cada mina en 2024?",
+      "Costo total de combustible por mina en 2024",
+      "¿Cómo evolucionó el costo de combustible de Cerro Rojo mes a mes en 2024?",
+      "Costo por tonelada de todas las minas en 2024",
+      "Desglose de costos de Peña Azul por categoría en 2024"
     ]
   },
   "shell": {
@@ -140,21 +147,21 @@
       "cat3": "Comparación entre Minas",
       "cat4": "Comparación Temporal",
       "cat5": "Análisis Agregado",
-      "q1": "¿Cuánto gastó Mina Norte en combustible durante 2024?",
-      "q2": "¿Cuál fue el costo total de Mina Sur en el primer trimestre?",
-      "q3": "Mostrá los costos mensuales de Mina Central en el segundo semestre",
-      "q4": "¿En qué mina fue mayor el gasto en equipos en diciembre?",
-      "q5": "Comparar costos de mano de obra entre todas las minas en Q3",
-      "q6": "¿Cómo evolucionaron los costos de insumos a lo largo de 2024?",
-      "q7": "¿Qué mina tuvo el mayor costo total en 2024?",
-      "q8": "Comparar el gasto en combustible entre Mina Norte y Mina Sur en octubre",
-      "q9": "¿Cuál fue la mina más eficiente en costos durante el cuarto trimestre?",
-      "q10": "¿Cuánto aumentaron los costos de noviembre a diciembre en Mina Norte?",
-      "q11": "Comparar costos de equipos del primer y segundo trimestre",
-      "q12": "¿Qué mes de 2024 tuvo el pico de costos totales?",
-      "q13": "¿Cuál fue el costo acumulado de todas las minas en Q4 2024?",
-      "q14": "Mostrá la tendencia de costos laborales en el segundo semestre",
-      "q15": "¿Qué porcentaje del costo total representa el combustible en Mina Sur?"
+      "q1": "Costo por tonelada de Cerro Rojo en 2024",
+      "q2": "Tonelaje de Loma Grande en noviembre 2024",
+      "q3": "Desglose de costos de Veta Dorada en Q4 2024",
+      "q4": "Costo de combustible de Cerro Rojo en agosto 2024",
+      "q5": "Costo de insumos de Peña Azul en enero 2024",
+      "q6": "Costo de equipos de Veta Dorada en diciembre 2024",
+      "q7": "¿Cuál fue el tonelaje de cada mina en 2024?",
+      "q8": "Costo total de combustible por mina en 2024",
+      "q9": "Comparar costo por tonelada entre Cerro Rojo y Loma Grande en 2024",
+      "q10": "¿Cómo evolucionó el costo de combustible de Cerro Rojo mes a mes en 2024?",
+      "q11": "Evolución mensual del costo de mano de obra de Veta Dorada en 2024",
+      "q12": "¿Cómo cambiaron los costos de insumos de Peña Azul mes a mes en 2024?",
+      "q13": "Costo por tonelada de todas las minas en 2024",
+      "q14": "Costo de insumos por mina en 2024",
+      "q15": "Desglose de costos de Peña Azul por categoría en 2024"
     },
     "stack": {
       "title": "Tecnologías Utilizadas"

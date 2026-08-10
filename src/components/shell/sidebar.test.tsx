@@ -12,7 +12,6 @@ vi.mock("next-intl", () => ({
       shell: {
         appName: "ERP Minero",
         "nav.dashboard": "Dashboard",
-        "nav.costVariance": "Cost Variance",
         "nav.about": "About",
       },
     };
@@ -45,11 +44,6 @@ describe("Sidebar", () => {
   it("renders a translated Dashboard navigation link", () => {
     render(<Sidebar mines={mines} />);
     expect(screen.getByRole("link", { name: /dashboard/i })).toBeInTheDocument();
-  });
-
-  it("renders a translated Cost Variance navigation link", () => {
-    render(<Sidebar mines={mines} />);
-    expect(screen.getByRole("link", { name: /cost variance/i })).toBeInTheDocument();
   });
 
   it("renders the aside element as the root", () => {

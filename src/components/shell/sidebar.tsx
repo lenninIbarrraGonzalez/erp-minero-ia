@@ -33,10 +33,6 @@ export function Sidebar({ mines }: SidebarProps) {
           <GridIcon />
           {t("nav.dashboard")}
         </Link>
-        <Link href="/?panel=cost-variance" className={linkClass(false)}>
-          <ChartBarIcon />
-          {t("nav.costVariance")}
-        </Link>
         <Link href="/about" className={linkClass(pathname === "/about")}>
           <InfoIcon />
           {t("nav.about")}
