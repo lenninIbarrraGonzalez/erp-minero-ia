@@ -25,10 +25,12 @@ export function QueryPanel() {
   const [result, setResult] = useState<QueryResultData | null>(null);
   const [error, setError] = useState<ErrorState | null>(null);
   const [inputValue, setInputValue] = useState("");
+  const [submittedQuestion, setSubmittedQuestion] = useState("");
 
   function handleSubmit(question: string) {
     setError(null);
     setResult(null);
+    setSubmittedQuestion(question);
 
     startTransition(async () => {
       try {
@@ -51,6 +53,7 @@ export function QueryPanel() {
           return;
         }
 
+        setInputValue("");
         setResult({
           rows: data.rows as QueryRow[],
           chartType: data.chartType as ChartType,
@@ -105,7 +108,7 @@ export function QueryPanel() {
         </div>
       )}
 
-      <QueryResults result={result} />
+      <QueryResults result={result} question={submittedQuestion} />
     </div>
   );
 }

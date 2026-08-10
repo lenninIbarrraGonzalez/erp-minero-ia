@@ -31,9 +31,10 @@ interface QueryResultsData {
 
 interface QueryResultsProps {
   result: QueryResultsData | null;
+  question?: string;
 }
 
-export function QueryResults({ result }: QueryResultsProps) {
+export function QueryResults({ result, question }: QueryResultsProps) {
   const t = useTranslations("textQuery");
   const chartColors = useChartColors();
 
@@ -55,6 +56,12 @@ export function QueryResults({ result }: QueryResultsProps) {
 
   return (
     <div data-testid="query-results" className="mt-4 flex flex-col gap-4">
+      {/* Question header */}
+      {question && (
+        <p className="text-sm font-semibold text-primary border-l-4 border-primary pl-3 py-1">
+          {question}
+        </p>
+      )}
       {/* Table */}
       <div className="overflow-x-auto">
         <table data-testid="query-table" className="w-full border-collapse text-sm">
@@ -143,7 +150,7 @@ export function QueryResults({ result }: QueryResultsProps) {
       {/* Insight */}
       {insightText && (
         <div className="flex flex-col gap-1">
-          <span className="text-xs font-medium text-text-muted uppercase tracking-wide">
+          <span className="text-sm font-semibold text-primary uppercase tracking-wide">
             {t("insight.label")}
           </span>
           <p data-testid="query-insight" className="text-sm text-text italic">{insightText}</p>
