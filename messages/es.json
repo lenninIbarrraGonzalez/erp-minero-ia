@@ -67,6 +67,14 @@
     "insight": {
       "label": "Análisis"
     },
+    "columns": {
+      "driver": "Categoría",
+      "amount": "Monto",
+      "period": "Período",
+      "mine": "Mina",
+      "costPerTonne": "Costo por Tonelada",
+      "tonnage": "Tonelaje"
+    },
     "examplesLabel": "Ejemplos",
     "examples": [
       "Costo por tonelada de Cerro Rojo en 2024",

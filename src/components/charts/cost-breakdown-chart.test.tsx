@@ -35,6 +35,18 @@ vi.mock("@/hooks/use-chart-colors", () => ({
   }),
 }));
 
+vi.mock("next-intl", () => ({
+  useTranslations: () => (key: string) => {
+    const map: Record<string, string> = {
+      "drivers.fuel": "Combustible",
+      "drivers.supplies": "Insumos",
+      "drivers.equipment": "Equipos",
+      "drivers.labor": "Mano de Obra",
+    };
+    return map[key] ?? key;
+  },
+}));
+
 const { CostBreakdownChart } = await import("./cost-breakdown-chart");
 
 const breakdownData: CostByDriverPoint[] = [

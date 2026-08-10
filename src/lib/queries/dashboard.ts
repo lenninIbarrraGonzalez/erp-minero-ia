@@ -9,12 +9,14 @@ export type MineFilter = string | undefined;
 export interface MineOption {
   id: string;
   name: string;
+  mineral_type: string;
 }
 
 export interface DashboardKpis {
   totalTonnage: number;
   costPerTonne: number;
   mineName: string | null;
+  mineralType: string | null;
 }
 
 export interface CostTrendPoint {
@@ -47,6 +49,7 @@ interface ProductionRunRow {
 interface MineRow {
   id: string;
   name: string;
+  mineral_type: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -105,11 +108,11 @@ export async function fetchPeriodRange(
 export async function fetchMines(db: SupabaseClient): Promise<MineOption[]> {
   const { data, error } = await db
     .from("mines")
-    .select("id, name");
+    .select("id, name, mineral_type");
 
   if (error ?? !data) return [];
 
-  return (data as MineRow[]).map((row) => ({ id: row.id, name: row.name }));
+  return (data as MineRow[]).map((row) => ({ id: row.id, name: row.name, mineral_type: row.mineral_type }));
 }
 
 // ---------------------------------------------------------------------------
@@ -138,16 +141,20 @@ export async function fetchKpiSummary(
   const costPerTonne = totalTonnage > 0 ? totalAmount / totalTonnage : 0;
 
   let mineName: string | null = null;
+  let mineralType: string | null = null;
   if (mine !== undefined) {
     const { data: mineData } = await db
       .from("mines")
-      .select("id, name")
+      .select("id, name, mineral_type")
       .eq("id", mine);
     const mineRows = (mineData ?? []) as MineRow[];
-    mineName = mineRows.length > 0 ? mineRows[0].name : null;
+    if (mineRows.length > 0) {
+      mineName = mineRows[0].name;
+      mineralType = mineRows[0].mineral_type;
+    }
   }
 
-  return { totalTonnage, costPerTonne, mineName };
+  return { totalTonnage, costPerTonne, mineName, mineralType };
 }
 
 // ---------------------------------------------------------------------------

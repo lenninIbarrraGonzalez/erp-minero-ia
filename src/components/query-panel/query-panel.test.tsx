@@ -37,6 +37,12 @@ vi.mock("next-intl", () => ({
       "error.hint.yearOutOfRange": "Change the year to 2024 — it's the only available period.",
       "error.hint.outOfScope": "Ask about costs, tonnage, or cost breakdown by driver.",
       "insight.label": "Analysis",
+      "columns.period": "Period",
+      "columns.amount": "Amount",
+      "columns.driver": "Driver",
+      "columns.mine": "Mine",
+      "columns.costPerTonne": "Cost per Tonne",
+      "columns.tonnage": "Tonnage",
       examplesLabel: "Examples",
     };
     const t = (key: string) => map[key] ?? key;
@@ -137,7 +143,7 @@ describe("QueryPanel", () => {
     fireEvent.click(screen.getByRole("button", { name: "Query" }));
 
     await waitFor(() => {
-      expect(screen.getByText("period")).toBeInTheDocument();
+      expect(screen.getByText("Period")).toBeInTheDocument();
       expect(screen.getByText("cost_per_tonne")).toBeInTheDocument();
       expect(screen.getByText("2024-01-01")).toBeInTheDocument();
       expect(screen.getByText("15")).toBeInTheDocument();

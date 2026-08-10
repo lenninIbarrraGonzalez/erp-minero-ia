@@ -38,7 +38,7 @@ export function MineSelector({ mines }: MineSelectorProps) {
         <option value="">{t("filter.allMines")}</option>
         {mines.map((mine) => (
           <option key={mine.id} value={mine.id}>
-            {mine.name}
+            {mine.name} ({mine.mineral_type})
           </option>
         ))}
       </select>

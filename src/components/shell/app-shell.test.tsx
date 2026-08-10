@@ -16,8 +16,8 @@ vi.mock("./sidebar", () => ({
 const { AppShell } = await import("./app-shell");
 
 const mines = [
-  { id: "mine-1", name: "Cerro Rojo" },
-  { id: "mine-2", name: "Loma Grande" },
+  { id: "mine-1", name: "Cerro Rojo", mineral_type: "Cu" },
+  { id: "mine-2", name: "Loma Grande", mineral_type: "Fe" },
 ];
 
 describe("AppShell", () => {

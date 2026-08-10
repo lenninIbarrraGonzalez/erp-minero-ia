@@ -35,8 +35,8 @@ vi.mock("next-intl", () => ({
 const { MineSelector } = await import("./mine-selector");
 
 const mines: MineOption[] = [
-  { id: "uuid-1", name: "Mina Norte" },
-  { id: "uuid-2", name: "Mina Sur" },
+  { id: "uuid-1", name: "Mina Norte", mineral_type: "Cu" },
+  { id: "uuid-2", name: "Mina Sur", mineral_type: "Au" },
 ];
 
 describe("MineSelector", () => {
@@ -49,14 +49,14 @@ describe("MineSelector", () => {
     render(<MineSelector mines={mines} />);
 
     expect(screen.getByText("All Mines")).toBeInTheDocument();
-    expect(screen.getByText("Mina Norte")).toBeInTheDocument();
-    expect(screen.getByText("Mina Sur")).toBeInTheDocument();
+    expect(screen.getByText("Mina Norte (Cu)")).toBeInTheDocument();
+    expect(screen.getByText("Mina Sur (Au)")).toBeInTheDocument();
   });
 
   it("selects the currently active mine from URL param", () => {
     mockGet.mockReturnValue("uuid-2");
 
-    render(<MineSelector mines={mines} selectedId="uuid-2" />);
+    render(<MineSelector mines={mines} />);
 
     const select = screen.getByRole("combobox");
     expect((select as HTMLSelectElement).value).toBe("uuid-2");

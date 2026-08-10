@@ -47,7 +47,11 @@ export default async function Home({ searchParams }: HomeProps) {
         />
         <KpiCard
           label={t("kpi.activeMines")}
-          value={kpis.mineName ?? t("filter.allMines")}
+          value={
+            kpis.mineName
+              ? `${kpis.mineName} (${kpis.mineralType})`
+              : t("filter.allMines")
+          }
         />
       </section>
 

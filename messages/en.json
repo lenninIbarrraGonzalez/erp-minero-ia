@@ -67,6 +67,14 @@
     "insight": {
       "label": "Analysis"
     },
+    "columns": {
+      "driver": "Driver",
+      "amount": "Amount",
+      "period": "Period",
+      "mine": "Mine",
+      "costPerTonne": "Cost per Tonne",
+      "tonnage": "Tonnage"
+    },
     "examplesLabel": "Examples",
     "examples": [
       "Cost per tonne for Cerro Rojo in 2024",

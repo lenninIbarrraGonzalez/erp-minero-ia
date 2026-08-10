@@ -8,8 +8,12 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useTranslations } from "next-intl";
 import type { CostByDriverPoint } from "@/lib/queries/dashboard";
 import { useChartColors } from "@/hooks/use-chart-colors";
+
+const KNOWN_DRIVERS = ["fuel", "supplies", "equipment", "labor"] as const;
+type KnownDriver = (typeof KNOWN_DRIVERS)[number];
 
 interface CostBreakdownChartProps {
   data: CostByDriverPoint[];
@@ -17,6 +21,14 @@ interface CostBreakdownChartProps {
 
 export function CostBreakdownChart({ data }: CostBreakdownChartProps) {
   const { primary } = useChartColors();
+  const t = useTranslations("costVariance");
+
+  function translateDriver(key: string): string {
+    if ((KNOWN_DRIVERS as readonly string[]).includes(key)) {
+      return t(`drivers.${key as KnownDriver}`);
+    }
+    return key;
+  }
 
   if (data.length === 0) {
     return (
@@ -32,7 +44,7 @@ export function CostBreakdownChart({ data }: CostBreakdownChartProps) {
   return (
     <ResponsiveContainer width="100%" height={240}>
       <BarChart data={data}>
-        <XAxis dataKey="driver" />
+        <XAxis dataKey="driver" tickFormatter={translateDriver} />
         <YAxis
           width={125}
           tickFormatter={(value: number) =>
