@@ -58,9 +58,37 @@ describe("parseIntent", () => {
     } satisfies Partial<TextQueryError>);
   });
 
-  it("throws TextQueryError with code 'llm_error' when LLM provider throws", async () => {
+  it("throws TextQueryError with code 'llm_error' when LLM provider throws (unknown kind)", async () => {
     const llm = makeLLM(new LLMProviderError("mock", "provider unavailable"));
 
+    await expect(parseIntent("cualquier pregunta", llm)).rejects.toMatchObject({
+      code: "llm_error",
+    } satisfies Partial<TextQueryError>);
+  });
+
+  it("throws 'llm_rate_limit' when LLMProviderError has kind=rate_limit", async () => {
+    const llm = makeLLM(new LLMProviderError("mock", "429", undefined, "rate_limit"));
+    await expect(parseIntent("cualquier pregunta", llm)).rejects.toMatchObject({
+      code: "llm_rate_limit",
+    } satisfies Partial<TextQueryError>);
+  });
+
+  it("throws 'llm_timeout' when LLMProviderError has kind=timeout", async () => {
+    const llm = makeLLM(new LLMProviderError("mock", "504", undefined, "timeout"));
+    await expect(parseIntent("cualquier pregunta", llm)).rejects.toMatchObject({
+      code: "llm_timeout",
+    } satisfies Partial<TextQueryError>);
+  });
+
+  it("throws 'llm_auth_error' when LLMProviderError has kind=auth_error", async () => {
+    const llm = makeLLM(new LLMProviderError("mock", "401", undefined, "auth_error"));
+    await expect(parseIntent("cualquier pregunta", llm)).rejects.toMatchObject({
+      code: "llm_auth_error",
+    } satisfies Partial<TextQueryError>);
+  });
+
+  it("falls back to 'llm_error' for LLMProviderError with kind=server_error", async () => {
+    const llm = makeLLM(new LLMProviderError("mock", "500", undefined, "server_error"));
     await expect(parseIntent("cualquier pregunta", llm)).rejects.toMatchObject({
       code: "llm_error",
     } satisfies Partial<TextQueryError>);

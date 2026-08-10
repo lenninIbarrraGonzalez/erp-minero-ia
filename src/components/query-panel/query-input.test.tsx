@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 vi.mock("next-intl", () => ({
@@ -66,5 +66,37 @@ describe("QueryInput", () => {
     render(<QueryInput onSubmit={vi.fn()} disabled />);
     expect(screen.getByRole("textbox")).toBeDisabled();
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
+  });
+
+  // E1: Char counter
+  it("does not render char counter when value is under 400 chars", async () => {
+    const user = userEvent.setup();
+    render(<QueryInput onSubmit={vi.fn()} />);
+    await user.type(screen.getByRole("textbox"), "short text");
+    expect(screen.queryByTestId("char-counter")).not.toBeInTheDocument();
+  });
+
+  it("renders char counter with yellow style when value is between 401 and 499 chars", async () => {
+    render(<QueryInput onSubmit={vi.fn()} value={"a".repeat(420)} onValueChange={vi.fn()} />);
+    const counter = screen.getByTestId("char-counter");
+    expect(counter).toBeInTheDocument();
+    expect(counter).toHaveTextContent("420/500");
+    expect(counter.className).toContain("yellow");
+  });
+
+  it("renders char counter with red style when value is at 500 chars", async () => {
+    render(<QueryInput onSubmit={vi.fn()} value={"a".repeat(500)} onValueChange={vi.fn()} />);
+    const counter = screen.getByTestId("char-counter");
+    expect(counter).toBeInTheDocument();
+    expect(counter).toHaveTextContent("500/500");
+    expect(counter.className).toContain("red");
+  });
+
+  it("accepts value and onValueChange props for controlled mode", async () => {
+    const handleChange = vi.fn();
+    render(<QueryInput onSubmit={vi.fn()} value="controlled" onValueChange={handleChange} />);
+    expect(screen.getByRole("textbox")).toHaveValue("controlled");
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "new" } });
+    expect(handleChange).toHaveBeenCalledWith("new");
   });
 });

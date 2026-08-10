@@ -63,7 +63,12 @@ export async function parseIntent(
     text = response.text.trim();
   } catch (err) {
     if (err instanceof LLMProviderError) {
-      throw makeError("llm_error", `LLM provider failed: ${err.message}`);
+      const code =
+        err.kind === "rate_limit" ? "llm_rate_limit" :
+        err.kind === "timeout"    ? "llm_timeout"    :
+        err.kind === "auth_error" ? "llm_auth_error" :
+        "llm_error";
+      throw makeError(code, `LLM provider failed: ${err.message}`);
     }
     throw makeError("llm_error", "Unknown LLM error");
   }

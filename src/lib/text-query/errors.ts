@@ -2,11 +2,13 @@ import type { TextQueryError } from "./types";
 
 export function makeError(
   code: TextQueryError["code"],
-  message: string
+  message: string,
+  context?: Record<string, unknown>
 ): TextQueryError & Error {
   const err = new Error(message) as Error & TextQueryError;
   err.code = code;
   err.message = message;
+  if (context !== undefined) err.context = context;
   return err;
 }
 

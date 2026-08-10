@@ -17,14 +17,19 @@ describe("makeError", () => {
     expect(err.message).toBe("LLM failed");
   });
 
-  it("round-trips all valid code values", () => {
+  it("round-trips all valid code values including granular LLM and DB codes", () => {
     const codes = [
       "parse_failure",
       "unsupported_metric",
       "mine_not_found",
       "empty_result",
       "llm_error",
+      "llm_timeout",
+      "llm_rate_limit",
+      "llm_auth_error",
       "db_error",
+      "db_connection_error",
+      "db_timeout",
       "out_of_scope",
       "year_out_of_range",
       "ambiguous_query",
@@ -33,6 +38,18 @@ describe("makeError", () => {
     for (const code of codes) {
       expect(makeError(code, "m").code).toBe(code);
     }
+  });
+
+  it("accepts optional context and exposes it on the error", () => {
+    const err = makeError("mine_not_found", "not found", { attempted: "Serro Rojo" });
+    expect((err as unknown as { context: Record<string, unknown> }).context).toEqual({
+      attempted: "Serro Rojo",
+    });
+  });
+
+  it("context is undefined when not provided", () => {
+    const err = makeError("parse_failure", "msg");
+    expect((err as unknown as { context?: unknown }).context).toBeUndefined();
   });
 });
 

@@ -4,6 +4,7 @@ import {
   type LLMResponse,
   LLMProviderError,
 } from "@/lib/llm/types";
+import { classifyHttpStatus, withExponentialBackoff } from "@/lib/llm/http-utils";
 
 const DEFAULT_MODEL = "llama-3.3-70b-versatile";
 const API_URL = "https://api.groq.com/openai/v1/chat/completions";
@@ -24,33 +25,37 @@ export class GroqAdapter implements LLMProvider {
     }
 
     const model = DEFAULT_MODEL;
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
+    const apiKey = this.apiKey;
+
+    return withExponentialBackoff(
+      async () => {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model,
+            messages: [{ role: "user", content: prompt }],
+            max_tokens: opts?.maxTokens,
+            temperature: opts?.temperature,
+          }),
+        });
+
+        if (!response.ok) {
+          const kind = classifyHttpStatus(response.status);
+          throw new LLMProviderError("groq", `Groq API error: ${response.status}`, response.status, kind);
+        }
+
+        const data = (await response.json()) as GroqResponseBody;
+        return {
+          text: data.choices[0].message.content,
+          provider: "groq",
+          model: data.model,
+        };
       },
-      body: JSON.stringify({
-        model,
-        messages: [{ role: "user", content: prompt }],
-        max_tokens: opts?.maxTokens,
-        temperature: opts?.temperature,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new LLMProviderError(
-        "groq",
-        `Groq API error: ${response.status}`,
-        response.status
-      );
-    }
-
-    const data = (await response.json()) as GroqResponseBody;
-    return {
-      text: data.choices[0].message.content,
-      provider: "groq",
-      model: data.model,
-    };
+      { maxRetries: 2, baseDelayMs: 500, factor: 3, retryOn: ["rate_limit", "timeout"] }
+    );
   }
 }

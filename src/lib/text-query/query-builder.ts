@@ -91,7 +91,11 @@ async function resolveMineId(
   const { data, error } = await db.from("mines").select("id, name");
 
   if (error ?? !data) {
-    throw makeError("db_error", "Failed to fetch mines");
+    const msg = (error as { message?: string } | null)?.message ?? "";
+    const code = msg.includes("timeout") ? "db_timeout" :
+                 msg.includes("connect") ? "db_connection_error" :
+                 "db_error";
+    throw makeError(code, `DB error: ${msg || "Failed to fetch mines"}`);
   }
 
   const mines = data as MineRow[];
@@ -101,7 +105,7 @@ async function resolveMineId(
   );
 
   if (!match) {
-    throw makeError("mine_not_found", `Mine not found: ${mineName}`);
+    throw makeError("mine_not_found", `Mine not found: ${mineName}`, { attempted: mineName });
   }
 
   return match.id;

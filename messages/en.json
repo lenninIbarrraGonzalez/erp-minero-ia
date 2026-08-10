@@ -45,7 +45,24 @@
       "generic": "An unexpected error occurred. Please try again later.",
       "yearOutOfRange": "Only 2024 data is available. Try: 'tonnage in 2024'.",
       "ambiguousQuery": "Query is ambiguous. Specify: 'cost per tonne', 'tonnage', or 'cost by driver'.",
-      "overlappingPeriod": "Specify either a quarter or a month, not both. E.g.: 'costs in Q1 2024' or 'costs in March 2024'."
+      "overlappingPeriod": "Specify either a quarter or a month, not both. E.g.: 'costs in Q1 2024' or 'costs in March 2024'.",
+      "llmTimeout": "The service is slow. Try again in a few seconds.",
+      "llmRateLimit": "Query limit reached. Wait a moment and try again.",
+      "llmAuthError": "Service configuration error. Contact the administrator.",
+      "dbConnectionError": "Could not connect to the database. Check your connection.",
+      "dbTimeout": "Database timed out. Try a narrower period.",
+      "didYouMean": "Did you mean:",
+      "hint": {
+        "mineNotFound": "Available mines: Cerro Rojo, Veta Dorada, Loma Grande, Quebrada Sur, Peña Azul.",
+        "llmTimeout": "Service is slow. Try again in 30 seconds.",
+        "llmRateLimit": "Query limit reached. Wait a moment and try again.",
+        "llmAuthError": "Service configuration error. Contact the administrator.",
+        "dbConnectionError": "Could not connect to the database. Check your connection.",
+        "dbTimeout": "Database timed out. Try a narrower period.",
+        "parseFailure": "Try rephrasing: 'Cost per tonne for Cerro Rojo in 2024'.",
+        "yearOutOfRange": "Change the year to 2024 — it's the only available period.",
+        "outOfScope": "Ask about costs, tonnage, or cost breakdown by driver."
+      }
     },
     "insight": {
       "label": "Analysis"

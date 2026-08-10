@@ -5,6 +5,9 @@ import type { TextQueryError } from "@/lib/text-query/types";
 vi.mock("@/lib/text-query/intent-parser", () => ({
   parseIntent: vi.fn(),
 }));
+vi.mock("@/lib/text-query/error-tracker", () => ({
+  recordError: vi.fn(),
+}));
 vi.mock("@/lib/text-query/query-builder", () => ({
   buildAndExecuteQuery: vi.fn(),
 }));
@@ -27,7 +30,10 @@ import { getChartType } from "@/lib/text-query/chart-heuristic";
 import { generateInsight } from "@/lib/text-query/insight-generator";
 import { createLlmChain } from "@/lib/llm/create-llm-provider";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { recordError } from "@/lib/text-query/error-tracker";
 import { POST } from "./route";
+
+const mockRecordError = vi.mocked(recordError);
 
 const mockParseIntent = vi.mocked(parseIntent);
 const mockBuildAndExecuteQuery = vi.mocked(buildAndExecuteQuery);
@@ -260,5 +266,62 @@ describe("POST /api/text-query", () => {
 
     expect(res.status).toBe(200);
     expect(mockParseIntent).toHaveBeenCalled();
+  });
+
+  it("logs structured JSON and calls recordError on TextQueryError (non-empty_result)", async () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    mockParseIntent.mockRejectedValue(makeTextQueryError("mine_not_found", "Mine not found"));
+
+    const req = makeRequest({ question: "tonelaje de Mina Inexistente" });
+    await POST(req);
+
+    expect(consoleSpy).toHaveBeenCalled();
+    const logged = JSON.parse((consoleSpy.mock.calls[0] as string[])[0]);
+    expect(logged.level).toBe("ERROR");
+    expect(logged.event).toBe("text_query_error");
+    expect(logged.code).toBe("mine_not_found");
+    expect(mockRecordError).toHaveBeenCalledWith("mine_not_found");
+
+    consoleSpy.mockRestore();
+  });
+
+  it("returns suggestions array when mine_not_found has a close typo", async () => {
+    const err = makeTextQueryError("mine_not_found", "Mine not found: Serro Rojo");
+    (err as TextQueryError & { context?: Record<string, unknown> }).context = { attempted: "Serro Rojo" };
+    mockParseIntent.mockRejectedValue(err);
+
+    const req = makeRequest({ question: "tonelaje de Serro Rojo" });
+    const res = await POST(req);
+    const body = await res.json();
+
+    expect(res.status).toBe(422);
+    expect(body.suggestions).toContain("Cerro Rojo");
+  });
+
+  it("returns empty suggestions when mine name is too different", async () => {
+    const err = makeTextQueryError("mine_not_found", "Mine not found: XYZ123");
+    (err as TextQueryError & { context?: Record<string, unknown> }).context = { attempted: "XYZ123" };
+    mockParseIntent.mockRejectedValue(err);
+
+    const req = makeRequest({ question: "tonelaje de XYZ123" });
+    const res = await POST(req);
+    const body = await res.json();
+
+    expect(res.status).toBe(422);
+    expect(body.suggestions).toEqual([]);
+  });
+
+  it("does NOT log or call recordError for empty_result (200 path)", async () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    mockParseIntent.mockRejectedValue(makeTextQueryError("empty_result", "No data"));
+
+    const req = makeRequest({ question: "tonelaje" });
+    const res = await POST(req);
+
+    expect(res.status).toBe(200);
+    expect(consoleSpy).not.toHaveBeenCalled();
+    expect(mockRecordError).not.toHaveBeenCalled();
+
+    consoleSpy.mockRestore();
   });
 });

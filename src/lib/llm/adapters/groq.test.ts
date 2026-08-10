@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { LLMProviderError } from "@/lib/llm/types";
 
 // Import after test scaffolding — will fail in RED phase since file doesn't exist yet
@@ -16,7 +16,12 @@ function makeFetchResponse(body: unknown, status = 200): Response {
   } as unknown as Response;
 }
 
+beforeEach(() => {
+  vi.useFakeTimers();
+});
+
 afterEach(() => {
+  vi.useRealTimers();
   vi.restoreAllMocks();
 });
 
@@ -74,11 +79,57 @@ describe("GroqAdapter", () => {
     );
 
     const adapter = new GroqAdapter(MOCK_API_KEY);
-    await expect(adapter.complete(PROMPT)).rejects.toBeInstanceOf(
-      LLMProviderError
+    const promise = adapter.complete(PROMPT).catch((e: unknown) => e);
+    await vi.runAllTimersAsync();
+    const err = await promise;
+    expect(err).toBeInstanceOf(LLMProviderError);
+    expect((err as LLMProviderError).provider).toBe("groq");
+  });
+
+  it("propagates kind=rate_limit on 429", async () => {
+    vi.spyOn(global, "fetch").mockResolvedValue(
+      makeFetchResponse({ error: "Rate limited" }, 429)
     );
-    await expect(adapter.complete(PROMPT)).rejects.toMatchObject({
-      provider: "groq",
+
+    const adapter = new GroqAdapter(MOCK_API_KEY);
+    const promise = adapter.complete(PROMPT).catch((e: unknown) => e);
+    await vi.runAllTimersAsync();
+    const err = await promise;
+    expect(err).toBeInstanceOf(LLMProviderError);
+    expect((err as LLMProviderError).kind).toBe("rate_limit");
+  });
+
+  it("retries on 429 and succeeds on 2nd attempt", async () => {
+    const successResponse = makeFetchResponse({
+      choices: [{ message: { content: "ok" } }],
+      model: MOCK_MODEL,
     });
+    const rateLimitResponse = makeFetchResponse({ error: "Rate limited" }, 429);
+
+    vi.spyOn(global, "fetch")
+      .mockResolvedValueOnce(rateLimitResponse)
+      .mockResolvedValue(successResponse);
+
+    const adapter = new GroqAdapter(MOCK_API_KEY);
+    const promise = adapter.complete(PROMPT);
+    await vi.runAllTimersAsync();
+    const result = await promise;
+
+    expect(result.text).toBe("ok");
+  });
+
+  it("throws immediately on 401 without retrying", async () => {
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValue(
+      makeFetchResponse({ error: "Unauthorized" }, 401)
+    );
+
+    const adapter = new GroqAdapter(MOCK_API_KEY);
+    const promise = adapter.complete(PROMPT).catch((e: unknown) => e);
+    await vi.runAllTimersAsync();
+    const err = await promise;
+
+    expect(err).toBeInstanceOf(LLMProviderError);
+    expect((err as LLMProviderError).kind).toBe("auth_error");
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 });

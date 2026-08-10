@@ -45,7 +45,24 @@
       "generic": "Ocurrió un error inesperado. Intentá de nuevo más tarde.",
       "yearOutOfRange": "Solo tenemos datos de 2024. Intentá: 'tonelaje en 2024'.",
       "ambiguousQuery": "La consulta es ambigua. Especificá: 'costo por tonelada', 'tonelaje' o 'costo por categoría'.",
-      "overlappingPeriod": "Indicá un trimestre o un mes, no ambos. Ej: 'costos en Q1 2024' o 'costos en marzo 2024'."
+      "overlappingPeriod": "Indicá un trimestre o un mes, no ambos. Ej: 'costos en Q1 2024' o 'costos en marzo 2024'.",
+      "llmTimeout": "El servicio está tardando. Intentá de nuevo en unos segundos.",
+      "llmRateLimit": "Límite de consultas alcanzado. Esperá un momento e intentá de nuevo.",
+      "llmAuthError": "Error de configuración del servicio. Contactá al administrador.",
+      "dbConnectionError": "No se pudo conectar a la base de datos. Verificá tu conexión.",
+      "dbTimeout": "La base de datos tardó demasiado. Intentá con un período más acotado.",
+      "didYouMean": "¿Quisiste decir:",
+      "hint": {
+        "mineNotFound": "Las minas disponibles son: Cerro Rojo, Veta Dorada, Loma Grande, Quebrada Sur, Peña Azul.",
+        "llmTimeout": "El servicio está tardando. Intentá de nuevo en 30 segundos.",
+        "llmRateLimit": "Límite de consultas alcanzado. Esperá un momento e intentá de nuevo.",
+        "llmAuthError": "Error de configuración del servicio. Contactá al administrador.",
+        "dbConnectionError": "No se pudo conectar a la base de datos. Verificá tu conexión.",
+        "dbTimeout": "La base de datos tardó demasiado. Intentá con un período más acotado.",
+        "parseFailure": "Intentá reformular: 'Costo por tonelada de Cerro Rojo en 2024'.",
+        "yearOutOfRange": "Cambiá el año a 2024 — es el único período disponible.",
+        "outOfScope": "Preguntá sobre costos, tonelaje o desglose por categoría."
+      }
     },
     "insight": {
       "label": "Análisis"

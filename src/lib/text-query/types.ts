@@ -34,10 +34,16 @@ export interface TextQueryError {
     | "mine_not_found"
     | "empty_result"
     | "llm_error"
+    | "llm_timeout"
+    | "llm_rate_limit"
+    | "llm_auth_error"
     | "db_error"
+    | "db_connection_error"
+    | "db_timeout"
     | "out_of_scope"
     | "year_out_of_range"
     | "ambiguous_query"
     | "overlapping_period";
   message: string;
+  context?: Record<string, unknown>;
 }

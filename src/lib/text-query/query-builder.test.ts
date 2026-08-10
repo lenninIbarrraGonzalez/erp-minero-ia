@@ -493,4 +493,37 @@ describe("buildAndExecuteQuery", () => {
     expect(rows[0]).toHaveProperty("mine");
     expect(rows[0]).toHaveProperty("avg_cost_per_tonne");
   });
+
+  it("throws db_timeout when Supabase error message contains 'timeout'", async () => {
+    const intent: ParsedIntent = { metric: "cost_per_tonne", mineName: "Cerro Rojo" };
+    const db = makeSupabaseMock({
+      mines: { data: null, error: { message: "connection timeout exceeded" } },
+    });
+
+    await expect(buildAndExecuteQuery(db as never, intent)).rejects.toMatchObject({
+      code: "db_timeout",
+    } satisfies Partial<TextQueryError>);
+  });
+
+  it("throws db_connection_error when Supabase error message contains 'connect'", async () => {
+    const intent: ParsedIntent = { metric: "cost_per_tonne", mineName: "Cerro Rojo" };
+    const db = makeSupabaseMock({
+      mines: { data: null, error: { message: "connection refused" } },
+    });
+
+    await expect(buildAndExecuteQuery(db as never, intent)).rejects.toMatchObject({
+      code: "db_connection_error",
+    } satisfies Partial<TextQueryError>);
+  });
+
+  it("throws db_error for generic Supabase errors", async () => {
+    const intent: ParsedIntent = { metric: "cost_per_tonne", mineName: "Cerro Rojo" };
+    const db = makeSupabaseMock({
+      mines: { data: null, error: { message: "schema not found" } },
+    });
+
+    await expect(buildAndExecuteQuery(db as never, intent)).rejects.toMatchObject({
+      code: "db_error",
+    } satisfies Partial<TextQueryError>);
+  });
 });
