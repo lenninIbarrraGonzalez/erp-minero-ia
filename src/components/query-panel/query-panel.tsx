@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { QueryInput } from "./query-input";
 import { QueryResults } from "./query-results";
+import { Spinner } from "@/components/ui/spinner";
 import type { ChartType, QueryRow } from "@/lib/text-query/types";
 
 interface QueryResultData {
@@ -71,7 +72,9 @@ export function QueryPanel() {
       />
 
       {isPending && (
-        <p data-testid="query-loading" className="text-sm text-text-muted">{t("loading")}</p>
+        <div data-testid="query-loading">
+          <Spinner label={t("loading")} />
+        </div>
       )}
 
       {error && (

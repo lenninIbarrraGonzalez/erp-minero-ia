@@ -34,7 +34,7 @@ export function CostBreakdownChart({ data }: CostBreakdownChartProps) {
       <BarChart data={data}>
         <XAxis dataKey="driver" />
         <YAxis
-          width={100}
+          width={125}
           tickFormatter={(value: number) =>
             `$${value.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
           }

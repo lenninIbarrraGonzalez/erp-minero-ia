@@ -41,10 +41,10 @@ export function Sidebar({ mines }: SidebarProps) {
           <InfoIcon />
           {t("nav.about")}
         </Link>
+        <div className="px-1 pt-3">
+          <MineSelector mines={mines} />
+        </div>
       </nav>
-      <div className="px-4 py-4 border-t border-border">
-        <MineSelector mines={mines} />
-      </div>
     </aside>
   );
 }

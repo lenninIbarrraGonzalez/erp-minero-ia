@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { CostVarianceInput } from "./cost-variance-input";
 import { CostVarianceResults } from "./cost-variance-results";
+import { Spinner } from "@/components/ui/spinner";
 import type { CostVarianceResult } from "@/lib/cost-variance/types";
 import type { PeriodRange } from "@/lib/queries/dashboard";
 
@@ -62,9 +63,7 @@ export function CostVariancePanel({ mines, periodRange }: CostVariancePanelProps
         maxPeriod={periodRange?.max}
       />
 
-      {isPending && (
-        <p className="text-sm text-text-muted">{t("loading")}</p>
-      )}
+      {isPending && <Spinner label={t("loading")} />}
 
       {error && (
         <p role="alert" className="text-sm text-red-600">

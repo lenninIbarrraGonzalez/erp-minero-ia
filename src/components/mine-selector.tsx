@@ -23,8 +23,8 @@ export function MineSelector({ mines, selectedId }: MineSelectorProps) {
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <label htmlFor="mine-select" className="text-sm text-text-muted">
+    <div className="flex flex-col gap-1">
+      <label htmlFor="mine-select" className="text-xs text-text-muted font-medium">
         {t("filter.label")}
       </label>
       <select
