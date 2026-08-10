@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-08-07T18:27:41.115Z",
+  "timestamp": "2026-08-10T03:05:36.540Z",
   "totalQuestions": 100,
-  "totalPoints": 484,
+  "totalPoints": 495,
   "maxPoints": 500,
-  "qualityPct": 96.8,
+  "qualityPct": 99,
   "grade": "A",
   "byCategory": {
     "A-simple": {
@@ -20,9 +20,9 @@
     },
     "C-quarter": {
       "questions": 10,
-      "points": 49,
+      "points": 50,
       "maxPoints": 50,
-      "pct": 98
+      "pct": 100
     },
     "D-timeseries": {
       "questions": 10,
@@ -32,15 +32,15 @@
     },
     "E-all-mines": {
       "questions": 8,
-      "points": 36,
+      "points": 40,
       "maxPoints": 40,
-      "pct": 90
+      "pct": 100
     },
     "F-multi-mine": {
       "questions": 10,
-      "points": 48,
+      "points": 50,
       "maxPoints": 50,
-      "pct": 96
+      "pct": 100
     },
     "G-anomaly": {
       "questions": 8,
@@ -62,15 +62,15 @@
     },
     "J-error": {
       "questions": 6,
-      "points": 25,
+      "points": 30,
       "maxPoints": 30,
-      "pct": 83.33333333333334
+      "pct": 100
     },
     "K-driver-quarter": {
       "questions": 10,
-      "points": 49,
+      "points": 48,
       "maxPoints": 50,
-      "pct": 98
+      "pct": 96
     }
   },
   "questions": [
@@ -409,13 +409,11 @@
       "id": 30,
       "category": "C-quarter",
       "question": "Costo de equipos de Quebrada Sur en Q3 2024",
-      "score": 4,
+      "score": 5,
       "maxScore": 5,
-      "pct": 80,
+      "pct": 100,
       "llmDependent": false,
-      "failures": [
-        "row_count: 4 rows (expected 1–1)"
-      ],
+      "failures": [],
       "bonusChecks": []
     },
     {
@@ -587,16 +585,11 @@
       "id": 46,
       "category": "E-all-mines",
       "question": "Costo de equipos por mina en 2024",
-      "score": 1,
+      "score": 5,
       "maxScore": 5,
-      "pct": 20,
+      "pct": 100,
       "llmDependent": true,
-      "failures": [
-        "results_shown: unexpected error shown",
-        "row_count: table not visible",
-        "chart_type: bar chart not found",
-        "insight: insight element not visible"
-      ],
+      "failures": [],
       "bonusChecks": []
     },
     {
@@ -702,14 +695,11 @@
       "id": 56,
       "category": "F-multi-mine",
       "question": "Costo de insumos entre Veta Dorada y Quebrada Sur en 2024",
-      "score": 3,
+      "score": 5,
       "maxScore": 5,
-      "pct": 60,
+      "pct": 100,
       "llmDependent": false,
-      "failures": [
-        "row_count: 8 rows (expected 2–2)",
-        "chart_type: bar chart not found"
-      ],
+      "failures": [],
       "bonusChecks": []
     },
     {
@@ -741,7 +731,7 @@
       "score": 5,
       "maxScore": 5,
       "pct": 100,
-      "llmDependent": false,
+      "llmDependent": true,
       "failures": [],
       "bonusChecks": [
         {
@@ -883,14 +873,11 @@
       "id": 70,
       "category": "H-complex",
       "question": "Costo por tonelada por mina en Q4 2024",
-      "score": 3,
+      "score": 5,
       "maxScore": 5,
-      "pct": 60,
+      "pct": 100,
       "llmDependent": true,
-      "failures": [
-        "row_count: 3 rows (expected 5–5)",
-        "chart_type: bar chart not found"
-      ],
+      "failures": [],
       "bonusChecks": []
     },
     {
@@ -908,13 +895,11 @@
       "id": 72,
       "category": "H-complex",
       "question": "Desglose de costos de todas las minas en Q3 2024",
-      "score": 4,
+      "score": 5,
       "maxScore": 5,
-      "pct": 80,
+      "pct": 100,
       "llmDependent": false,
-      "failures": [
-        "row_count: 5 rows (expected 4–4)"
-      ],
+      "failures": [],
       "bonusChecks": []
     },
     {
@@ -954,11 +939,15 @@
       "id": 76,
       "category": "H-complex",
       "question": "¿Qué mina tiene el mayor costo total en 2024?",
-      "score": 5,
+      "score": 2,
       "maxScore": 5,
-      "pct": 100,
+      "pct": 40,
       "llmDependent": true,
-      "failures": [],
+      "failures": [
+        "results_shown: unexpected error shown",
+        "row_count: table not visible",
+        "insight: insight element not visible"
+      ],
       "bonusChecks": []
     },
     {
@@ -1114,13 +1103,11 @@
       "id": 90,
       "category": "J-error",
       "question": "Cost per tonne for all mines in 2023",
-      "score": 0,
+      "score": 5,
       "maxScore": 5,
-      "pct": 0,
+      "pct": 100,
       "llmDependent": false,
-      "failures": [
-        "response_received: timeout after 35s"
-      ],
+      "failures": [],
       "bonusChecks": []
     },
     {
@@ -1138,13 +1125,11 @@
       "id": 92,
       "category": "K-driver-quarter",
       "question": "Costo de equipos de Loma Grande en Q1 2024",
-      "score": 4,
+      "score": 5,
       "maxScore": 5,
-      "pct": 80,
+      "pct": 100,
       "llmDependent": false,
-      "failures": [
-        "row_count: 4 rows (expected 1–1)"
-      ],
+      "failures": [],
       "bonusChecks": []
     },
     {
@@ -1173,11 +1158,13 @@
       "id": 95,
       "category": "K-driver-quarter",
       "question": "Fuel cost for Peña Azul in Q3 2024",
-      "score": 5,
+      "score": 4,
       "maxScore": 5,
-      "pct": 100,
+      "pct": 80,
       "llmDependent": false,
-      "failures": [],
+      "failures": [
+        "row_count: 4 rows (expected 1–1)"
+      ],
       "bonusChecks": []
     },
     {
@@ -1228,11 +1215,13 @@
       "id": 100,
       "category": "K-driver-quarter",
       "question": "Labor costs for Veta Dorada in Q4 2024",
-      "score": 5,
+      "score": 4,
       "maxScore": 5,
-      "pct": 100,
+      "pct": 80,
       "llmDependent": false,
-      "failures": [],
+      "failures": [
+        "row_count: 4 rows (expected 1–1)"
+      ],
       "bonusChecks": []
     }
   ],
@@ -1247,7 +1236,7 @@
     },
     {
       "id": "I6",
-      "issue": "Category E (all-mines grouped) scored 90.0%",
+      "issue": "Category E (all-mines grouped) scored 100.0%",
       "impact": "MEDIUM",
       "root_cause": "LLM inconsistency: 'cada mina', 'por mina', 'every mine' trigger groupBy:mine unreliably — sometimes returning a time-series instead of 5-row per-mine grouping.",
       "fix": "Add post-parse rule: if mineNames is empty/generic AND question contains 'por mina'/'cada mina'/'every mine', enforce groupBy:mine. Add 3 few-shot examples to intent-parser prompt.",
@@ -1260,14 +1249,6 @@
       "root_cause": "When the question asks for 'desglose' or 'breakdown by category' without naming a specific driver, the LLM occasionally sets driverFilter to a specific driver, returning 1 row instead of the full 4-row breakdown.",
       "fix": "Strengthen prompt: clarify that driverFilter should ONLY be set if the user names exactly one driver. Add negative few-shot example where 'desglose de costos' maps to no driverFilter.",
       "priority": 3
-    },
-    {
-      "id": "J-scope",
-      "issue": "Category J (out-of-scope/errors) scored 83.3% — some error queries not rejected",
-      "impact": "HIGH",
-      "root_cause": "Out-of-scope guard not triggering consistently for all off-topic queries (FX rates, HR data, commodity prices).",
-      "fix": "Expand out-of-scope keyword list and few-shot examples. Add domain guard: if no mine/cost/tonnage intent detected AND no mine name matched, treat as out-of-scope.",
-      "priority": 4
     }
   ]
 }
